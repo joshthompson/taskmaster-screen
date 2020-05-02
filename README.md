@@ -1,4 +1,4 @@
-# taskmaster-scores
+# taskmaster-screen
 
 ## Project setup
 ```

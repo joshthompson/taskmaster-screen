@@ -1,29 +1,39 @@
-<template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
-</template>
-
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
+	import { Component, Vue } from 'vue-property-decorator'
+	import Logo from './components/Logo.vue'
+	import Scores from './components/Scores.vue'
+	import { Contestant } from './types'
+	import { getState} from './services/data'
 
-@Component({
-  components: {
-    HelloWorld,
-  },
-})
-export default class App extends Vue {}
+	@Component({
+		components: {
+			Logo,
+			Scores
+		}
+	})
+	export default class App extends Vue {
+		public contestants: Contestant[] = []
+		public mode: string = 'logo'
+		public created() {
+			this.getState()
+		}
+		private async getState() {
+			setTimeout(this.getState, 2000)
+			const state = await getState()
+			this.mode = state.mode
+			this.contestants = state.contestants
+		}
+
+	}
 </script>
 
+<template>
+	<div id="app">
+		<Logo v-if="mode === 'logo'" />
+		<Scores v-if="mode === 'scores'" :contestants="contestants" />
+	</div>
+</template>
+
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+	@import './style/app.scss';
 </style>
