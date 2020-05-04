@@ -8,24 +8,24 @@ const data = {
 	mode: 'scores',
 	contestants: [
 		{
-			name: 'nick',
-			icon: '/images/nick.png'
-		},
-		{
-			name: 'holly',
-			icon: '/images/holly.png'
-		},
-		{
-			name: 'leo',
-			icon: '/images/leo.png'
-		},
-		{
 			name: 'vicki',
 			icon: '/images/vicki.png'
 		},
 		{
 			name: 'paul',
 			icon: '/images/paul.png'
+		},
+		{
+			name: 'nick',
+			icon: '/images/nick.png'
+		},
+		{
+			name: 'leo',
+			icon: '/images/leo.png'
+		},
+		{
+			name: 'holly',
+			icon: '/images/holly.png'
 		}
 	]
 }
@@ -119,7 +119,5 @@ app.get('/state', (_req, res) => {
 app.get('*', (_req, res) => {
 	res.sendFile(`${__dirname}/dist/index.html`)
 })
-
-app.get
 
 module.exports = app

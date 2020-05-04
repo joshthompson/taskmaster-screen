@@ -80,6 +80,7 @@
 			background-repeat: no-repeat;
 			background-position: center;
 			transition: all 1s ease-in-out;
+			text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 		}
 
 		&.pos_0 { transform: translateX(-2 * 300 - 100px) }
