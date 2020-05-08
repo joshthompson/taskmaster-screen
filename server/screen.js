@@ -75,7 +75,7 @@ const modes = {
 }
 
 let mode = modes.logo
-mode = modes.score
-// mode = modes.outro
+// mode = modes.score
+// mode = modes.intro
 
 module.exports = mode
