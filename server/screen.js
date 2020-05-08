@@ -3,14 +3,21 @@ const modes = {
 	logo:			{ type: 'logo' },
 	score:			{ type: 'scores' },
 
-	intro:			{ type: 'video', video: '0 - Intro.mp4' },
+	intro:			{ type: 'video', video: '/videos/0 - Intro.mp4' },
 
 	banter:	[
-					{ type: 'slide', image: '/images/banter/0.png' },
-					{ type: 'slide', image: '/images/banter/1.png' },
-					{ type: 'slide', image: '/images/banter/2.png' },
-					{ type: 'slide', image: '/images/banter/3.png' },
-					{ type: 'slide', image: '/images/banter/4.png' }
+		{ type: 'slide', image: '/images/banter/anagram - vicki.png' },
+		{ type: 'slide', image: '/images/banter/anagram - vicki.gif' },
+		{ type: 'slide', image: '/images/banter/anagram - leo.png' },
+		{ type: 'slide', image: '/images/banter/anagram - leo.gif' },
+		{ type: 'slide', image: '/images/banter/anagram - paul.png' },
+		{ type: 'slide', image: '/images/banter/anagram - paul.gif' },
+		{ type: 'slide', image: '/images/banter/anagram - nick.png' },
+		{ type: 'slide', image: '/images/banter/anagram - nick.gif' },
+		{ type: 'slide', image: '/images/banter/anagram - holly.png' },
+		{ type: 'slide', image: '/images/banter/anagram - holly.gif' },
+		{ type: 'slide', image: '/images/banter/anagram - craig.png' },
+		{ type: 'slide', image: '/images/banter/anagram - craig.gif' }
 	],
 
 	water: {
@@ -63,12 +70,12 @@ const modes = {
 		holly:		{ type: 'video', video: '/videos/6.6 - Lava - Holly.mp4' }
 	},
 
-	outro:			{ type: 'video', video: '7 - Outro.mp4' },
+	outro:			{ type: 'video', video: '/videos/7 - Outro.mp4' },
 
 }
 
 let mode = modes.logo
 mode = modes.score
-mode = modes.lava.leo2
+// mode = modes.outro
 
 module.exports = mode
