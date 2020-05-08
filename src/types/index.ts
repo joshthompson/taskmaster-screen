@@ -1,6 +1,12 @@
 export interface State {
-	mode: 'logo' | 'scores'
+	screen: ScreenState
 	contestants: Contestant[]
+}
+
+export interface ScreenState {
+	type: 'logo' | 'scores' | 'video' | 'slide'
+	video?: string
+	image?: string
 }
 
 export interface Contestant {

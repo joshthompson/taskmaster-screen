@@ -2,93 +2,12 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
+
+const contestants = require('./server/contestants')
+const screen = require('./server/screen')
+const scores = require('./server/score')
+
 app.use(bodyParser.json())
-
-const data = {
-	mode: 'scores',
-	contestants: [
-		{
-			name: 'vicki',
-			icon: '/images/vicki.png'
-		},
-		{
-			name: 'paul',
-			icon: '/images/paul.png'
-		},
-		{
-			name: 'nick',
-			icon: '/images/nick.png'
-		},
-		{
-			name: 'leo',
-			icon: '/images/leo.png'
-		},
-		{
-			name: 'holly',
-			icon: '/images/holly.png'
-		}
-	]
-}
-
-const rounds = {
-	showAndTell: {
-		nick: 0,
-		holly: 0,
-		leo: 0,
-		vicki: 0,
-		paul: 0
-	},
-	water: {
-		nick: 0,
-		holly: 0,
-		leo: 0,
-		vicki: 0,
-		paul: 0
-	},
-	drawing: {
-		nick: 0,
-		holly: 0,
-		leo: 0,
-		vicki: 0,
-		paul: 0
-	},
-	swede: {
-		nick: 0,
-		holly: 0,
-		leo: 0,
-		vicki: 0,
-		paul: 0
-	},
-	rainbow: {
-		nick: 0,
-		holly: 0,
-		leo: 0,
-		vicki: 0,
-		paul: 0
-	},
-	lava: {
-		nick: 0,
-		holly: 0,
-		leo: 0,
-		vicki: 0,
-		paul: 0
-	},
-	final: {
-		nick: 0,
-		holly: 0,
-		leo: 0,
-		vicki: 0,
-		paul: 0
-	},
-	bonus: {
-		nick: 0,
-		holly: 0,
-		leo: 0,
-		vicki: 0,
-		paul: 0
-	}
-}
-
 console.log('\033cTASKMASTER SCREEN')
 
 /* tslint:disable:no-console */
@@ -105,12 +24,14 @@ app.use(express.static('dist'))
 
 app.get('/state', (_req, res) => {
 	res.send({
-		mode: data.mode,
-		contestants: data.contestants.map(c => {
+		screen: screen,
+		contestants: contestants.map(c => {
 			return {
 				name: c.name,
 				icon: c.icon,
-				score: Object.keys(rounds).map(r => rounds[r][c.name] || 0).reduce((a, b) => a + b, 0)
+				score: Object.keys(scores)
+						.map(round => scores[round][c.name] || 0)
+						.reduce((a, b) => a + b, 0)
 			}
 		})
 	})

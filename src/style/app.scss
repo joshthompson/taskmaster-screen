@@ -8,6 +8,14 @@
 	font-style: normal;
 }
 
+html {
+	box-sizing: border-box;
+}
+
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+
 html, body {
 	text-align: center;
 	padding: 0;
@@ -25,5 +33,3 @@ body {
 	text-align: center;
 	color: #FFFFFF;
 }
-
-
