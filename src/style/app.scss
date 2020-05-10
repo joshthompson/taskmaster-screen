@@ -25,6 +25,7 @@ html, body {
 body {
 	background: url('assets/bg.jpg');
 	background-size: cover;
+	min-height: 100vh;
 }
 
 #app {

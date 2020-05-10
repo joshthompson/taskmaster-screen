@@ -37,6 +37,11 @@ app.get('/state', (_req, res) => {
 	})
 })
 
+app.post('/state/logo', (_req, res) => {
+	screen.type = 'logo'
+	res.sendStatus(200)
+})
+
 app.get('*', (_req, res) => {
 	res.sendFile(`${__dirname}/dist/index.html`)
 })

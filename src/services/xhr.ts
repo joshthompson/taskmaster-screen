@@ -14,11 +14,11 @@ class XHR {
 		return this.execute(url, 'GET', null)
 	}
 
-	public post(url: string, data: any) {
+	public post(url: string, data: any = null) {
 		return this.execute(url, 'POST', data)
 	}
 
-	public put(url: string, data: any) {
+	public put(url: string, data: any = null) {
 		return this.execute(url, 'PUT', data)
 	}
 

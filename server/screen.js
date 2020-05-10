@@ -49,14 +49,16 @@ const modes = {
 		dob:		{ type: 'video', video: '/videos/4.3 - Swede - DOB.mp4' },
 		wife:		{ type: 'video', video: '/videos/4.4 - Swede - Wife.mp4' },
 		connection:	{ type: 'video', video: '/videos/4.5 - Swede - Connection.mp4' },
+		connection2:{ type: 'slide', image: '/images/boss.png' },
 		food:		{ type: 'video', video: '/videos/4.6 - Swede - Food.mp4' },
 		holiday:	{ type: 'video', video: '/videos/4.7 - Swede - Holiday.mp4' },
 	},
 
 	rainbow: {
 		intro:		{ type: 'video', video: '/videos/5.1 - Rainbow - Intro.mp4' },
-		clips1:		{ type: 'video', video: '/videos/5.2 - Rainbow - All The E\'s (Vick-e, Holl-e).mp4' },
-		clips2:		{ type: 'video', video: '/videos/5.3 - Rainbow - Chaps.mp4' },
+		clips1:		{ type: 'video', video: '/videos/5.2 - Rainbow - Paul & Holly.mp4' },
+		clips2:		{ type: 'video', video: '/videos/5.3 - Rainbow - Leo & Nick.mp4' },
+		clips3:		{ type: 'video', video: '/videos/5.4 - Rainbow - Vicki.mp4' },
 		rainbows:	{ type: 'slide', image: '/images/rainbows.png'}
 	},
 
@@ -75,7 +77,7 @@ const modes = {
 }
 
 let mode = modes.logo
-// mode = modes.score
-// mode = modes.intro
+mode = modes.score
+// mode = modes.swede.food
 
 module.exports = mode

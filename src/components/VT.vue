@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from 'vue-property-decorator'
+	import { setStateToLogo } from '@/services/data'
 
 	@Component
 	export default class VT extends Vue {
@@ -12,7 +13,10 @@
 			video.onload = () => video.play()
 			video.onclick = () => video.paused ? video.play() : video.pause()
 			video.onplay = () => this.faded = false
-			video.onended = () => this.faded = true
+			video.onended = () => {
+				this.faded = true
+				setStateToLogo()
+			}
 		}
 	}
 </script>
