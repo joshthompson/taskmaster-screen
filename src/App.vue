@@ -4,6 +4,7 @@
 	import Scores from './components/Scores.vue'
 	import VT from './components/VT.vue'
 	import Slide from './components/Slide.vue'
+	import Letter from './components/Letter.vue'
 	import { Contestant, ScreenState } from './types'
 	import { getState } from './services/data'
 
@@ -12,7 +13,8 @@
 			Logo,
 			Scores,
 			VT,
-			Slide
+			Slide,
+			Letter
 		}
 	})
 	export default class App extends Vue {
@@ -39,6 +41,7 @@
 		<Scores v-if="started && screen.type === 'scores'" :contestants="contestants" />
 		<VT     v-if="started && screen.type === 'video'"  :video="screen.video" :key="screen.video" />
 		<Slide  v-if="started && screen.type === 'slide'"  :slide="screen.image" />
+		<Letter v-if="started && screen.type === 'letter'" :letter="screen.letter" />
 	</div>
 </template>
 

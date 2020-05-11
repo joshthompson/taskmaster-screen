@@ -20,6 +20,14 @@ const modes = {
 		{ type: 'slide', image: '/images/banter/anagram - craig.gif' }
 	],
 
+	showandtell: {
+		leo:		{ type: 'slide', image: '/images/showandtell/leo.jpg' },
+		nick:		{ type: 'slide', image: '/images/showandtell/nick.jpg' },
+		vicki:		{ type: 'slide', image: '/images/showandtell/vicki.jpg' },
+		holly:		{ type: 'slide', image: '/images/showandtell/holly.jpg' },
+		paul:		{ type: 'slide', image: '/images/showandtell/paul.jpg' }
+	},
+
 	water: {
 		intro:		{ type: 'video', video: '/videos/1.1 - Water - Intro.mp4' },
 		clips1:		{ type: 'video', video: '/videos/1.2 - Water - Holly & Leo.mp4' },
@@ -78,6 +86,8 @@ const modes = {
 
 let mode = modes.logo
 mode = modes.score
-// mode = modes.swede.food
+// mode = modes.lava.holly
+
+// mode = { type: 'letter', letter: 'y' }
 
 module.exports = mode
