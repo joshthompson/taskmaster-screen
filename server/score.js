@@ -48,13 +48,13 @@ const scores = {
 		vicki: 1,
 		paul: 5
 	},
-	bonus: {
-		nick: 0,
-		holly: 0,
-		leo: 0,
-		vicki: 0,
-		paul: 0
-	}
+	// bonus: {
+	// 	nick: 0,
+	// 	holly: 0,
+	// 	leo: 0,
+	// 	vicki: 0,
+	// 	paul: 0
+	// }
 }
 
 module.exports = scores
