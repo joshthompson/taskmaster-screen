@@ -21,6 +21,7 @@
 		"object-literal-sort-keys": false,
 		"object-literal-shorthand": false,
 		"no-consecutive-blank-lines": false,
-		"no-bitwise": false
+		"no-bitwise": false,
+		"curly": [true, "ignore-same-line"]
 	}
 }

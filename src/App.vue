@@ -4,33 +4,35 @@
 	import FakeWeakestLink from './FakeWeakestLink.vue'
 
 	@Component({
-		components: { FakeTaskmaster, FakeWeakestLink}
+		components: { FakeTaskmaster, FakeWeakestLink }
 	})
 	export default class App extends Vue {
 		public started: boolean = false
+		public game: 'taskmaster' | 'weakest-link' = null
 		public get taskmaster() {
-			return false
+			return this.game === 'taskmaster'
 		}
 		public get weakestLink() {
-			return true
+			return this.game === 'weakest-link'
 		}
 	}
 </script>
 
 <template>
-	<div id="app" :class="{ started }">
-		<a v-if="!started" @click="started = true">START</a>
-		<FakeTaskmaster v-if="started && taskmaster" />
-		<FakeWeakestLink v-if="started && weakestLink" />
+	<div id="app" :class="{ started: game !== null }">
+		<a v-if="!game" @click="game = 'taskmaster'">Start Taskmaster</a>
+		<a v-if="!game" @click="game = 'weakest-link'">Start Weakest Link</a>
+		<FakeTaskmaster v-if="taskmaster" />
+		<FakeWeakestLink v-if="weakestLink" />
 	</div>
 </template>
 
 <style lang="scss">
 	@import './style/app.scss';
 
-	#app.started {
-		// cursor: none;
-	}
+	// #app.started {
+	// 	cursor: none;
+	// }
 
 	#app > a {
 		display: inline-block;
@@ -39,7 +41,7 @@
 		border-radius: 0rem;
 		color: #FFFFFF;
 		background: #008DD4;
-		margin-top: 50vh;
+		margin: 50vh 1rem 0;
 		transform: translateY(-50%);
 		cursor: pointer;
 	}
