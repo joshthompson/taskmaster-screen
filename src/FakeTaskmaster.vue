@@ -5,7 +5,7 @@
 	import VT from './components/tm/VT.vue'
 	import Slide from './components/tm/Slide.vue'
 	import Letter from './components/tm/Letter.vue'
-	import { Contestant, ScreenState } from './types'
+	import { TMContestant, TMScreenState } from './types/TaskMaster'
 	import { getState } from './services/data'
 
 	@Component({
@@ -19,8 +19,8 @@
 	})
 	export default class FakeTaskmaster extends Vue {
 		public started: boolean = false
-		public contestants: Contestant[] = []
-		public screen: ScreenState = { type: 'logo' }
+		public contestants: TMContestant[] = []
+		public screen: TMScreenState = { type: 'logo' }
 		public created() {
 			this.getState()
 		}

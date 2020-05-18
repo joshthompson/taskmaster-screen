@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
-	import { Contestant } from '@/types'
+	import { TMContestant } from '@/types/TaskMaster'
 
 	@Component
 	export default class ContestantBlock extends Vue {
-		@Prop() public contestant: Contestant
+		@Prop() public contestant: TMContestant
 		private score: number = 0
 
 		public created() {

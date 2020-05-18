@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from 'vue-property-decorator'
 	import ContestantBlock from './ContestantBlock.vue'
-	import { Contestant } from '@/types'
+	import { TMContestant } from '@/types/TaskMaster'
 
 	@Component({
 		components: { ContestantBlock }
 	})
 	export default class Scores extends Vue {
-		@Prop() public contestants: Contestant[]
+		@Prop() public contestants: TMContestant[]
 
-		public position(contestant: Contestant) {
+		public position(contestant: TMContestant) {
 			const copy = [ ...this.contestants ]
 			copy.sort((a, b) => a.score > b.score ? 1 : -1)
 			const pos = copy.findIndex((c) => c === contestant)

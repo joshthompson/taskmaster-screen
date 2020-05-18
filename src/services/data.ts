@@ -1,8 +1,8 @@
 import xhr from './xhr'
-import { State } from '@/types'
+import { TMState } from '@/types/TaskMaster'
 
 export async function getState() {
-	return await xhr.get('http://localhost:3000/state') as State
+	return await xhr.get('http://localhost:3000/state') as TMState
 }
 
 export async function setStateToLogo() {

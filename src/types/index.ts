@@ -1,16 +1,7 @@
-export interface State {
-	screen: ScreenState
-	contestants: Contestant[]
-}
+import { TMState } from './TaskMaster'
+import { WLState } from './WeakestLink'
 
-export interface ScreenState {
-	type: 'logo' | 'scores' | 'video' | 'slide'
-	video?: string
-	image?: string
-}
-
-export interface Contestant {
-	name: string
-	score: number
-	icon: string
+export interface AppState {
+	wl: WLState
+	tm: TMState
 }
