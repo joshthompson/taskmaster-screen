@@ -1,6 +1,7 @@
 import WLGame from './WLGame'
 import WLScript from './WLScript'
 import WLQuestions from './WLQuestions'
+import WLAudio from './WLAudio'
 import { WLBaseTime, WLTimeReduction, WLChain } from '@/types/WeakestLink'
 import { sleep } from '@/services/helper'
 
@@ -101,6 +102,7 @@ export default class WLRound {
 			this.chainPosition = Math.min(WLChain.length, this.chainPosition + 0.5)
 			setTimeout(() => {
 				this.chainPosition = Math.min(WLChain.length, this.chainPosition + 0.5)
+				this.save()
 			}, 300)
 		}
 		this.currentContestant.right++
@@ -122,6 +124,7 @@ export default class WLRound {
 		this.currentContestant.banked += this.banked - before
 		this.chainPosition = 0
 		if (this.banked >= this.max) {
+			WLAudio.endRound()
 			this.end()
 		}
 		this.save()
@@ -147,16 +150,14 @@ export default class WLRound {
 		this.getQuestion()
 		this.questionStart = Date.now()
 		setTimeout(() => this.runTimer(), 1000)
+		this.save()
 	}
 
 	public async startMusic() {
-		// this.music.currentTime = 0
-		// this.music.play()
-		await sleep(3000)
+		WLAudio.round(this.timer)
+		await sleep(2000)
 		WLScript.set(WLScript.startClock)
-		await sleep(1000)
-		// this.music.currentTime = 9.5
-		await sleep(1000)
+		await sleep(1500)
 		WLScript.set(WLScript.empty)
 	}
 
@@ -176,7 +177,7 @@ export default class WLRound {
 	}
 
 	public get value() {
-		return WLChain[this.chainPosition - 1] || 0
+		return WLChain[Math.ceil(this.chainPosition - 1)] || 0
 	}
 
 	public get max() {

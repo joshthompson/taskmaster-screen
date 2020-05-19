@@ -32,6 +32,7 @@ export interface WLContestant {
 	banked?: number
 	lost?: number
 	total?: number
+	outTime?: number
 }
 
 export const WLBaseTime = 180 // Starting time

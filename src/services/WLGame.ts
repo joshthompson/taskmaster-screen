@@ -21,6 +21,10 @@ export default class WLGame {
 		this.round = new WLRound(this)
 	}
 
+	public startFinalRound() {
+		
+	}
+
 	public get currentContestants() {
 		return this.contestants.filter((c) => !c.out)
 	}
@@ -58,7 +62,9 @@ export default class WLGame {
 	}
 
 	public vote(name: string, out: boolean) {
-		this.contestants.find((c) => c.name === name).out = out
+		const contestant = this.contestants.find((c) => c.name === name)
+		contestant.out = out
+		contestant.outTime = out ? Date.now() : null
 		this.save()
 	}
 
@@ -67,13 +73,13 @@ export default class WLGame {
 	}
 
 	public get data(): WLGameState {
-		return {
+		return JSON.parse(JSON.stringify({
 			contestants: this.contestants,
 			roundNumber: this.roundNumber,
 			totalBanked: this.totalBanked,
 			round: this.round ? this.round.data : this.round,
 			strongest: this.strongest
-		}
+		}))
 	}
 
 }
