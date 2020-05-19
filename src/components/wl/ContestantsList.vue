@@ -29,7 +29,6 @@
 <template>
 	<div v-if="game">
 		<div>
-			<h3>Strongest Link</h3>
 			<ContestantBlock
 				v-for="contestant in game.strongest"
 				:key="contestant.name"

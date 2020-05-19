@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex, { MutationTree } from 'vuex'
 import { AppState } from '@/types'
-import { WLGameState } from '@/types/WeakestLink'
+import { WLGameState, WLScreenState } from '@/types/WeakestLink'
 
 Vue.use(Vuex)
 
@@ -12,7 +12,8 @@ const initialState: AppState = {
 	},
 	wl: {
 		game: null,
-		script: ''
+		script: '',
+		screenState: 'nothing'
 	}
 }
 
@@ -22,6 +23,9 @@ const mutations: MutationTree<AppState> = {
 	},
 	wlUpdateScript: (state, line: string) => {
 		state.wl.script = line
+	},
+	wlSetScreenState: (state, screenState: WLScreenState) => {
+		state.wl.screenState = screenState
 	}
 }
 

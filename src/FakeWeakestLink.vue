@@ -34,12 +34,17 @@
 			color: #000000;
 			text-transform: uppercase;
 			padding: 0.5em 1em;
-			margin: 0.5em;
+			margin: 0.25rem;
 			border-radius: 0.5em;
 			cursor: pointer;
+			outline: none;
 
 			&.large {
-				font-size: 1.5rem;
+				font-size: 1rem;
+			}
+
+			&:hover {
+				background: #EEEEEE;
 			}
 		}
 	}

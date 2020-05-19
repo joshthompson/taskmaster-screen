@@ -1,13 +1,19 @@
+import WLFinalRound from '@/services/WLFinalRound'
+
 export interface WLState {
 	game: WLGameState
 	script: string
+	screenState?: WLScreenState
 }
+
+export type WLScreenState = 'nothing' | 'showLogo' | 'showTotal' | 'round' | 'finalRound'
 
 export interface WLGameState {
 	contestants: WLContestant[]
 	roundNumber: number
 	totalBanked: number
 	round?: WLRoundState
+	finalRound?: WLFinalRoundState
 	strongest?: WLContestant[]
 }
 
@@ -22,6 +28,13 @@ export interface WLRoundState {
 	value: number
 	max: number
 	currentContestant: WLContestant
+}
+
+export interface WLFinalRoundState {
+	player1: WLContestant
+	player2: WLContestant
+	questionNumber: number
+	results: boolean[][]
 }
 
 export interface WLContestant {

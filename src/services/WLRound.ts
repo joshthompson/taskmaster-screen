@@ -2,7 +2,7 @@ import WLGame from './WLGame'
 import WLScript from './WLScript'
 import WLQuestions from './WLQuestions'
 import WLAudio from './WLAudio'
-import { WLBaseTime, WLTimeReduction, WLChain } from '@/types/WeakestLink'
+import { WLBaseTime, WLTimeReduction, WLChain, WLRoundState } from '@/types/WeakestLink'
 import { sleep } from '@/services/helper'
 
 export default class WLRound {
@@ -14,8 +14,9 @@ export default class WLRound {
 	public contestant: number			// Current contestant in rotation
 	public chainPosition: number = 0	// What position is the chain
 	public timeoutId: number			// Keeps track of timeout
+	private eventListenerWrapper
 
-	public get data() {
+	public get data(): WLRoundState {
 		return {
 			banked: this.banked,
 			started: this.started,
@@ -30,12 +31,18 @@ export default class WLRound {
 		}
 	}
 
+
 	public constructor(game: WLGame) {
 		// Setup vars
 		this.game = game
 
 		// Setup listeners
-		window.addEventListener('keypress', (e) => this.keypressListener(e))
+		this.eventListenerWrapper = (event) => {
+			if (this.started && event.code === 'Space') this.right()
+			else if (this.started && event.code === 'Enter') this.wrong()
+			else if (this.started && event.code === 'KeyB') this.bank()
+		}
+		window.addEventListener('keypress', this.eventListenerWrapper)
 
 		// First player
 		this.contestant = this.game.contestants.findIndex((c) => c.name === this.game.strongest[0].name)
@@ -59,12 +66,6 @@ export default class WLRound {
 
 	public save() {
 		this.game.save()
-	}
-
-	public keypressListener(event) {
-		if (this.started && event.code === 'Space') this.right()
-		else if (this.started && event.code === 'Enter') this.wrong()
-		else if (this.started && event.code === 'KeyB') this.bank()
 	}
 
 	public getQuestion() {
@@ -123,6 +124,7 @@ export default class WLRound {
 		this.banked = Math.min(this.banked + this.value, this.max)
 		this.currentContestant.banked += this.banked - before
 		this.chainPosition = 0
+		console.log(this.banked, this.max)
 		if (this.banked >= this.max) {
 			WLAudio.endRound()
 			this.end()
@@ -170,7 +172,7 @@ export default class WLRound {
 		// 	this.script = Script.endOfRound
 		// 	this.total += this.banked
 		// 	this.started = false
-		window.removeEventListener('keypress', this.keypressListener)
+		window.removeEventListener('keypress', this.eventListenerWrapper)
 		clearTimeout(this.timeoutId)
 		this.game.endRound()
 		this.save()

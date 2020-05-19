@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from 'vue-property-decorator'
-	import { WLState, WLContestant } from '@/types/WeakestLink'
+	import { WLState, WLContestant, WLScreenState } from '@/types/WeakestLink'
 	import ContestantsList from '@/components/wl/ContestantsList.vue'
 	import WLGame from '@/services/WLGame'
 	import { WLDisplayMoney } from '@/services/helper'
@@ -14,6 +14,8 @@
 		public contestantNames: string =
 			'Josh, Holly, Craig, Paul, Esther, Vicki, Nick, Tanya, Adam'
 			// 'Anne, Jack, Pete, Rebekah, Guy, Lisa, James, Nick'
+		public total: number = 0
+		public round: number = 0
 
 		public get game() {
 			return (this.$store.state.wl as WLState).game
@@ -30,11 +32,19 @@
 				.map((n): WLContestant => ({ name: n.trim(), out: false }))
 				.sort((a, b) => a.name > b.name ? 1 : -1)
 			// Create game
-			this.gameObj = new WLGame(contestants)
+			this.gameObj = new WLGame(contestants, this.round, this.total)
 		}
 
 		public startRound() {
 			this.gameObj.startRound()
+		}
+
+		public startFinalRound() {
+			this.gameObj.startFinalRound()
+		}
+
+		public screenState(state: WLScreenState) {
+			this.$store.commit('wlSetScreenState', state)
 		}
 
 	}
@@ -49,20 +59,22 @@
 
 		<div v-if="!game">
 			<textarea type="text" v-model="contestantNames"></textarea>
-			<!-- <p>Banked: <input type="text" v-model="total" /></p> -->
-			<!-- <p>Round: <input type="text" v-model="round" /></p> -->
+			<p>Banked: <input type="text" v-model="total" /></p>
+			<p>Round: <input type="text" v-model="round" /></p>
 			<p><button @click="setupGame" class="btn">Setup Game</button></p>
 		</div>
 
 		<div v-if="game">
-			<h3>Total - {{ money(game.totalBanked) }}</h3>
+			<h3>Total: {{ money(game.totalBanked) }}</h3>
 		</div>
 		<ContestantsList :gameObj="gameObj" />
 
 		<div class="actions" v-if="game && !game.round">
-			<h3>Actions</h3>
 			<button @click="startRound" class="btn large">Start Round</button>
-			<button @click="gameObj.startFinalRound" class="btn large">Final Round</button>
+			<button @click="startFinalRound" class="btn large">Final Round</button>
+			<button @click="screenState('showTotal')" class="btn large">Show Total</button>
+			<button @click="screenState('nothing')" class="btn large">Nothing</button>
+			<button @click="screenState('showLogo')" class="btn large">Show Logo</button>
 		</div>
 	</div>
 </template>

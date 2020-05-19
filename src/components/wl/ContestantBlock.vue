@@ -35,14 +35,18 @@
 		<div>
 			<div class="name">{{ contestant.name }}</div>
 			<div v-if="out" class="out">OUT {{ orderOut }}</div>
-			<div v-if="!out" class="correct">{{ contestant.right }}/{{ contestant.total }}</div>
-			<div v-if="!out">({{ time }} secs)</div>
+			<div v-if="!out" class="correct">{{ contestant.right || 0 }}/{{ contestant.total || 0 }}</div>
+			<div v-if="!out">({{ time || '∞' }} secs)</div>
 		</div>
 		<div>
-			<div v-if="!out" class="banked">Banked: {{ contestant.banked }}</div>
-			<div v-if="!out" class="lost">Lost: {{ contestant.lost }}</div>
-			<button v-if="!out" @click="$emit('voteOut', true)" class="btn">Voted Out</button>
-			<button v-if="out" @click="$emit('voteOut', false)" class="btn">Add back in</button>
+			<div v-if="!out" class="banked">Banked: {{ contestant.banked || 0 }}</div>
+			<div v-if="!out" class="lost">Lost: {{ contestant.lost || 0 }}</div>
+			<div>
+				<button v-if="!out" @click="$emit('voteOut', true)" class="btn">Voted Out</button>
+			</div>
+			<div>
+				<button v-if="out" @click="$emit('voteOut', false)" class="btn">Add back in</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -68,11 +72,15 @@
 		& > div {
 			display: flex;
 			width: 100%;
-			& > :nth-child(1) {
-				width: 100px;
+			& > div:nth-child(1) {
+				text-align: left;
 			}
-			& > div:not(:nth-last-child(1)) {
+			& > div:nth-child(2) {
+				text-align: center;
 				flex-grow: 1;
+			}
+			& > div:nth-child(3) {
+				text-align: right;
 			}
 		}
 

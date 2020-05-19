@@ -24,6 +24,9 @@ const questions: FullGame = {
 		maths(),
 		maths(),
 		maths()
+	],
+	round2: [
+		maths()
 	]
 }
 
