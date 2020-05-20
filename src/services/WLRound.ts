@@ -31,7 +31,6 @@ export default class WLRound {
 		}
 	}
 
-
 	public constructor(game: WLGame) {
 		// Setup vars
 		this.game = game
@@ -124,7 +123,6 @@ export default class WLRound {
 		this.banked = Math.min(this.banked + this.value, this.max)
 		this.currentContestant.banked += this.banked - before
 		this.chainPosition = 0
-		console.log(this.banked, this.max)
 		if (this.banked >= this.max) {
 			WLAudio.endRound()
 			this.end()

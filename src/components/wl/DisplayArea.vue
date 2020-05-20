@@ -32,7 +32,7 @@
 			<ContestantName v-if="game.round.started" :name="game.round.currentContestant.name" />
 			<RoundTimer :time="game.round.timer" />
 		</div>
-		<FinalRound v-if="game.finalRound" />
+		<FinalRound v-if="game.finalRound && game.finalRound.started" />
 	</div>
 </template>
 

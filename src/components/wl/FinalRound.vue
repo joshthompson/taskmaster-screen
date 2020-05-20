@@ -25,7 +25,7 @@
 </script>
 
 <template>
-	<div class="final-round">
+	<div class="final-round" v-if="!finalRound.suddenDeath">
 		<div class="names">
 			<div>{{ finalRound.player1.name }}</div>
 			<div>{{ finalRound.player2.name }}</div>

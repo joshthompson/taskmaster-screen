@@ -15,7 +15,7 @@
 		}
 
 		public get contenstantOut() {
-			return this.game.contestants 
+			return this.game.contestants
 				.filter((c) => c.out)
 				.sort((a, b) => a.outTime > b.outTime ? 1 : - 1)
 		}

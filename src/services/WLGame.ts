@@ -3,7 +3,8 @@ import WLFinalRound from './WLFinalRound'
 import { WLContestant, WLGameState } from '@/types/WeakestLink'
 import store from '@/store'
 import WLScript from './WLScript'
-import { WLDisplayMoney } from './helper'
+import { WLDisplayMoney, sleep } from './helper'
+import WLAudio from './WLAudio'
 
 export default class WLGame {
 
@@ -72,6 +73,13 @@ export default class WLGame {
 		this.totalBanked += this.round.banked
 		this.round = null
 		store.commit('wlSetScreenState', 'nothing')
+		this.save()
+	}
+
+	public endFinalRound() {
+		this.finalRound = null
+		store.commit('wlSetScreenState', 'showTotal')
+		this.save()
 	}
 
 	public vote(name: string, out: boolean) {
@@ -83,6 +91,18 @@ export default class WLGame {
 
 	public save() {
 		store.commit('wlSetGame', JSON.parse(JSON.stringify(this.data)))
+	}
+
+	public async voting() {
+		store.commit('wlSetScreenState', 'voting')
+		WLAudio.voting()
+		await sleep(27500)
+		store.commit('wlSetScreenState', 'nothing')
+		WLAudio.stop()
+	}
+
+	public async walkOfShame() {
+		WLAudio.walkOfShame()
 	}
 
 	public get data(): WLGameState {

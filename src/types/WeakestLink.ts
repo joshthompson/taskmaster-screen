@@ -6,7 +6,7 @@ export interface WLState {
 	screenState?: WLScreenState
 }
 
-export type WLScreenState = 'nothing' | 'showLogo' | 'showTotal' | 'round' | 'finalRound'
+export type WLScreenState = 'nothing' | 'showLogo' | 'showTotal' | 'round' | 'finalRound' | 'voting'
 
 export interface WLGameState {
 	contestants: WLContestant[]
@@ -35,6 +35,8 @@ export interface WLFinalRoundState {
 	player2: WLContestant
 	questionNumber: number
 	results: boolean[][]
+	started: boolean
+	suddenDeath: boolean
 }
 
 export interface WLContestant {

@@ -21,6 +21,10 @@
 			return (this.$store.state.wl as WLState).game
 		}
 
+		public get screenState() {
+			return (this.$store.state.wl as WLState).screenState
+		}
+
 		public money(value) {
 			return WLDisplayMoney(value)
 		}
@@ -43,8 +47,18 @@
 			this.gameObj.startFinalRound()
 		}
 
-		public screenState(state: WLScreenState) {
+		public voting() {
+			this.gameObj.voting()
+		}
+
+		public setScreenState(state: WLScreenState) {
 			this.$store.commit('wlSetScreenState', state)
+		}
+
+		public get showActions() {
+			return this.game
+				&& !this.game.round
+				&& this.screenState !== 'voting'
 		}
 
 	}
@@ -69,12 +83,13 @@
 		</div>
 		<ContestantsList :gameObj="gameObj" />
 
-		<div class="actions" v-if="game && !game.round">
+		<div class="actions" v-if="showActions">
 			<button @click="startRound" class="btn large">Start Round</button>
 			<button @click="startFinalRound" class="btn large">Final Round</button>
-			<button @click="screenState('showTotal')" class="btn large">Show Total</button>
-			<button @click="screenState('nothing')" class="btn large">Nothing</button>
-			<button @click="screenState('showLogo')" class="btn large">Show Logo</button>
+			<button @click="voting" class="btn large">Voting</button>
+			<button @click="setScreenState('showTotal')" class="btn large">Show Total</button>
+			<button @click="setScreenState('nothing')" class="btn large">Nothing</button>
+			<button @click="setScreenState('showLogo')" class="btn large">Show Logo</button>
 		</div>
 	</div>
 </template>

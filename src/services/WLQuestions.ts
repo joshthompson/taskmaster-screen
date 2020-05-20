@@ -11,7 +11,7 @@ interface FullGame {
 
 
 const questions: FullGame = {
-	round1: [
+	round_1: [
 		maths(),
 		maths(),
 		maths(),
@@ -25,7 +25,10 @@ const questions: FullGame = {
 		maths(),
 		maths()
 	],
-	round2: [
+	round_2: [
+		maths()
+	],
+	round_final: [
 		maths()
 	]
 }
@@ -39,8 +42,8 @@ function maths(): Question {
 	}
 }
 
-function getQuestion(round: number) {
-	return questions[`round${round}`][0]
+function getQuestion(round: number | string) {
+	return questions[`round_${round}`][0]
 }
 
 export default {
