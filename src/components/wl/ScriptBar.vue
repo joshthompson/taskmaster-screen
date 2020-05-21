@@ -1,11 +1,29 @@
 <script lang="ts">
-	import { Component, Vue } from 'vue-property-decorator'
+	import { Component, Watch, Vue } from 'vue-property-decorator'
 	import { WLState } from '@/types/WeakestLink'
+	import io from 'socket.io-client'
+	const socket = io('localhost:6226')
 
 	@Component
 	export default class ScriptBar extends Vue {
+
+		private ready: boolean = false
+		private socket: any = socket
+
+		public created() {
+			this.socket.on('connect', (socket) => {
+				this.ready = true
+				this.socket.emit('update the script', this.script)
+			})
+		}
+
 		public get script() {
 			return (this.$store.state.wl as WLState).script
+		}
+
+		@Watch('script', { immediate: true })
+		private updateScript() {
+			this.socket.emit('update the script', this.script)
 		}
 	}
 </script>

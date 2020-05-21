@@ -85,7 +85,7 @@ const modes = {
 }
 
 let mode = modes.logo
-// mode = modes.score
+mode = modes.score
 // mode = modes.lava.holly
 
 // mode = { type: 'letter', letter: 'y' }

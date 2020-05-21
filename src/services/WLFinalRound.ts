@@ -66,9 +66,6 @@ export default class WLFinalRound {
 		if (this.questionNumber >= 9 && this.questionNumber % 2 === 1) {
 			this.results.push([null, null])
 		}
-		console.table(this.results)
-		// Todo - do we have a winner?
-		// Todo - Sudden death?
 		this.questionNumber++
 		this.getQuestion()
 		this.save()
