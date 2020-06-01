@@ -1,0 +1,122 @@
+<html>
+	<head>
+		<title>Weakest Link</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"
+			integrity="sha256-OgiHfllOBEOiWQ2OcBsDncRG2k7QBW9Rs1dB7MH2N2s="
+			crossorigin="anonymous"
+		></script>
+		<style>
+			html {
+				font-size: 32px;
+			}
+			body {
+				background: black;
+				color: white;
+				font-family: Arial, Helvetica, sans-serif;
+				padding: 0.5rem;
+				line-height: 1.25rem;
+				margin: 0;
+				text-align: center;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			#script {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: calc(100vw - 300px);
+				height: 100vh;
+				padding: 20px;
+				overflow: auto;
+			}
+
+			#contestants {
+				position: fixed;
+				top: 0;
+				right: 0;
+				width: 300px;
+				height: 100vh;
+				font-size: 20px;
+				padding: 1em;
+				overflow: auto;
+			}
+
+			.answer {
+				color: #008DD4;
+			}
+
+			.contestant-block {
+				margin-bottom: 0.25em;
+				padding: 0.25em;
+				border-radius: 0.5em;
+				background: #AAAAAA;
+				color: #000000;
+				text-align: left;
+			}
+
+			.contestant-block > div {
+				display: flex;
+				width: 100%;
+			}
+			.contestant-block > div > div:nth-child(1) {
+				text-align: left;
+			}
+			.contestant-block > div > div:nth-child(2) {
+				text-align: center;
+				flex-grow: 1;
+			}
+			.contestant-block > div > div:nth-child(3) {
+				text-align: right;
+			}
+			.name {
+				font-weight: bold;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="script"></div>
+		<div id="contestants"></div>
+		<script type="text/javascript">
+			const socket = io.connect({ autoConnect: true })
+			const idleTimeout = 5000
+			let timeout = null
+			socket.on('connect', () => {
+				socket.emit('i want the stuff')
+				socket.on('script', (script) => {
+					document.getElementById('script').innerHTML = script
+					clearTimeout(timeout)
+					timeout = setTimeout(() => socket.emit('i want the stuff'), idleTimeout)
+				})
+				socket.on('contestants', (contestants) => {
+					document.getElementById('contestants').innerHTML = contestants
+						.filter(c => !c.out)
+						.map(c => {
+							const time = Math.floor(c.time / c.total / 1000 * 10) / 10
+							return `
+								<div class="contestant-block">
+									<div>
+										<div class="name">${c.name}</div>
+										<div class="correct">${ c.right || 0 }/${ c.total || 0 }</div>
+										<div>(${ time || '∞'} secs)</div>
+									</div>
+									<div>
+										<div class="banked">Banked: ${ c.banked || 0 }</div>
+										<div class="lost">Lost: ${ c.lost || 0 }</div>
+									</div>
+								</div>
+							`
+						}).join('')
+					clearTimeout(timeout)
+					timeout = setTimeout(() => socket.emit('i want the stuff'), idleTimeout)
+				})
+			})
+		</script>
+	</body>
+</html>

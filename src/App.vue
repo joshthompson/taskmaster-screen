@@ -30,19 +30,14 @@
 <style lang="scss">
 	@import './style/app.scss';
 
-	// #app.started {
-	// 	cursor: none;
-	// }
-
 	#app > a {
-		display: inline-block;
+		display: block;
 		padding: 2rem 10rem;
 		font-size: 1.5rem;
 		border-radius: 0rem;
 		color: #FFFFFF;
 		background: #008DD4;
-		margin: 50vh 1rem 0;
-		transform: translateY(-50%);
+		margin: 1rem 1rem;
 		cursor: pointer;
 	}
 </style>

@@ -1,5 +1,3 @@
-import { sleep } from './helper'
-
 const ELEMENT_ID = 'wl-music'
 
 function audio(file: string) {
@@ -20,9 +18,11 @@ function audio(file: string) {
 }
 
 async function sting() {
-	// console.log('Audio start: ..... sting')
-	// await audio(0, 3)
-	// console.log('Audio finish: .... sting')
+	audio(`/weakest-link/audio/sting.mov`)
+}
+
+async function sting2() {
+	audio(`/weakest-link/audio/sting2.mov`)
 }
 
 function round(length: number) {
@@ -43,13 +43,14 @@ function walkOfShame() {
 	audio(`/weakest-link/audio/walk-of-shame.mp3`)
 }
 
-async function finalRound() {
+async function finalRound1() {
 	// Final winner - https://www.youtube.com/watch?v=WAa47Fb5xKc
-	const element = audio(`/weakest-link/audio/final-round.mp3`)
-	await sleep(6000)
-	if (element) {
-		element.currentTime = 14.5
-	}
+	audio(`/weakest-link/audio/final-round1.mov`)
+}
+
+async function finalRound2() {
+	// Final winner - https://www.youtube.com/watch?v=WAa47Fb5xKc
+	audio(`/weakest-link/audio/final-round2.mov`)
 }
 
 async function winner() {
@@ -62,6 +63,11 @@ function suddenDeath() {
 	audio(`/weakest-link/audio/sudden-death.mp3`)
 }
 
+function intro() {
+	// Has good quality everything - https://www.youtube.com/watch?v=11i_Y4FD554
+	audio(`/weakest-link/audio/intro.mov`)
+}
+
 function stop() {
 	// Remove previous audio tags
 	if (document.getElementById(ELEMENT_ID)) {
@@ -71,12 +77,15 @@ function stop() {
 
 export default {
 	sting,
+	sting2,
+	intro,
 	round,
 	endRound,
 	voting,
 	walkOfShame,
 	stop,
-	finalRound,
+	finalRound1,
+	finalRound2,
 	winner,
 	suddenDeath
 }

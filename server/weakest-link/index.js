@@ -1,20 +1,20 @@
 const router = require('express').Router()
 
 let script = 'hello'
+let contestants = []
+let stuffListeners = []
 
-let scriptListeners = []
-
-function addScriptListener(listener) {
-	removeScriptListener(listener) // Remove first to avoid duplicates
-	scriptListeners.push(listener)
+function addStuffListener(listener) {
+	removeStuffListener(listener) // Remove first to avoid duplicates
+	stuffListeners.push(listener)
 }
 
-function removeScriptListener(listener) {
-	scriptListeners = scriptListeners.filter(sL => sL !== listener)
+function removeStuffListener(listener) {
+	stuffListeners = stuffListeners.filter(sL => sL !== listener)
 }
 
-function updateScriptListeners() {
-	scriptListeners.forEach(sL => sL.emit('script', script))
+function updateStuffListeners(eventName, value) {
+	stuffListeners.forEach(sL => sL.emit(eventName, value))
 }
 
 module.exports = function(io) {
@@ -22,24 +22,45 @@ module.exports = function(io) {
 	io.on('connection', (socket) => {
 		io.emit('script', script)
 
-		socket.on('i want the script', () => {
+		socket.on('i want the stuff', () => {
 			io.emit('script', script)
-			addScriptListener(io)
+			io.emit('contestants', contestants)
+			addStuffListener(io)
 		})
 
 		socket.on('i do not want the script', () => {
-			removeScriptListener(io)
+			removeStuffListener(io)
 		})
 
 		socket.on('update the script', (data) => {
 			script = data
-			updateScriptListeners()
+			updateStuffListeners('script', data)
+		})
+
+		socket.on('update the contestants', (data) => {
+			contestants = data
+			updateStuffListeners('contestants', data)
 		})
 		
 		socket.on('disconnect', () => {
-			removeScriptListener(io)
+			removeStuffListener(io)
 			io.emit('user disconnected')
 		})
+	})
+
+	// Router
+
+	router.get('/script', (_req, res) => {
+		res.sendFile(`${__dirname}/script.html`)
+	})
+	
+	let director = 'free'
+	router.get('/set-director/:director', (req, res) => {
+		director = req.params.director
+		res.send({ director })
+	})
+	router.get('/director', (_req, res) => {
+		res.send({ director })
 	})
 
 	return router

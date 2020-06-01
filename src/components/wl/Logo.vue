@@ -14,13 +14,13 @@
 
 	.logo {
 		position: absolute;
-		bottom: $s5;
-		right: $s5;
-		background-image: url('../../assets/weakest-link/logo.png');
+		bottom: 0;
+		right: 0;
+		background-image: url('../../assets/weakest-link/logo-new.png');
 		background-size: contain;
 		background-position: center;
 		background-repeat: no-repeat;
-		width: $s15;
-		height: $s15;
+		width: $s25;
+		height: $s25;
 	}
 </style>

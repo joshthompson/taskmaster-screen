@@ -2,18 +2,18 @@
 	import { Component, Watch, Vue } from 'vue-property-decorator'
 	import { WLState } from '@/types/WeakestLink'
 	import io from 'socket.io-client'
-	const socket = io('localhost:6226')
 
 	@Component
 	export default class ScriptBar extends Vue {
 
 		private ready: boolean = false
-		private socket: any = socket
+		private socket: any = io('localhost:6226')
 
 		public created() {
 			this.socket.on('connect', (socket) => {
 				this.ready = true
 				this.socket.emit('update the script', this.script)
+				this.socket.emit('update the contestants', this.game?.strongest || [])
 			})
 		}
 
@@ -21,9 +21,18 @@
 			return (this.$store.state.wl as WLState).script
 		}
 
+		public get game() {
+			return (this.$store.state.wl as WLState).game
+		}
+
 		@Watch('script', { immediate: true })
 		private updateScript() {
 			this.socket.emit('update the script', this.script)
+		}
+
+		@Watch('game', { immediate: true, deep: true })
+		private updateContestants() {
+			this.socket.emit('update the contestants', this.game?.strongest || [])
 		}
 	}
 </script>
@@ -36,11 +45,11 @@
 	@import '../../style/weakest-link.scss';
 	
 	.script-bar {
-		$textSize: calc((100vh - #{$height}) / 5);
+		$textSize: calc((100vh - #{$height}) / 7);
 		position: absolute;
 		bottom: 0;
 		left: 0;
-		width: 100vw;
+		width: $width;
 		height: calc(100vh - #{$height});
 		background: #000000;
 		color: #FFFFFF;

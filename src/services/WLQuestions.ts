@@ -1,49 +1,64 @@
+interface RawQuestion {
+	Question: string
+	Answer: string
+	Round: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | 'final'
+}
+
 interface Question {
-	q: string
-	a: string
+	question: string
+	answer: string
 }
 
 type Round = Question[]
 
 interface FullGame {
-	[roundName: string]: Round
+	round_1?: Round
+	round_2?: Round
+	round_3?: Round
+	round_4?: Round
+	round_5?: Round
+	round_6?: Round
+	round_7?: Round
+	round_8?: Round
+	round_final?: Round
 }
 
+import raw1 from '@/data/WL_Weakest_Link_Questions.csv'
+import raw2 from '@/data/WL_Original_Questions.csv'
+const rawQuestions: RawQuestion[] = [ ...raw1, ...raw2 ]
 
 const questions: FullGame = {
-	round_1: [
-		maths(),
-		maths(),
-		maths(),
-		maths(),
-		maths(),
-		maths(),
-		maths(),
-		maths(),
-		maths(),
-		maths(),
-		maths(),
-		maths()
-	],
-	round_2: [
-		maths()
-	],
-	round_final: [
-		maths()
-	]
+	round_1: [],
+	round_2: [],
+	round_3: [mathsQuestion()],
+	round_4: [],
+	round_5: [],
+	round_6: [],
+	round_7: [],
+	round_8: [],
+	round_final: []
 }
 
-function maths(): Question {
-	const a = Math.ceil(Math.random() * 100)
-	const b = Math.ceil(Math.random() * 100)
+rawQuestions.forEach((q) => {
+	questions[`round_${q.Round}`].push({
+		question: q.Question,
+		answer: `${q.Answer}`
+	})
+})
+
+function mathsQuestion(round: number = 1): Question {
+	const a = 20 * round + Math.ceil(Math.random() * 100)
+	const b = 20 * round + Math.ceil(Math.random() * 100)
 	return {
-		q: `What is ${a} + ${b}?`,
-		a: `${a + b}`
+		question: `What is ${a} + ${b}?`,
+		answer: `${a + b}`
 	}
 }
 
-function getQuestion(round: number | string) {
-	return questions[`round_${round}`][0]
+function getQuestion(round: number | string): Question {
+	const roundQuestions: Round = questions[`round_${round}`]
+	const theQuestion = roundQuestions.splice(Math.floor(Math.random() * roundQuestions.length), 1)[0]
+	return theQuestion || mathsQuestion(typeof round === 'number' ? round : 10)
 }
 
 export default {

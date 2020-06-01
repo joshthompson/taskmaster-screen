@@ -12,6 +12,7 @@ export default class WLFinalRound {
 	public started: boolean = false
 	public questionNumber: number = 0
 	public suddenDeath: boolean = false
+	public ready: boolean = false
 	private eventListenerWrapper
 
 	public results: boolean[][] = [
@@ -37,13 +38,32 @@ export default class WLFinalRound {
 	}
 
 	public async start() {
-		WLAudio.finalRound()
+		WLScript.set(`So, ${this.player1.name} and ${this.player2.name}; lets play The Weakest Link.</div>`)
 		await sleep(3000)
-		WLScript.set(`As the strongest link in the last round ${this.player1.name} will go first`)
-		await sleep(6000)
+		WLAudio.finalRound1()
+		await sleep(3000)
+		WLScript.set(`As the strongest link in the last round ${this.player1.name} you will have the choice of who goes first?`)
+		while (!this.ready) {
+			await sleep(100)
+		}
+		WLAudio.finalRound2()
+		WLScript.set(WLScript.empty)
+		await sleep(3000)
 		this.getQuestion()
 		this.started = true
 		this.save()
+	}
+
+	public startPlayer1() {
+		this.ready = true
+	}
+
+	public startPlayer2() {
+		const p1 = this.player2
+		const p2 = this.player1
+		this.player1 = p1
+		this.player2 = p2
+		this.ready = true
 	}
 
 	public right() {
@@ -90,7 +110,7 @@ export default class WLFinalRound {
 	public async startSuddenDeath() {
 		this.save()
 		WLScript.set(`
-			So after 5 questions each your scores are tied.<br/>
+			So after 5 questions, your scores are tied.<br/>
 			Therefore ${this.player1.name} and ${this.player2.name}, let's play sudden death.
 		`)
 		await sleep(6000)
@@ -102,7 +122,7 @@ export default class WLFinalRound {
 	public async end(winner: WLContestant, loser: WLContestant) {
 		WLAudio.winner()
 		WLScript.set(`
-			That means ${winner.name}, that you are todays strongest link and you
+			That means ${winner.name}, you are today's strongest link and you
 			go away with ${WLDisplayMoney(this.game.totalBanked)}.<br/>
 			${loser.name}, you leave with nothing.<br/>
 			Join us again for The Weakest Link. Goodbye (<em>wink</em>)
@@ -115,9 +135,10 @@ export default class WLFinalRound {
 
 	public getQuestion() {
 		const question = WLQuestions.getQuestion('final')
+		const name = this.questionNumber % 2 === 0 ? this.player1.name : this.player2.name
 		WLScript.set(`
-			<div>${this.player1.name}, ${question.q}</div>
-			<div class="answer">${question.a}</div>
+			<div>${name}: ${question.question}</div>
+			<div class="answer">${question.answer}</div>
 		`)
 	}
 
@@ -132,7 +153,8 @@ export default class WLFinalRound {
 			questionNumber: this.questionNumber,
 			results: this.results,
 			started: this.started,
-			suddenDeath: this.suddenDeath
+			suddenDeath: this.suddenDeath,
+			ready: this.ready
 		}
 	}
 

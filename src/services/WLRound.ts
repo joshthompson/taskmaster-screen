@@ -1,9 +1,11 @@
-import WLGame from './WLGame'
-import WLScript from './WLScript'
-import WLQuestions from './WLQuestions'
-import WLAudio from './WLAudio'
+import WLGame from '@/services/WLGame'
+import WLScript from '@/services/WLScript'
+import WLQuestions from '@/services/WLQuestions'
+import WLAudio from '@/services/WLAudio'
+import WLDirector from '@/services/WLDirector'
 import { WLBaseTime, WLTimeReduction, WLChain, WLRoundState } from '@/types/WeakestLink'
 import { sleep } from '@/services/helper'
+import WLSettings from '@/services/WLSettings'
 
 export default class WLRound {
 	public game: WLGame					// The game
@@ -15,6 +17,10 @@ export default class WLRound {
 	public chainPosition: number = 0	// What position is the chain
 	public timeoutId: number			// Keeps track of timeout
 	private eventListenerWrapper
+	public currentChain: number = 0		// Current chain length (doesn't reset with bank)
+	public longestChain: number = 0		// Longest chain - just used for mocking contestants
+	public final: boolean = false		// Is this the final normal round
+	public multiplier: number = 1		// Multiplier - used to triple final normal round
 
 	public get data(): WLRoundState {
 		return {
@@ -58,6 +64,13 @@ export default class WLRound {
 		// Setup timer
 		this.timer = WLBaseTime - WLTimeReduction * (this.game.roundNumber - 1)
 
+		// Check if final normal round
+		if (this.currentContestants.length === 2) {
+			this.timer = 90
+			this.multiplier = 3
+			this.final = true
+		}
+
 		// Start
 		this.start()
 		this.save()
@@ -67,11 +80,22 @@ export default class WLRound {
 		this.game.save()
 	}
 
+	public get currentContestants() {
+		return this.game.contestants.filter((c) => !c.out)
+	}
+
 	public getQuestion() {
 		const question = WLQuestions.getQuestion(this.game.roundNumber)
+
+		if (Math.random() < 0.2) {
+			WLDirector.set(WLSettings.hostGoogle)
+			setTimeout(() => WLDirector.set(this.currentContestant.googleName), 1500)
+		} else {
+			WLDirector.set(this.currentContestant.googleName)
+		}
 		WLScript.set(`
-			<div>${this.currentContestant.name}, ${question.q}</div>
-			<div class="answer">${question.a}</div>
+			<div>${this.currentContestant.name}: ${question.question}</div>
+			<div class="answer">${question.answer}</div>
 		`)
 	}
 
@@ -107,6 +131,8 @@ export default class WLRound {
 		}
 		this.currentContestant.right++
 		this.currentContestant.total++
+		this.currentChain++
+		this.longestChain = Math.max(this.longestChain, this.currentChain)
 		this.nextQuestion()
 	}
 
@@ -115,6 +141,7 @@ export default class WLRound {
 		const lost = Math.min(this.value, this.max - this.banked)
 		this.currentContestant.lost += lost
 		this.chainPosition = 0
+		this.currentChain = 0
 		this.nextQuestion()
 	}
 
@@ -145,6 +172,7 @@ export default class WLRound {
 
 	public async start() {
 		WLScript.set(WLScript.startRound)
+		await sleep(2000)
 		await this.startMusic()
 		this.started = true
 		this.getQuestion()
@@ -162,14 +190,7 @@ export default class WLRound {
 	}
 
 	public async end() {
-		// 	this.reallyStarted = false
-		// 	this.endQuestion()
-		// 	this.music.currentTime = 310.3
-		// 	this.script = Script.empty
-		// 	await sleep(3500)
-		// 	this.script = Script.endOfRound
-		// 	this.total += this.banked
-		// 	this.started = false
+		WLDirector.set('free')
 		window.removeEventListener('keypress', this.eventListenerWrapper)
 		clearTimeout(this.timeoutId)
 		this.game.endRound()

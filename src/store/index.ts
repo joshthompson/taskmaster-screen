@@ -13,7 +13,8 @@ const initialState: AppState = {
 	wl: {
 		game: null,
 		script: '',
-		screenState: 'nothing'
+		screenState: 'preShow',
+		director: 'free'
 	}
 }
 
@@ -26,6 +27,9 @@ const mutations: MutationTree<AppState> = {
 	},
 	wlSetScreenState: (state, screenState: WLScreenState) => {
 		state.wl.screenState = screenState
+	},
+	wlSetDirector: (state, director: string) => {
+		state.wl.director = director
 	}
 }
 
