@@ -3,8 +3,9 @@ export async function sleep(ms: number) {
 }
 
 export function WLDisplayMoney(value: number, useBr: boolean = false, emoji: string = '🧻', rollName = 'roll') {
-	const rolls = Math.floor(value / 500)
-	const sheets = value % 500
+	const sheetsPerRoll = 180
+	const rolls = Math.floor(value / sheetsPerRoll)
+	const sheets = value % sheetsPerRoll
 	const rollsStr = rolls === 1 ? `${emoji} 1 ${rollName}` : `${emoji} ${rolls} ${rollName}s`
 	const sheetsStr = sheets === 1 ? '1 sheet' : `${sheets} sheets`
 	if (value === 0) {

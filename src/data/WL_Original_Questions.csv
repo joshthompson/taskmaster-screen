@@ -1,46 +1,118 @@
-Question,Answer,Round
-"In TV comedy, which 2009 sitcom coined the expression 6 seasons and a movie?",Community,3
-With which sport is Olympic medalist Michael Phelps associated?,Swimming,2
-"In music, John Deacon, Roger Taylor and Brian May were three member of which British rock band?",Queen,2
-"In entertainment, Nancy Cartwright is most famously known for voicing which Simpsons character?",Bart,5
-"In music, brothers Joe, Kevin and Nick make up which famous American pop rock band?",Jonas Brothers,5
-"In geography, what is the longest river in the UK?",Severn,3
-"In literature, The BFG and Esio Trot are novels by which author",Roald Dahl,1
-"In TV, the character Walter White is known for making a blue varient of which drug?",Cystal Meth / Methamphetamine,2
-"In US geography, the District of Colombia is sandwiched between which Maryland and which other state?",Virginia,final
-Barack Obama and Bob the Builder share what slogan?,Yes We Can,4
-"In poetry, a haiku is a japanese poem that consists of how many lines?",3,3
-"In biology, what blood type is known as a universal donor?",O negative,5
-A person who peddles medicines that are fake or ineffective is commonly said to be selling snake what?,Oil,5
-A person who works full-time and gets paid fortnightly would receive how many paycheques in one year?,26,3
-"In diets, a pescetarian breaks from the vegetarian code by eating what type of food?",Fish,3
-"In geography, what Asian island nation lies just of the southern coast of Indian?",Sri Lanka,3
-What is the name of the yearly Gloucestershire event in which a wheel of dairy product is chased down a hill?,Cheese rolling,4
-"In cinema, in which film does Jim Carrey play Stanley Ipkiss, a man that turns into an eccentric green-skinned being who can bend reality?",The Mask,5
-"In France, what holiday is celebrated each year on the 14th of July?",Bastille Day / Fête nationale,5
-"In comedy, Eddie Large is one half of the double act known as what?",Little and Large,4
-"In computer spreadsheets, what formula is used to total up all numbers in a range of cells?",SUM,5
-"In gardening, what S is powered grass cutting device that commonly uses a nylon cord which rotates rapidly on a spindle?",Strimmer,7
-"In history, the Tang Dynasty was an imperial dynasty in which Asian country?",China,4
-"What UK terminology, what term meaning an area around a city in which building is restricted, is also a term used in many martial arts?",Green belt,7
-"In astronomy, what star is the shortest distance from the planet Neptune?",The Sun,2
-"In geography, what country is the most southerly in continental North America?",Panama,8
-"In retail, what chain of eatery gets it's name from the French phrase that translates as ""ready to eat""?",Pret a Manger,7
-What is was the full official name of the UK prior to it being The United Kingdom of Great Britain and Northern Ireland?,The United Kingdom of Great Britain and Ireland,final
-"In nature, what mammal is the only one that can fly?",Bat,final
-Svalbard is northerly island territory that is part of which country?,Norway,final
-"In geography, which British Crown dependency, situated in the Irish sea has a flag containing three armoured legs?",Isle of Mann,3
-"In literature, Robert Galbraith is a pseudonym of which famous author?",JK Rowling,4
-"In music, which Southampton R&B singer topped the UK charts in 2000 with 7 Days?",Craig David,3
-"In video games, what is the name of Mario's brother from the popular Nintendo franchise?",Luigi,1
-"In sport, Anna Kournikova was a tennis player from which country?",Russia,2
-"In electronics, ohms are standard unit to measure what? ",Resistance,7
-"In entertainment, which Radio series featured the characters of Zaphod Beeblebrox and Slartibartfast?",The Hitchhikers Guide To The Galaxy,5
-"In comedy, which show featured Mark Corrigan and Jeremy Usborne and had every camera shot form the perspective of a character?",Peep Show,4
-"In science, a stamen and stigma are parts of the anatomy of a whale or a flower?",A Flower,3
-"In science, cumulus nimbus is type of what?",Cloud,4
-"In maths, what is the cubed route of 216?",6,6
-"In politics, in which year did David Cameron resign as UK Prime Minister?",2016,5
-"In music, Beethoven was born in which country?",Germany,6
-"In health, what does the D in ‘covid-19’ stand for?",Disease,6
-What is the largest country in the world with one time zone?,China,final
+Question,Answer,Round,Used,UK
+"In TV comedy, which 2009 sitcom coined the expression 6 seasons and a movie?",Community,3,,
+With which sport is Olympic medalist Michael Phelps associated?,Swimming,3,1,
+"In music, John Deacon, Roger Taylor and Brian May were three members of which British rock band?",Queen,2,,
+"In entertainment, Nancy Cartwright is most famously known for voicing which Simpsons character?",Bart,5,,
+"In music, brothers Joe, Kevin and Nick make up which famous American pop rock band?",Jonas Brothers,5,,
+"In geography, what is the longest river in the UK?",Severn,3,,
+"In literature, The BFG and Esio Trot are novels by which author?",Roald Dahl,1,1,
+"In TV, the character Walter White is known for making a blue varient of which drug?",Cystal Meth / Methamphetamine,3,1,
+"In US geography, the District of Colombia is sandwiched between Maryland and which other state?",Virginia,final,,
+"In popular culture, Barack Obama and Bob the Builder share what slogan?",Yes We Can,4,,
+"In poetry, a haiku is a Japanese poem that consists of how many lines?",3,3,,
+"In biology, what blood type is known as a universal donor?",O negative,5,1,
+A person who peddles medicines that are fake or ineffective is commonly said to be selling snake what?,Oil,5,1,
+A person who works full-time and gets paid fortnightly would receive how many pay cheques in one year?,26,4,,
+"In diets, a pescetarian breaks from the vegetarian code by eating what type of food?",Fish,3,1,
+"In geography, what Asian island nation lies just off the south eastern coast of India?",Sri Lanka,3,,
+"In sport, what is the name of the yearly Gloucestershire event in which a wheel of dairy product is chased down a hill?",Cheese rolling,6,1,
+"In cinema, in which film does Jim Carrey play Stanley Ipkiss, a man that turns into an eccentric green-skinned being who can bend reality?",The Mask,5,,
+"In France, what holiday is celebrated each year on the 14th of July?",Bastille Day / Fête nationale,5,1,
+"In comedy, Eddie Large is one half of the double act known as what?",Little and Large,6,,1
+"In computer spreadsheets, what formula is used to total up all numbers in a range of cells?",SUM,5,,
+"In gardening, what S is a powered grass cutting device that commonly uses a nylon cord which rotates rapidly on a spindle?",Strimmer,7,,
+"In history, the Tang Dynasty was an imperial dynasty in which Asian country?",China,4,,
+"In UK terminology, what term meaning an area around a city in which building is restricted, is also a term used in many martial arts?",Green belt,6,1,1
+"In astronomy, what star is the shortest distance from the planet Neptune?",The Sun,2,,
+"In geography, what country is the most southerly in continental North America?",Panama,7,,
+"In retail, what chain of eatery gets its name from the French phrase that translates as ""ready to eat""?",Pret a Manger,4,1,
+"In nature, which is the only mammal that can fly?",Bat,final,1,
+"In geography, Svalbard is a northerly island territory that is part of which country?",Norway,final,1,
+"In geography, which British Crown dependency, situated in the Irish sea has a flag containing three armoured legs?",Isle of Mann,3,,
+"In literature, Robert Galbraith is a pseudonym of which famous author?",JK Rowling,4,,
+"In music, which Southampton R&B singer topped the UK charts in 2000 with 7 Days?",Craig David,3,,1
+"In video games, what is the name of Mario's brother from the popular Nintendo franchise?",Luigi,1,,
+"In sport, Anna Kournikova was a tennis player from which country?",Russia,5,,
+"In electronics, ohms is the standard derived unit to measure what? ",Resistance,7,,
+"In entertainment, which Radio series featured the characters of Ford Prefect and Arthur Dent?",The Hitchhikers Guide To The Galaxy,5,,
+"In comedy, which show featured Mark Corrigan and Jeremy Usborne and had every camera shot form the perspective of a character?",Peep Show,4,,1
+"In science, a stamen and a stigma are parts of the anatomy of a whale or a flower?",A Flower,3,,
+"In science, a cumulus nimbus is a type of what?",Cloud,4,1,
+"In maths, what is the cubed route of 216?",6,6,1,
+"In UK politics, in which year did David Cameron resign as UK Prime Minister?",2016,5,,
+"In music, Beethoven was born in which country?",Germany,6,1,
+"In health, what does the D in ‘covid-19’ stand for?",Disease,6,1,
+"In geography, what is the largest country in the world with only one time zone?",China,final,1,
+"In comedy, on what island do Father Ted, Father Dougal and Father Jack live upon?",Craggy Island,5,,1
+"In retail, which breakfast cereal has the cartoon mascots; Snap, Crackle and Pop?",Rice Krispies,1,,
+"In business, Google aquired which popular video streaming website in 2006?",YouTube,3,,
+"In business, which company was the first to reach a market value of 1 trillion US dollars?",Apple,4,,
+"In carpentry, what is a possible specialisation? Joinery or smithing",Joinery,4,1,
+"In economics, which of these countries has not adopted the Euro? Denmark or Slovenia",Denmark,5,,
+"In nature, sand, cow and hammerhead are types of which sea creature?",Shark,3,,
+"In history, what year were East and West Germany reunified? ",1990,7,,
+"In technology, what was the original maximum number of characters for messages published on the social media site, Twitter?",140,3,,
+"In television, the crash of flight Oceanic 815 appeared in which 2004 show?",LOST,3,,
+"In games, how many dice does a player start their turn rolling, in a game of Yahtzee?",5,4,1,
+"In objects, what is the total value of all sides on a standard six sided die?",21,5,,
+"In cinema, what mostly silent movie won the Academy Award for Best Picture in 2011?",The Artist,6,,
+"In literature, which book is the longest by page count in the Harry Potter series by JK Rowling?",Order of the Phoenix,6,,
+"In electronics, what does the D in LED stand for?",Diode,4,,
+"In video games, what S is a popular mobile game, where a player collects pellets that makes their character grow in length?",Snake,4,1,
+"In South America, what is the most commonly spoken language, beating Spanish by a small margin?",Portuguese,6,,
+"In Russian currency, one hundred kopeyka make up one what?",Ruble,5,,
+"In television, what series that ran from 2001 to 2011 and focused on the life of a teenager named Clark Kent?",Smallville,3,,
+"In media, what newspaper stopped publishing in 2011 after being central in the phone hacking scandal?",News of the World,3,1,1
+"In internet culture, what does the abreviation brb stand for?",Be right back,1,,
+"In technology, the term emoji comes from combining the words picture and character in which language?",Japanese,5,,
+"In poetry, from which animal did the Owl and the Pussycat purchase the ring from, so that they could get married?",Pig / Piggy-wig,4,,
+"In television, in the 2005 revival of Doctor Who, which actor played the role of the ninth Doctor?",Christopher Eccleston,4,,
+"In currency, 1000 pence is equal to how many pounds?",£10,3,,
+"In children's literature, Astrid Lindgren's famous red headed, stocking wearing character is known by what name?",Pippi Longstocking,5,1,
+"In children's literature, from which country does the character Paddington Bear originate?",Peru,5,1,
+"In sport, Sebastian Vettel and Charles Leclerc are the drivers for which Formula 1 team?",Ferrari,6,,
+"In sport, who did England beat in a tied super over to win the 2019 Cricket World Cup?",New Zealand,5,,
+"In literature, the novels Great Expectations and Bleak House were written by which author?",Charles Dickens,5,1,
+"In music, Dark Side of the Moon and The Wall are albums made by which artist?",Pink Floyd,4,,
+"In music, the Thin White Duke, Ziggy Stardust and Aladdin Sane are alter egos of which singer?",David Bowie,5,,
+"In chemistry, which element in the periodic table is denoted by the letter K?",Potassium,5,,
+"In nature, a group of owls is called a what?",Parliament,6,,
+"In games, excluding sequels and spin-offs, the Final Fantasy series has had how many original titles?",15,7,,
+"In history, who was the third wife of Henry VIII?",Jane Seymour,6,1,
+"In music, the score for the ballet called The Nutcracker was written by which Russian composer?",Tchaikovsky,final,1,
+"In film, what was the first feature-length animation released by Walt Disney Studios?",Snow White and the Seven Dwarves,5,1,
+"In sport, who is the current manager of the England Men's football team?",Gareth Southgate,4,1,
+"In language, what is the german word used to describe a feeling of pleasure at someone else's misfortune?",Shadenfreude,6,,
+"In history, what is the name of the volcano that erupted in 79AD and destroyed the city of Pompeii?",Vesuvius,4,1,
+"In geography, which is the largest ocean in the world?",Pacific,5,,
+"In history, the assassination of Franz Ferdinand started a series of events that led to which global conflict?",World War I,5,,
+"In television, the show Fraser starring Kelsey Grammar was a spin-off of which series?",Cheers,4,,
+"In geography, which is the largest completely landlocked country?",Kazakhstan,6,,
+"In music, the waltz is a ballroom and folk dance typically associated with what time signature?",3:4/triple,final,,
+"In motoring, the Aventador and Murcielago are sports cars produced by which Italian manufacturer?",Lamborghini,6,,
+"In politics, who succeeded Margaret Thatcher as Prime Minister of the United Kingdom?",John Major,3,,
+"In fashion, Sophia Webster is most well known for her line of which article of clothing?",Shoes,6,,
+"In nature, lemurs are mammals native to which island?",Madagascar,final,1,
+"In music, the Beatles caused outrage by claiming they were bigger than which deity, Jesus or Ganesh?",Jesus,1,1,
+"In boating, what S is the side of a vessel that is on the right when one is facing forward?",Starboard,final,,
+"In Romanian history, Vlad III or Vlad the Impaler is seen as the major inspiration for the titular character in which Bram Stoker novel?",Dracular,final,,
+"In music, what is the name of the suprrise album Beyoncé released in 2016?",Lemonade,6,1,
+"In television, who played the role of Robert Baratheon in the first series of the HBO show Game of Thrones?",Mark Addy,7,,
+"In culture, what B is the name of the coming of age ritual for boys in the Jewish faith?",Bar mitzva,6,1,
+"In banking, which bank was forced to split with TSB in 2013?",Lloyds,1,,1
+What was the final Apollo mission where astronauts walked on the Moon's surface?,18,final,1,
+"In film, who directed Jojo Rabbit, Hunt For the Wilderpeople and Thor: Ragnarok?",Taika Waititi,7,,
+"In American culture, 7-Eleven stores were temporarily converted into Kwik E-marts to promote the release of what movie?",The Simpsons Movie,2,1,
+"In modern history, what famous ship wreck was discovered in 1985 in an expedition led by Robert Ballard, 73 years after it sank?",Titanic,5,,
+"In music, the 2010 hit, ”Dog Days are Over” is a song by what band “Florence and the” what?",Machine,2,,
+"In religion, a famous passage from the Bible, in the Twenty-third Psalm begins with the line “The Lord is my”?",Shepherd,3,,
+"In literature, a famous Shakespearean sonnet begins with the question “Shall I compare thee to” what?",Summer's day,4,,
+"A fixture in urban settings, ""Columba livia"" is the scientific name for what species of bird?",Pigeons,7,,
+"In measurements, a hectare is a metric unit used to measure what?",Area,6,,
+"In film, the mascot to the animation studio Pixar, Luxo Junior, is a what?",Desk Lamp,7,,
+"In culture, the popular drinking game beer pong is typically played with a ball from what sport?",Table tennis,3,1,
+"In terminology, a tune or song that becomes stuck in one’s head is colloquially known as an ear what?",Worm,1,,
+"In computing, a web site that no longer exists will often prompt the phrase “Not Found” preceded by what error code number?",404,1,,
+"In music, what C is the section of a song that is traditionally repeated after every verse? ",Chorus,1,,
+"In American Politics, which political party is seen as the main opposing rival of the Democrat Party?",Republican Party,1,1,
+"In food, from which country does the cheese, Camembert, originate?",France,7,,

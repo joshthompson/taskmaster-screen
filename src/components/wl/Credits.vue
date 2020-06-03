@@ -21,14 +21,14 @@
 		}
 
 		public get credits() {
-			return [
+			let credits = [
 				{
 					role: 'Host',
 					people: [ WLSettings.host ]
 				},
 				{
 					role: 'Featuring',
-					people: [ 'Josh Thompson' ]
+					people: [ WLSettings.featuring ]
 				},
 				{
 					role: 'Music',
@@ -56,6 +56,10 @@
 					people: [ 'Josh Thompson' ]
 				}
 			]
+			if (WLSettings.host === WLSettings.featuring) {
+				credits = credits.filter((section) => section.role !== 'Featuring')
+			}
+			return credits
 		}
 	}
 </script>
@@ -70,7 +74,7 @@
 </template>
 
 <style scoped lang="scss">
-	@import '../../style/weakest-link.scss';
+	@import '../../style/sizing.scss';
 
 	.credits {
 		animation: scroll linear;

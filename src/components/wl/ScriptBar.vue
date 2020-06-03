@@ -42,7 +42,7 @@
 </template>
 
 <style lang="scss" scoped>
-	@import '../../style/weakest-link.scss';
+	@import '../../style/sizing.scss';
 	
 	.script-bar {
 		$textSize: calc((100vh - #{$height}) / 7);

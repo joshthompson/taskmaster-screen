@@ -4,6 +4,8 @@ import WLAudio from './WLAudio'
 import { sleep, WLDisplayMoney } from './helper'
 import WLScript from './WLScript'
 import WLQuestions from './WLQuestions'
+import WLDirector from './WLDirector'
+import WLSettings from './WLSettings'
 
 export default class WLFinalRound {
 	public game: WLGame
@@ -120,6 +122,7 @@ export default class WLFinalRound {
 	}
 
 	public async end(winner: WLContestant, loser: WLContestant) {
+		WLDirector.set('free')
 		WLAudio.winner()
 		WLScript.set(`
 			That means ${winner.name}, you are today's strongest link and you
@@ -133,9 +136,16 @@ export default class WLFinalRound {
 		this.game.endFinalRound()
 	}
 
+	public get currentContestant() {
+		return this.questionNumber % 2 === 0 ? this.player1 : this.player2
+	}
+
 	public getQuestion() {
 		const question = WLQuestions.getQuestion('final')
 		const name = this.questionNumber % 2 === 0 ? this.player1.name : this.player2.name
+		WLDirector.set(WLSettings.hostGoogle)
+		setTimeout(() => WLDirector.set(this.currentContestant.googleName), 2000)
+
 		WLScript.set(`
 			<div>${name}: ${question.question}</div>
 			<div class="answer">${question.answer}</div>

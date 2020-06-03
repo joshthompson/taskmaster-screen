@@ -6,7 +6,6 @@
 	import { sleep, WLDisplayMoney } from '@/services/helper'
 	import WLSettings from '@/services/WLSettings'
 	import WLScript from '@/services/WLScript'
-	import { WLChain } from '@/types/WeakestLink'
 	import ContestantName from '@/components/wl/ContestantName.vue'
 
 	@Component({
@@ -27,9 +26,11 @@
 			WLAudio.sting()
 			this.postIntro = true
 
+			const { chain } = WLSettings
 			const contestantsNum = this.game.contestants.length
-			const maxRound = WLChain[WLChain.length - 1]
+			const maxRound = chain[chain.length - 1]
 			const max = WLDisplayMoney(maxRound * (contestantsNum + 2), false, '', 'toilet roll')
+
 			WLScript.set(`Any of the ${contestantsNum} people in this video call today could win up to ${max}.`)
 			await sleep(6000)
 			WLScript.set(`
@@ -57,7 +58,7 @@
 			WLDirector.set('free')
 			WLScript.set(`
 				Just to remind you of the rules, in each round there is ${WLDisplayMoney(maxRound, false, '', 'toilet roll')} to be won.<br />
-				The fastest way to do this is to create a chain of ${WLChain.length} correct answers.<br />
+				The fastest way to do this is to create a chain of ${chain.length} correct answers.<br />
 				Break the chain and you lose all the money in that chain.
 				Say bank before the question is asked and the money is safe.
 			`)
@@ -89,7 +90,7 @@
 </template>
 
 <style scoped lang="scss">
-	@import '../../style/weakest-link.scss';
+	@import '../../style/sizing.scss';
 
 	$time: 28s;
 

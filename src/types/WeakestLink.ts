@@ -64,7 +64,3 @@ export interface WLContestant {
 	total?: number
 	outTime?: number
 }
-
-export const WLBaseTime = 180 // Starting time
-export const WLTimeReduction = 10 // How much less time for whenever a contestant leaves
-export const WLChain = [ 5, 10, 25, 50, 100, 150, 250, 375, 500 ]

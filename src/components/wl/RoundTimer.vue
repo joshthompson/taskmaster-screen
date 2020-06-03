@@ -20,7 +20,7 @@
 </template>
 
 <style scoped lang="scss">
-	@import '../../style/weakest-link.scss';
+	@import '../../style/sizing.scss';
 
 	.timer {
 		position: absolute;

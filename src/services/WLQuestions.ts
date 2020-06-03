@@ -2,6 +2,8 @@ interface RawQuestion {
 	Question: string
 	Answer: string
 	Round: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | 'final'
+	UK: '1' | ''
+	Used: '1' | ''
 }
 
 interface Question {
@@ -25,12 +27,13 @@ interface FullGame {
 
 import raw1 from '@/data/WL_Weakest_Link_Questions.csv'
 import raw2 from '@/data/WL_Original_Questions.csv'
+import WLSettings from './WLSettings'
 const rawQuestions: RawQuestion[] = [ ...raw1, ...raw2 ]
 
 const questions: FullGame = {
 	round_1: [],
 	round_2: [],
-	round_3: [mathsQuestion()],
+	round_3: [],
 	round_4: [],
 	round_5: [],
 	round_6: [],
@@ -40,10 +43,14 @@ const questions: FullGame = {
 }
 
 rawQuestions.forEach((q) => {
-	questions[`round_${q.Round}`].push({
-		question: q.Question,
-		answer: `${q.Answer}`
-	})
+	const ukCheck = !WLSettings.notUK || WLSettings.notUK && q.UK === ''
+	const usedCheck = !WLSettings.notUsed || WLSettings.notUsed && q.Used === ''
+	if (ukCheck && usedCheck) {
+		questions[`round_${q.Round}`].push({
+			question: q.Question,
+			answer: `${q.Answer}`
+		})
+	}
 })
 
 function mathsQuestion(round: number = 1): Question {

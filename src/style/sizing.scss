@@ -6,13 +6,20 @@ $vw-width: 80vw;
 $width: min(#{$vw-width}, #{$vh-width});
 $height: min(#{$vw-height}, #{$vh-height});
 
+$s0_25: calc(0.0025 * #{$height});
+$s0_5: calc(0.005 * #{$height});
 $s1: calc(0.01 * #{$height});
+$s1_5: calc(0.015 * #{$height});
+$s2: calc(0.02 * #{$height});
 $s2_5: calc(0.025 * #{$height});
+$s3: calc(0.03 * #{$height});
 $s3_5: calc(0.035 * #{$height});
 $s4: calc(0.04 * #{$height});
 $s5: calc(0.05 * #{$height});
 $s7_5: calc(0.075 * #{$height});
 $s10: calc(0.1 * #{$height});
+$s12_5: calc(0.125 * #{$height});
+$s14: calc(0.14 * #{$height});
 $s15: calc(0.15 * #{$height});
 $s20: calc(0.2 * #{$height});
 $s25: calc(0.25 * #{$height});
@@ -29,4 +36,5 @@ $s110: calc(1.1 * #{$height});
 $s120: calc(1.2 * #{$height});
 $s200: calc(2.0 * #{$height});
 
+$s-10: calc(-0.1 * #{$height});
 $s-30: calc(-0.3 * #{$height});

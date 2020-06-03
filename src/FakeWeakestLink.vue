@@ -21,7 +21,7 @@
 </template>
 
 <style lang="scss">
-	@import './style/weakest-link.scss';
+	@import './style/sizing.scss';
 	#fake-weakest-link {
 		height: 100vh;
 		width: 100vw;

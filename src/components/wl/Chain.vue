@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from 'vue-property-decorator'
 	import WLGame from '@/services/WLGame'
-	import { WLChain } from '@/types/WeakestLink'
 	import { WLDisplayMoney } from '@/services/helper'
+	import WLSettings from '@/services/WLSettings'
 
 	@Component
 	export default class Chain extends Vue {
 		@Prop() public game: WLGame
-		public chain: number[] = WLChain
+		public chain: number[] = WLSettings.chain
 
 		public get position() {
 			return this.game.round.chainPosition
@@ -52,7 +52,7 @@
 </template>
 
 <style scoped lang="scss">
-	@import '../../style/weakest-link.scss';
+	@import '../../style/sizing.scss';
 
 	.chain {
 		position: absolute;

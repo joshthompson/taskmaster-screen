@@ -1,6 +1,6 @@
 import WLRound from './WLRound'
 import WLFinalRound from './WLFinalRound'
-import { WLContestant, WLGameState, WLChain } from '@/types/WeakestLink'
+import { WLContestant, WLGameState } from '@/types/WeakestLink'
 import store from '@/store'
 import WLScript from './WLScript'
 import { WLDisplayMoney, sleep } from './helper'
@@ -94,11 +94,12 @@ export default class WLGame {
 				It's time to vote off - the weakest link
 			`)
 		} else {
-			if (this.round.longestChain >= WLChain.length) {
+			const { chain } = WLSettings
+			if (this.round.longestChain >= chain.length) {
 				WLScript.set(`
 					You won ${WLDisplayMoney(this.round.banked)}.<br/>
-					But you had a chain of ${WLChain.length} correct answers,
-					you could have reached the ${WLDisplayMoney(WLChain[WLChain.length - 1])} target.<br />
+					But you had a chain of ${chain.length} correct answers,
+					you could have reached the ${WLDisplayMoney(chain[chain.length - 1])} target.<br />
 					${WLScript.getInsult()}<br/>
 					${WLScript.getInsult()}<br />
 					It's time to vote off - the weakest link

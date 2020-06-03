@@ -3,7 +3,7 @@ import WLScript from '@/services/WLScript'
 import WLQuestions from '@/services/WLQuestions'
 import WLAudio from '@/services/WLAudio'
 import WLDirector from '@/services/WLDirector'
-import { WLBaseTime, WLTimeReduction, WLChain, WLRoundState } from '@/types/WeakestLink'
+import { WLRoundState } from '@/types/WeakestLink'
 import { sleep } from '@/services/helper'
 import WLSettings from '@/services/WLSettings'
 
@@ -62,11 +62,11 @@ export default class WLRound {
 		})
 
 		// Setup timer
-		this.timer = WLBaseTime - WLTimeReduction * (this.game.roundNumber - 1)
+		this.timer = WLSettings.roundBaseTime - WLSettings.roundTimeReduction * (this.game.roundNumber - 1)
 
 		// Check if final normal round
 		if (this.currentContestants.length === 2) {
-			this.timer = 90
+			this.timer = WLSettings.finalRoundTime
 			this.multiplier = 3
 			this.final = true
 		}
@@ -89,7 +89,7 @@ export default class WLRound {
 
 		if (Math.random() < 0.2) {
 			WLDirector.set(WLSettings.hostGoogle)
-			setTimeout(() => WLDirector.set(this.currentContestant.googleName), 1500)
+			setTimeout(() => WLDirector.set(this.currentContestant.googleName), 3000)
 		} else {
 			WLDirector.set(this.currentContestant.googleName)
 		}
@@ -123,9 +123,9 @@ export default class WLRound {
 		if (this.chainPosition === 0) {
 			this.chainPosition++
 		} else {
-			this.chainPosition = Math.min(WLChain.length, this.chainPosition + 0.5)
+			this.chainPosition = Math.min(WLSettings.chain.length, this.chainPosition + 0.5)
 			setTimeout(() => {
-				this.chainPosition = Math.min(WLChain.length, this.chainPosition + 0.5)
+				this.chainPosition = Math.min(WLSettings.chain.length, this.chainPosition + 0.5)
 				this.save()
 			}, 300)
 		}
@@ -198,11 +198,11 @@ export default class WLRound {
 	}
 
 	public get value() {
-		return WLChain[Math.ceil(this.chainPosition - 1)] || 0
+		return WLSettings.chain[Math.ceil(this.chainPosition - 1)] || 0
 	}
 
 	public get max() {
-		return WLChain[WLChain.length - 1]
+		return WLSettings.chain[WLSettings.chain.length - 1]
 	}
 
 	public get currentContestant() {

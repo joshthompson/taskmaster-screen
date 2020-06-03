@@ -185,7 +185,7 @@
 </template>
 
 <style lang="scss" scoped>
-	@import '../../style/weakest-link.scss';
+	@import '../../style/sizing.scss';
 	
 	.info-bar {
 		position: absolute;
