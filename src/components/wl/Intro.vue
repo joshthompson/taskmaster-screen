@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from 'vue-property-decorator'
-	import WLGame from '@/services/WLGame'
-	import WLAudio from '@/services/WLAudio'
-	import WLDirector from '@/services/WLDirector'
-	import { sleep, WLDisplayMoney } from '@/services/helper'
-	import WLSettings from '@/services/WLSettings'
-	import WLScript from '@/services/WLScript'
+	import WLGame from '@/services/wl/WLGame'
+	import WLAudio from '@/services/wl/WLAudio'
+	import Director from '@/services/shared/Director'
+	import { sleep, WLDisplayMoney } from '@/services/shared/helper'
+	import WLSettings from '@/services/wl/WLSettings'
+	import WLScript from '@/services/wl/WLScript'
 	import ContestantName from '@/components/wl/ContestantName.vue'
 
 	@Component({
@@ -18,18 +18,25 @@
 		public postIntro: boolean = false
 
 		public async created() {
+
+			const { chain } = WLSettings
+			const contestantsNum = this.game.contestants.length
+			const maxRound = chain[chain.length - 1]
+			const max = WLDisplayMoney(maxRound * (contestantsNum + 2), false, '', 'toilet roll')
+
 			WLAudio.intro()
 			this.nextShot()
+			WLScript.set(`
+				Here are the ${contestantsNum} contestants preparing for today's show.<br />
+				Only one of them will win up to ${max} - the others will leave with nothing when voted off as
+				the Weakest Link
+			`)
 			await sleep(29000)
 			WLScript.set('Welcome to The Weakest Link')
 			await sleep(2000)
 			WLAudio.sting()
 			this.postIntro = true
 
-			const { chain } = WLSettings
-			const contestantsNum = this.game.contestants.length
-			const maxRound = chain[chain.length - 1]
-			const max = WLDisplayMoney(maxRound * (contestantsNum + 2), false, '', 'toilet roll')
 
 			WLScript.set(`Any of the ${contestantsNum} people in this video call today could win up to ${max}.`)
 			await sleep(6000)
@@ -46,16 +53,16 @@
 			for (let i = 0; i < this.game.contestants.length; i++) {
 				const c = this.game.contestants[i]
 				this.namePlaque = c.name
-				WLDirector.set(c.googleName)
+				Director.set(c.googleName)
 				WLScript.set(`<em>[ ${c.name} introduction ]</em>`)
 				await sleep(8000)
 			}
 			WLAudio.sting2()
 			this.namePlaque = ''
-			WLDirector.set(WLSettings.hostGoogle)
+			Director.set(WLSettings.hostGoogle)
 			WLScript.set(WLScript.empty)
 			await sleep(2500)
-			WLDirector.set('free')
+			Director.set('free')
 			WLScript.set(`
 				Just to remind you of the rules, in each round there is ${WLDisplayMoney(maxRound, false, '', 'toilet roll')} to be won.<br />
 				The fastest way to do this is to create a chain of ${chain.length} correct answers.<br />
@@ -63,17 +70,17 @@
 				Say bank before the question is asked and the money is safe.
 			`)
 			await sleep(2500)
-			WLDirector.set('free')
+			Director.set('free')
 			this.$store.commit('wlSetScreenState', 'nothing')
 		}
 
 		public async nextShot() {
 			if (this.i < this.game.contestants.length * 2) {
 				const contestant = this.game.contestants[this.i++ % this.game.contestants.length]
-				WLDirector.set(contestant.googleName)
+				Director.set(contestant.googleName)
 				setTimeout(() => this.nextShot(), 1500)
 			} else {
-				WLDirector.set(WLSettings.hostGoogle)
+				Director.set(WLSettings.hostGoogle)
 			}
 		}
 	}

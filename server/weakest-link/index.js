@@ -53,15 +53,6 @@ module.exports = function(io) {
 	router.get('/script', (_req, res) => {
 		res.sendFile(`${__dirname}/script.html`)
 	})
-	
-	let director = 'free'
-	router.get('/set-director/:director', (req, res) => {
-		director = req.params.director
-		res.send({ director })
-	})
-	router.get('/director', (_req, res) => {
-		res.send({ director })
-	})
 
 	return router
 }

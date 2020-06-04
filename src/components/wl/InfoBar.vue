@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from 'vue-property-decorator'
-	import { WLState, WLContestant, WLScreenState } from '@/types/WeakestLink'
+	import { WLContestant, WLScreenState } from '@/types/WeakestLink'
 	import ContestantsList from '@/components/wl/ContestantsList.vue'
-	import WLGame from '@/services/WLGame'
-	import { WLDisplayMoney } from '@/services/helper'
-	import WLAudio from '@/services/WLAudio'
-	import WLDirector from '@/services/WLDirector'
-	import WLScript from '@/services/WLScript'
+	import WLGame from '@/services/wl/WLGame'
+	import { WLDisplayMoney } from '@/services/shared/helper'
+	import WLAudio from '@/services/wl/WLAudio'
+	import Director from '@/services/shared/Director'
+	import WLScript from '@/services/wl/WLScript'
+	import { AppState } from '@/types'
 
 	@Component({
 		components: { ContestantsList }
@@ -19,22 +20,30 @@
 		public round: number = 1
 
 		public created() {
-			WLDirector.set('free')
+			Director.set('free')
 			// this.contestantNames = 'Josh Testerson=Josh,Craig Testersson=Craig'
 			this.contestantNames = 'Holly Young=Holly, Paul Barratt=Paul, Sarah Bell=Sarah,Esther Akinfenwa=Esther, Vicki Kiely=Vicki, Nick Pearson=Nick, Tanya Alam=Tanya, Leo Baines Jump=Leo'
 			// this.contestantNames = 'Anne, Jack, Peter, Rebekah, Guy, Lisa, James, Nick'
 		}
 
 		public get game() {
-			return (this.$store.state.wl as WLState).game
+			return (this.$store.state as AppState).wl.game
 		}
 
 		public get screenState() {
-			return (this.$store.state.wl as WLState).screenState
+			return (this.$store.state as AppState).wl.screenState
 		}
 
 		public get director() {
-			return (this.$store.state.wl as WLState).director
+			return (this.$store.state as AppState).wl.director
+		}
+
+		public get volume() {
+			return (this.$store.state as AppState).volume
+		}
+
+		public setVolume(event) {
+			WLAudio.setVolume(parseFloat(event.target.value))
 		}
 
 		public money(value) {
@@ -113,16 +122,16 @@
 		public nothing() {
 			this.setScreenState('nothing')
 			WLAudio.stop()
-			WLDirector.set('free')
+			Director.set('free')
 		}
 
 		public walkOfShame() {
 			this.setScreenState('nothing')
 			this.gameObj.walkOfShame()
 			const out = this.game.contestants.filter((c) => c.out).sort((a, b) => a.outTime > b.outTime ? -1 : 1)[0]
-			WLDirector.set(out.googleName)
+			Director.set(out.googleName)
 			WLScript.set('<em>[ Vote out interview ]</em>')
-			setTimeout(() => WLDirector.set('free'), 30000)
+			setTimeout(() => Director.set('free'), 30000)
 		}
 
 	}
@@ -180,6 +189,11 @@
 			<button @click="gameObj.finalRound.startPlayer2()" class="btn large">
 				{{ gameObj.finalRound.player2.name }}
 			</button>
+		</div>
+
+		<div>
+			<h3>Volume</h3>
+			<input type="range" min="0" max="1" step="0.01" :value="volume" @change="setVolume" />
 		</div>
 	</div>
 </template>

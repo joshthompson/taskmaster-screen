@@ -25,6 +25,16 @@ app.use(express.static('public'))
 app.use('/taskmaster', require('./server/taskmaster'))
 app.use('/weakest-link', require('./server/weakest-link')(io))
 
+
+let director = 'free'
+app.get('/set-director/:director', (req, res) => {
+	director = req.params.director
+	res.send({ director })
+})
+app.get('/director', (_req, res) => {
+	res.send({ director })
+})
+
 // app.get('*', (_req, res) => {
 // 	res.sendFile(`${__dirname}/dist/index.html`)
 // })

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from 'vue-property-decorator'
-	import { setStateToLogo } from '@/services/data'
+	import { setStateToLogo } from '@/services/tm/TMFetchData'
 
 	@Component
 	export default class VT extends Vue {

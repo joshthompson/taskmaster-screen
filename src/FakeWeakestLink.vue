@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Component, Watch, Vue } from 'vue-property-decorator'
-	import { getState } from './services/data'
+	import { getState } from '@/services/tm/TMFetchData'
 	
 	import DisplayArea from '@/components/wl/DisplayArea.vue'
 	import InfoBar from '@/components/wl/InfoBar.vue'

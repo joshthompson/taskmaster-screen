@@ -4,4 +4,5 @@ import { WLState } from './WeakestLink'
 export interface AppState {
 	wl: WLState
 	tm: TMState
+	volume: number
 }

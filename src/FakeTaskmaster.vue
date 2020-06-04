@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { Component, Vue } from 'vue-property-decorator'
-	import Logo from './components/tm/Logo.vue'
-	import Scores from './components/tm/Scores.vue'
-	import VT from './components/tm/VT.vue'
-	import Slide from './components/tm/Slide.vue'
-	import Letter from './components/tm/Letter.vue'
-	import { TMContestant, TMScreenState } from './types/TaskMaster'
-	import { getState } from './services/data'
+	import Logo from '@/components/tm/Logo.vue'
+	import Scores from '@/components/tm/Scores.vue'
+	import VT from '@/components/tm/VT.vue'
+	import Slide from '@/components/tm/Slide.vue'
+	import Letter from '@/components/tm/Letter.vue'
+	import { TMContestant, TMScreenState } from '@/types/TaskMaster'
+	import { getState } from '@/services/tm/TMFetchData'
 
 	@Component({
 		components: {

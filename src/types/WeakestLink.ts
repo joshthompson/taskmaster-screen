@@ -1,5 +1,3 @@
-import WLFinalRound from '@/services/WLFinalRound'
-
 export interface WLState {
 	game: WLGameState
 	script: string

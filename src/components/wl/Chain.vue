@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from 'vue-property-decorator'
-	import WLGame from '@/services/WLGame'
-	import { WLDisplayMoney } from '@/services/helper'
-	import WLSettings from '@/services/WLSettings'
+	import WLGame from '@/services/wl/WLGame'
+	import { WLDisplayMoney } from '@/services/shared/helper'
+	import WLSettings from '@/services/wl/WLSettings'
 
 	@Component
 	export default class Chain extends Vue {

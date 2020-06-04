@@ -6,6 +6,10 @@ $vw-width: 80vw;
 $width: min(#{$vw-width}, #{$vh-width});
 $height: min(#{$vw-height}, #{$vh-height});
 
+@function s($v) {
+	@return calc(#{$v / 100} * #{$height});
+}
+
 $s0_25: calc(0.0025 * #{$height});
 $s0_5: calc(0.005 * #{$height});
 $s1: calc(0.01 * #{$height});
@@ -36,5 +40,6 @@ $s110: calc(1.1 * #{$height});
 $s120: calc(1.2 * #{$height});
 $s200: calc(2.0 * #{$height});
 
+$s-1: calc(-0.01 * #{$height});
 $s-10: calc(-0.1 * #{$height});
 $s-30: calc(-0.3 * #{$height});

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Component, Vue } from 'vue-property-decorator'
-	import { WLDisplayMoney } from '@/services/helper'
+	import { WLDisplayMoney } from '@/services/shared/helper'
 	import { WLState } from '@/types/WeakestLink'
 
 	@Component

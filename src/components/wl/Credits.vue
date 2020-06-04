@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from 'vue-property-decorator'
-	import WLGame from '@/services/WLGame'
-	import WLAudio from '@/services/WLAudio'
-	import WLSettings from '@/services/WLSettings'
-	import { sleep } from '@/services/helper'
+	import WLGame from '@/services/wl/WLGame'
+	import WLAudio from '@/services/wl/WLAudio'
+	import WLSettings from '@/services/wl/WLSettings'
+	import { sleep } from '@/services/shared/helper'
 
 	@Component
 	export default class Credits extends Vue {
