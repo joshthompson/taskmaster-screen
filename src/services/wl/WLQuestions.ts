@@ -43,8 +43,8 @@ const questions: FullGame = {
 }
 
 rawQuestions.forEach((q) => {
-	const ukCheck = !WLSettings.notUK || WLSettings.notUK && q.UK === ''
-	const usedCheck = !WLSettings.notUsed || WLSettings.notUsed && q.Used === ''
+	const ukCheck = !WLSettings.notUK || (WLSettings.notUK && q.UK === '')
+	const usedCheck = !WLSettings.notUsed || (WLSettings.notUsed && q.Used === '')
 	if (ukCheck && usedCheck) {
 		questions[`round_${q.Round}`].push({
 			question: q.Question,
@@ -52,6 +52,16 @@ rawQuestions.forEach((q) => {
 		})
 	}
 })
+
+function redistributeQuestionsFor9Player() {
+	// Hacky function to get an 8th regular round out of questions
+	questions.round_8.push(...questions.round_7.slice(0, 20))
+	questions.round_7.push(...questions.round_6.slice(0, 5))
+	questions.round_6.push(...questions.round_5.slice(0, 4))
+	questions.round_5.push(...questions.round_4.slice(0, 3))
+	questions.round_4.push(...questions.round_3.slice(0, 2))
+	questions.round_3.push(...questions.round_2.slice(0, 1))
+}
 
 function mathsQuestion(round: number = 1): Question {
 	const a = 20 * round + Math.ceil(Math.random() * 100)
@@ -69,5 +79,6 @@ function getQuestion(round: number | string): Question {
 }
 
 export default {
-	getQuestion
+	getQuestion,
+	redistributeQuestionsFor9Player
 }

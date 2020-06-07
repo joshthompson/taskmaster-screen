@@ -27,7 +27,7 @@
 </template>
 
 <style lang="scss">
-	@import './style/app.scss';
+	@import '@/style/app.scss';
 
 	#app > .actions a {
 		display: block;

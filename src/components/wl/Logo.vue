@@ -10,7 +10,7 @@
 </template>
 
 <style scoped lang="scss">
-	@import '../../style/sizing.scss';
+	@import '@/style/sizing.scss';
 
 	.logo {
 		position: absolute;

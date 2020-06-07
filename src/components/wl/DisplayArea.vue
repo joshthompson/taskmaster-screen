@@ -47,7 +47,7 @@
 </template>
 
 <style scoped lang="scss">
-	@import '../../style/sizing.scss';
+	@import '@/style/sizing.scss';
 
 	.display-area {
 		position: relative;

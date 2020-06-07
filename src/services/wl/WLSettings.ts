@@ -6,7 +6,7 @@ export default {
 	roundTimeReduction: 10,		// How many seconds are reduced every round
 	finalRoundTime: 90,			// How many seconds are for the final (non head-to-head) round
 	// chain: [ 5, 10, 25, 50, 100, 150, 250, 375, 500 ],
-	chain: [ 1, 2, 5, 10, 20, 40, 90, 130, 180 ],
+	chain: [ 1, 2, 5, 10, 20, 40, 70, 110, 180 ],
 
 	notUK: true,				// Should questions that are too reliant on UK culture - be removed
 	notUsed: true				// Should questions that have been used - be removed

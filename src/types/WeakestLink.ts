@@ -25,6 +25,8 @@ export interface WLGameState {
 	strongest?: WLContestant[]
 	currentlyVoting?: boolean
 	namePlaque?: string
+	prevStrongest?: WLContestant
+	prev2ndStrongest?: WLContestant
 }
 
 export interface WLRoundState {

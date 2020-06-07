@@ -12,9 +12,14 @@ async function wrong() {
 	audio(`/pointless/audio/wrong.wav`)
 }
 
+async function passedRedLine() {
+	audio(`/pointless/audio/wrong.wav`, 'red-line')
+}
+
 export default {
 	setVolume,
 	countdown,
 	correct,
-	wrong
+	wrong,
+	passedRedLine
 }

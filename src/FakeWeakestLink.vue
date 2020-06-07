@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { Component, Watch, Vue } from 'vue-property-decorator'
-	import { getState } from '@/services/tm/TMFetchData'
-	
 	import DisplayArea from '@/components/wl/DisplayArea.vue'
 	import InfoBar from '@/components/wl/InfoBar.vue'
 	import ScriptBar from '@/components/wl/ScriptBar.vue'
@@ -21,7 +19,7 @@
 </template>
 
 <style lang="scss">
-	@import './style/sizing.scss';
+	@import '@/style/sizing.scss';
 	#fake-weakest-link {
 		height: 100vh;
 		width: 100vw;

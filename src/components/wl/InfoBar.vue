@@ -3,11 +3,12 @@
 	import { WLContestant, WLScreenState } from '@/types/WeakestLink'
 	import ContestantsList from '@/components/wl/ContestantsList.vue'
 	import WLGame from '@/services/wl/WLGame'
-	import { WLDisplayMoney } from '@/services/shared/helper'
+	import { WLDisplayMoney, sleep } from '@/services/shared/helper'
 	import WLAudio from '@/services/wl/WLAudio'
 	import Director from '@/services/shared/Director'
 	import WLScript from '@/services/wl/WLScript'
 	import { AppState } from '@/types'
+	import WLSettings from '@/services/wl/WLSettings'
 
 	@Component({
 		components: { ContestantsList }
@@ -22,8 +23,25 @@
 		public created() {
 			Director.set('free')
 			// this.contestantNames = 'Josh Testerson=Josh,Craig Testersson=Craig'
-			this.contestantNames = 'Holly Young=Holly, Paul Barratt=Paul, Sarah Bell=Sarah,Esther Akinfenwa=Esther, Vicki Kiely=Vicki, Nick Pearson=Nick, Tanya Alam=Tanya, Leo Baines Jump=Leo'
-			// this.contestantNames = 'Anne, Jack, Peter, Rebekah, Guy, Lisa, James, Nick'
+			// this.contestantNames = `
+			// 	Holly Young=Holly
+			// 	Paul Barratt=Paul
+			// 	Sarah Bell=Sarah,Esther Akinfenwa=Esther
+			// 	Vicki Kiely=Vicki
+			// 	Nick Pearson=Nick
+			// 	Tanya Alam=Tanya
+			// 	Leo Baines Jump=Leo
+			// `
+			this.contestantNames = `
+				Anne Gauthier=Anne
+				Jack Davis=Jack
+				Guy Stephens=Guy
+				Lisa Reinfelder=Lotte
+				James Rogers=James
+				Pete Siret=Peter
+				Rebekah Shah=Rebekah
+				Nick Mytton=Nick
+			`
 		}
 
 		public get game() {
@@ -125,13 +143,36 @@
 			Director.set('free')
 		}
 
-		public walkOfShame() {
+		public async walkOfShame() {
 			this.setScreenState('nothing')
 			this.gameObj.walkOfShame()
 			const out = this.game.contestants.filter((c) => c.out).sort((a, b) => a.outTime > b.outTime ? -1 : 1)[0]
-			Director.set(out.googleName)
+			Director.set(out?.googleName || 'free')
 			WLScript.set('<em>[ Vote out interview ]</em>')
-			setTimeout(() => Director.set('free'), 30000)
+
+			await sleep(10000)
+			Director.set('free')
+
+			if (this.game.roundNumber === 1) {
+				WLScript.set(`
+					So we move to Round ${this.game.roundNumber + 1} and take ${WLSettings.roundTimeReduction} seconds off the clock.
+				`)
+			} else if (this.game.roundNumber === this.game.contestants.length - 1) {
+				WLScript.set(`
+					One last timed round of questions, this time you'll have ${WLSettings.finalRoundTime} seconds.<br />
+					Whatever is earned in this round will be trebled.
+				`)
+			} else {
+				WLScript.set(`
+					So we move to Round ${this.game.roundNumber + 1}, ${WLSettings.roundTimeReduction} more seconds come off the clock
+				`)
+			}
+
+			if (!this.game.prevStrongest.out) {
+				WLScript.add(`<br/>We'll start with the strongest link from the last round - that's ${this.game.prevStrongest.name}`)
+			} else {
+				WLScript.add(`<br/>You voted off the strongest link so we'll start with the second strongest - that's ${this.game.prev2ndStrongest.name}`)
+			}
 		}
 
 	}
@@ -199,7 +240,7 @@
 </template>
 
 <style lang="scss" scoped>
-	@import '../../style/sizing.scss';
+	@import '@/style/sizing.scss';
 	
 	.info-bar {
 		position: absolute;

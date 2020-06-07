@@ -11,6 +11,10 @@ export function set(line: string) {
 	store.commit('wlUpdateScript', line)
 }
 
+export function add(line: string) {
+	store.commit('wlUpdateScript', store.state.wl.script + line)
+}
+
 const insults = [
 	// 1
 	`Who doesn't look up to the challenge ahead?`,
@@ -59,6 +63,7 @@ export function getInsult() {
 
 export default {
 	set,
+	add,
 	getInsult,
 	...lines
 }

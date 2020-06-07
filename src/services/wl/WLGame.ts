@@ -7,20 +7,28 @@ import { WLDisplayMoney, sleep } from '@/services/shared/helper'
 import WLAudio from '@/services/wl/WLAudio'
 import Director from '@/services/shared/Director'
 import WLSettings from '@/services/wl/WLSettings'
+import WLQuestions from './WLQuestions'
 
 export default class WLGame {
 
-	public contestants: WLContestant[]		// List of contestants
-	public roundNumber: number				// Current round (0 = pre game)
-	public totalBanked: number				// Total amount banked for entire game
-	public round: WLRound					// Current round
-	public finalRound: WLFinalRound			// Final round
-	private currentlyVoting = false			// Used for monitoring voting phase - so it can be cancelled
-	private votingDiscussion: number = null	// Post voting discussion period start time
-	public namePlaque: string				// Used show name at bottom
+	public contestants: WLContestant[]			// List of contestants
+	public roundNumber: number					// Current round (0 = pre game)
+	public totalBanked: number					// Total amount banked for entire game
+	public round: WLRound						// Current round
+	public finalRound: WLFinalRound				// Final round
+	private currentlyVoting = false				// Used for monitoring voting phase - so it can be cancelled
+	private votingDiscussion: number = null		// Post voting discussion period start time
+	public namePlaque: string					// Used show name at bottom
+	public prevStrongest: WLContestant			// Prev strongest player
+	public prev2ndStrongest: WLContestant		// Prev 2nd strongest player - if strongest was voted off
 
 	public constructor(contestants: WLContestant[], roundNumber: number = 0, totalBanked: number = 0) {
 		this.contestants = contestants
+
+		if (this.contestants.length === 9) {
+			WLQuestions.redistributeQuestionsFor9Player()
+		}
+
 		this.roundNumber = roundNumber
 		this.totalBanked = totalBanked
 		this.save()
@@ -71,6 +79,8 @@ export default class WLGame {
 
 	public endRound() {
 
+		this.prevStrongest = this.strongest[0]
+		this.prev2ndStrongest = this.strongest[1]
 		this.totalBanked += this.round.banked * this.round.multiplier
 		store.commit('wlSetScreenState', 'nothing')
 
@@ -222,7 +232,9 @@ export default class WLGame {
 			finalRound: this.finalRound ? this.finalRound.data : this.finalRound,
 			strongest: this.strongest,
 			currentlyVoting: this.currentlyVoting,
-			namePlaque: this.namePlaque
+			namePlaque: this.namePlaque,
+			prevStrongest: this.prevStrongest,
+			prev2ndStrongest: this.prev2ndStrongest
 		}
 	}
 

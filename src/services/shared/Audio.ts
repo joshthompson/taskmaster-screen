@@ -1,13 +1,14 @@
-const ELEMENT_ID = 'fake-game-show-music'
+const ELEMENT_CLASS = 'fake-game-show-music'
 import store from '@/store'
 
-export function audio(file: string) {
+export function audio(file: string, id: string = 'default') {
 	// Stop the music
-	stop()
+	stop(id)
 
 	// Create new audio tag
 	const element = document.createElement('audio')
-	element.setAttribute('id', ELEMENT_ID)
+	element.setAttribute('class', ELEMENT_CLASS)
+	element.setAttribute('data-audio-id', id)
 	element.setAttribute('src', file)
 	document.body.appendChild(element)
 
@@ -21,15 +22,16 @@ export function audio(file: string) {
 
 export function setVolume(volume: number) {
 	store.commit('setVolume', volume)
-	const element = document.getElementById(ELEMENT_ID) as HTMLAudioElement
-	if (element) {
-		element.volume = volume
-	}
+	Array.from(
+		document.getElementsByClassName(ELEMENT_CLASS) as HTMLCollectionOf<HTMLAudioElement>
+	).forEach((element) => element.volume = volume)
 }
 
-export function stop() {
+export function stop(id: string = 'default') {
 	// Remove previous audio tags
-	if (document.getElementById(ELEMENT_ID)) {
-		document.getElementById(ELEMENT_ID).remove()
+	const element = document.querySelector(`.${ELEMENT_CLASS}[data-audio-id="${id}"]`)
+	console.log('elem', element)
+	if (element) {
+		element.remove()
 	}
 }
