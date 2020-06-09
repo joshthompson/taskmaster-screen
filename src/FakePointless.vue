@@ -5,11 +5,12 @@
 	import ControlBar from '@/components/shared/ControlBar.vue'
 	import ScriptBar from '@/components/shared/ScriptBar.vue'
 	import Scoreometer from '@/components/pl/Scoreometer.vue'
+	import AnswerBlock from '@/components/pl/AnswerBlock.vue'
 	import { PointlessAnswer, PointlessQuestion, PointlessTeam, PointlessGame, PLState } from '@/types/Pointless'
 	import { game } from '@/services/pl/data'
 
 	@Component({
-		components: { DisplayArea, ControlBar, ScriptBar, Scoreometer }
+		components: { DisplayArea, ControlBar, ScriptBar, Scoreometer, AnswerBlock }
 	})
 	export default class FakePointless extends Vue {
 
@@ -42,6 +43,10 @@
 			return this.game.currentRound === 2
 		}
 
+		public setAnswer(answer: PointlessAnswer) {
+			this.answer1 = answer
+		}
+
 	}
 </script>
 
@@ -52,13 +57,13 @@
 				:question="question"
 				:answer="answer1"
 				:type="double ? 'left' : 'standard'"
-				:key="question.question + 1"
+				:key="question.question + 1 + answer1.answer"
 			/>
 			<Scoreometer
 				:question="question"
 				:answer="answer2"
 				v-if="double" type="right"
-				:key="question.question + 2"
+				:key="question.question + 2 + answer2.answer"
 			/>
 		</DisplayArea>
 		<ControlBar>
@@ -104,7 +109,7 @@
 			<div>Question: {{ question.question }}</div>
 			<div>Detail: {{ question.detail }}</div>
 			<div v-for="answer in question.openAnswers" :key="answer.answer">
-				<button>{{ answer.answer }} - {{ answer.score }}</button>
+				<AnswerBlock :answer="answer" @selected="setAnswer($event)" :selected="answer === answer1" />
 			</div>
 
 		</ControlBar>
