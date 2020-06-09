@@ -17,6 +17,7 @@ async function passedRedLine() {
 }
 
 export default {
+	stop,
 	setVolume,
 	countdown,
 	correct,

@@ -30,7 +30,6 @@ export function setVolume(volume: number) {
 export function stop(id: string = 'default') {
 	// Remove previous audio tags
 	const element = document.querySelector(`.${ELEMENT_CLASS}[data-audio-id="${id}"]`)
-	console.log('elem', element)
 	if (element) {
 		element.remove()
 	}

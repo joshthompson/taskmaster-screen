@@ -2,28 +2,29 @@
 	import { Component, Prop, Vue } from 'vue-property-decorator'
 	import PLAudio from '@/services/pl/PLAudio'
 	import WLAudio from '@/services/wl/WLAudio'
+	import { PointlessAnswer, PointlessQuestion } from '@/types/Pointless'
 
 	@Component
 	export default class Scoreometer extends Vue {
 
+		@Prop() public type: 'standard' | 'left' | 'right'
+		@Prop() public question: PointlessQuestion
+		@Prop() public answer: PointlessAnswer
+
 		private standardMax: number = 100		// The standard number for timings to be correct
-		private max: number = 100
 		private active: boolean = false
-		private current: number = this.max
-		private final: number = 0
+		private current: number = 100
 		private target: number = null
 		private duration: number = 7500			// Duration of a full countdown in ms
 		private wobble: boolean = false
 		public percentExtra: number = 100
-		private lastUpdate: number = null		// Used to know progress between larger steps
-
+		private lastUpdate: number = null		// Used to know the progress between larger steps
 		public pointless: boolean = false
-
-		@Prop() public type: 'standard' | 'left' | 'right'
 
 		private blueGlow: boolean = false
 
 		public created() {
+			this.current = 0 + this.question.max
 			this.wobbleToggle()
 		}
 
@@ -33,18 +34,30 @@
 		}
 
 		public start() {
-			this.active = true
-			this.current = this.max
-			this.reduce()
-			this.pointless = false
-			PLAudio.countdown()
+			if (this.active) {
+				PLAudio.stop()
+				this.active = false
+				this.current = this.question.max
+				this.pointless = false
+			} else {
+				this.active = true
+				this.current = this.question.max
+				this.reduce()
+				this.pointless = false
+				PLAudio.countdown()
+			}
 		}
 
 		public get step() {
-			return this.duration / this.max
+			return this.duration / this.question.max
 		}
 
 		public reduce() {
+
+			if (!this.active) {
+				return false
+			}
+
 			this.current--
 			this.lastUpdate = Date.now()
 
@@ -52,11 +65,11 @@
 				PLAudio.passedRedLine()
 			}
 
-			if (this.current > this.final) {
+			if (this.current > this.answer.score) {
 				setTimeout(() => this.reduce(), this.step)
 			} else {
 				PLAudio.correct()
-				this.pointless = this.final === 0
+				this.pointless = this.answer.score === 0
 				this.blueGlow = true
 				setTimeout(() => this.blueGlow = false, 500)
 			}
@@ -64,13 +77,13 @@
 		}
 
 		public get percent() {
-			return 100 * this.current / this.max
+			return 100 * this.current / this.question.max
 		}
 
 		public calcPercentExtra() {
-			if (this.active && this.current > this.final) {
+			if (this.active && this.current > this.answer.score) {
 				const d = (Date.now() - this.lastUpdate) / this.step
-				this.percentExtra = this.percent - d * this.standardMax / this.max
+				this.percentExtra = this.percent - d * this.standardMax / this.question.max
 				setTimeout(() => this.calcPercentExtra(), 50)
 			} else {
 				this.percentExtra = this.percent
@@ -101,7 +114,11 @@
 		public get scoreBackgroundStyle() {
 			if (this.pointless) {
 				return {
-					background: this.wobble ? '#33CC78' : '#C1CCB9'
+					background: `linear-gradient(0deg,
+						#FFFFFF 0%,
+						#15EF23 50%,
+						#FFFFFF 100%
+					)`
 				}
 			}
 			const p1 = 0
@@ -117,7 +134,7 @@
 		}
 
 		public pointInnerStyle(i: number) {
-			const width = Math.max(100 * (this.max - i) / this.max, 0)
+			const width = Math.max(100 * (this.question.max - i) / this.question.max, 0)
 			return {
 				width: `${width}%`
 			}
@@ -137,7 +154,7 @@
 		<div class="score">
 			<div class="number-container">
 				<div v-if="type !== 'standard'" class="divide"></div>
-				<div class="number" @click="start(false)">
+				<div class="number" @click="start">
 					<div class="inner">{{ type === 'standard' && pointless ? 'POINTLESS' : current }}</div>
 				</div>
 			</div>
@@ -147,8 +164,8 @@
 			<div class="points" :class="pointsClass">
 				<div
 					class="point"
-					v-for="i in max"
-					:data-glow="(max-i) * 0.2"
+					v-for="i in question.max"
+					:data-glow="(question.max-i) * 0.2"
 					:key="i"
 					:class="pointClass(i)"
 				>
@@ -301,11 +318,24 @@
 			width: s(38);
 			height: s(98);
 			background: rgba(255, 255, 255, 0);
-			transition: background 0.5s linear;
+			transition: background 2s linear;
 		}
 
+		&.white .overlay {
+			background: rgba(255, 255, 255, 1);
+			transition: background 0.1s linear;
+		}
+
+		.pointless & {
+			animation: pointless-background 1s linear infinite;
+		}
 		.pointless & .overlay {
 			background: rgba(255, 255, 255, 0);
+		}
+
+		@keyframes pointless-background {
+			0% { background-position-y: 0; }
+			100% { background-position-y: s(-100); }
 		}
 	}
 
@@ -414,8 +444,8 @@
 					background: linear-gradient(
 						90deg,
 						rgba(255, 255, 255, 0) 0%,
-						rgba(255, 255, 255, 0.3) 30%,
-						rgba(255, 255, 255, 0.7) 70%,
+						rgba(255, 255, 255, 0.5) 30%,
+						rgba(255, 255, 255, 0.5) 70%,
 						rgba(255, 255, 255, 0) 100%
 					);
 				}
@@ -457,7 +487,6 @@
 				}
 
 				&.old:not(.target) {
-					transform: translateY(s(-10));
 					animation: fadeUp 0.5s ease-in;
 				}
 
@@ -520,10 +549,12 @@
 	@keyframes fadeUp {
 		0% {
 			opacity: 1;
-			transform: translateY(0);
+			transform: translateY(0) scaleX(1);
 			filter: blur(0);
 		}
 		100% {
+			opacity: 0;
+			transform: translateY(s(-10)) scaleX(0.94);
 			filter: blur(5px);
 		}
 	}

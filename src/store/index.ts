@@ -16,6 +16,10 @@ const initialState: AppState = {
 		screenState: 'preShow',
 		director: 'free'
 	},
+	pl: {
+		game: null,
+		director: 'free'
+	},
 	volume: 0.7
 }
 
@@ -31,6 +35,9 @@ const mutations: MutationTree<AppState> = {
 	},
 	wlSetDirector: (state, director: string) => {
 		state.wl.director = director
+	},
+	plSetDirector: (state, director: string) => {
+		state.pl.director = director
 	},
 	setVolume: (state, volume: number) => {
 		state.volume = volume

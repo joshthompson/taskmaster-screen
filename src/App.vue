@@ -9,16 +9,26 @@
 	})
 	export default class App extends Vue {
 		public started: boolean = false
-		public game: 'taskmaster' | 'weakest-link' | 'pointless' = null
+		public game: 'taskmaster' | 'weakest-link' | 'pointless' | 'wheel-of-fortune' = null
 	}
 </script>
 
 <template>
 	<div id="app" :class="{ started: game !== null }">
 		<div class="actions">
-			<a v-if="!game" @click="game = 'taskmaster'">Start Taskmaster</a>
-			<a v-if="!game" @click="game = 'weakest-link'">Start Weakest Link</a>
-			<a v-if="!game" @click="game = 'pointless'">Start Pointless</a>
+			<h1 v-if="!game">Select Game</h1>
+			<a v-if="!game" @click="game = 'taskmaster'" class="taskmaster">
+				Taskmaster
+			</a>
+			<a v-if="!game" @click="game = 'weakest-link'" class="weakest-link">
+				<img src="./assets/weakest-link/logo.png" />
+			</a>
+			<a v-if="!game" @click="game = 'pointless'" class="pointless">
+				<img src="./assets/pointless/logo.png" />
+			</a>
+			<a v-if="!game" @click="game = 'wheel-of-fortune'" class="wheel-of-fortune">
+				<img src="./assets/wheel-of-fortune/logo.png" />
+			</a>
 		</div>
 		<FakeTaskmaster v-if="game === 'taskmaster'" />
 		<FakeWeakestLink v-if="game === 'weakest-link'" />
@@ -28,15 +38,54 @@
 
 <style lang="scss">
 	@import '@/style/app.scss';
+	#app > .actions {
 
-	#app > .actions a {
-		display: block;
-		padding: 2rem 10rem;
-		font-size: 1.5rem;
-		border-radius: 0rem;
-		color: #FFFFFF;
-		background: #008DD4;
-		margin: 1rem 1rem;
-		cursor: pointer;
+		h1 {
+			color: #000000;
+		}
+		
+		a {
+
+			$size: 300px;
+
+			display: inline-block;
+			font-size: 1.5rem;
+			border-radius: 0rem;
+			color: #FFFFFF;
+			background: #008DD4;
+			margin: 1rem 1rem;
+			height: $size;
+			width: $size;
+			line-height: $size;
+			text-align: center;
+			cursor: pointer;
+			vertical-align: top;
+			filter: brightness(1);
+			transition: all 0.2s ease-in-out;
+
+			img {
+				width: 80%;
+				vertical-align: middle;
+			}
+
+			&.taskmaster {
+				font-family: 'Veteran-Typewriter';
+				background: black;
+				font-size: 3rem;
+			}
+
+			&.weakest-link {
+				background: #296488;
+			}
+
+			&.pointless {
+				background: #1E0A37;
+			}
+
+			&:hover {
+				filter: brightness(1.1);
+				transform: scale(1.1);
+			}
+		}
 	}
 </style>
