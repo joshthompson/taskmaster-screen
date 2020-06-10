@@ -420,6 +420,7 @@
 			text-align: center;
 			font-size: s(12.5);
 			font-weight: bold;
+			cursor: pointer;
 			text-shadow: 0 0 s(1) #000000;
 			background: rgb(255, 255, 255);
 			background: linear-gradient(
@@ -470,6 +471,7 @@
 				display: flex;
 				flex-direction: column;
 				align-items: center;
+				transition: filter 0.5s linear;
 
 				.inner {
 					flex-grow: 1;
@@ -482,7 +484,6 @@
 					);
 				}
 
-				background: rgb(97,123,168);
 				background: linear-gradient(
 					90deg,
 					rgba(97,123,168,1) 10%,
@@ -491,6 +492,18 @@
 					rgba(97,123,168,1) 90%
 				);
 				border-bottom: s(0.25) solid rgba(0, 0, 0, 0.25);
+
+				.wrong & {
+					filter: hue-rotate(130deg)
+				}
+				
+				[type="left"].wrong & {
+					filter: hue-rotate(-60deg);
+				}
+
+				[type="right"].wrong & {
+					filter: hue-rotate(180deg);
+				}
 
 				&.current {
 					z-index: 2;

@@ -17,6 +17,8 @@
 		public get director() { return (this.$store.state.pl as PLState).director }
 		public set director(director: string) { this.$store.commit('plSetDirector', director) }
 
+		public screen: string = 'score'
+
 		public game: PointlessGame = game
 
 		public wrongAnswer: PointlessAnswer = {
@@ -24,17 +26,8 @@
 			score: 100
 		}
 
-		public answer1: PointlessAnswer = {
-			answer: 'Chicago',
-			score: 6,
-			extra: 'Nice city'
-		}
-
-		public answer2: PointlessAnswer = {
-			answer: 'New York',
-			score: 14,
-			extra: 'Big place'
-		}
+		public answer1: PointlessAnswer = this.wrongAnswer
+		public answer2: PointlessAnswer = this.wrongAnswer
 
 		public get round() {
 			return this.game.rounds[this.game.currentRound]
@@ -83,6 +76,24 @@
 						:key="i"
 						:value="team.googleName"
 					>{{ team.name }}</option>
+				</select>
+			</div>
+
+			<div>
+				<label>View: </label>
+				<select v-model="screen">
+					<option value="nothing">Nothing</option>
+					<option value="board">Question Board</option>
+					<option value="score">Score-o-meter</option>
+					<optgroup label="Team View">
+						<option v-for="(team, i) in game.teams" :key="i" :value="`team_${i}`">{{ team.name }}</option>
+					</optgroup>
+					<optgroup label="Team / Score-o-meter">
+						<option v-for="(team, i) in game.teams" :key="i" :value="`team_score_${i}`">{{ team.name }}</option>
+					</optgroup>
+					<optgroup label="Score-o-meter / Team">
+						<option v-for="(team, i) in game.teams" :key="i" :value="`score_team_${i}`">{{ team.name }}</option>
+					</optgroup>
 				</select>
 			</div>
 
