@@ -19,6 +19,11 @@
 
 		public game: PointlessGame = game
 
+		public wrongAnswer: PointlessAnswer = {
+			answer: '✘',
+			score: 100
+		}
+
 		public answer1: PointlessAnswer = {
 			answer: 'Chicago',
 			score: 6,
@@ -44,7 +49,7 @@
 		}
 
 		public setAnswer(answer: PointlessAnswer) {
-			this.answer1 = answer
+			this.answer1 = answer || this.wrongAnswer
 		}
 
 	}
@@ -109,7 +114,10 @@
 			<div>Question: {{ question.question }}</div>
 			<div>Detail: {{ question.detail }}</div>
 			<div v-for="answer in question.openAnswers" :key="answer.answer">
-				<AnswerBlock :answer="answer" @selected="setAnswer($event)" :selected="answer === answer1" />
+				<AnswerBlock :answer="answer" @selected="setAnswer" :selected="answer1 === answer" />
+			</div>
+			<div>
+				<AnswerBlock :answer="null" @selected="setAnswer" :selected="answer1 === wrongAnswer" />
 			</div>
 
 		</ControlBar>

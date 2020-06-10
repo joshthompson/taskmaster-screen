@@ -20,6 +20,7 @@
 		public percentExtra: number = 100
 		private lastUpdate: number = null		// Used to know the progress between larger steps
 		public pointless: boolean = false
+		public wrong: boolean = false
 
 		private blueGlow: boolean = false
 
@@ -39,6 +40,7 @@
 				this.active = false
 				this.current = this.question.max
 				this.pointless = false
+				this.wrong = false
 			} else {
 				this.active = true
 				this.current = this.question.max
@@ -53,6 +55,13 @@
 		}
 
 		public reduce() {
+
+			if (this.answer.answer === '✘') {
+				this.active = false
+				this.wrong = true
+				PLAudio.wrong()
+				return false
+			}
 
 			if (!this.active) {
 				return false
@@ -74,6 +83,7 @@
 				setTimeout(() => this.blueGlow = false, 500)
 			}
 			this.calcPercentExtra()
+			this.current = Math.min(this.question.max, Math.max(this.current, this.answer.score, 0))
 		}
 
 		public get percent() {
@@ -112,6 +122,15 @@
 		}
 
 		public get scoreBackgroundStyle() {
+			if (this.wrong) {
+				return {
+					background: `linear-gradient(0deg,
+						#FF0000 0%,
+						#990000 50%,
+						#FF0000 100%
+					)`
+				}
+			}
 			if (this.pointless) {
 				return {
 					background: `linear-gradient(0deg,
@@ -143,7 +162,7 @@
 </script>
 
 <template>
-	<div class="score-o-meter" :class="{ pointless }" :type="type">
+	<div class="score-o-meter" :class="{ pointless, wrong }" :type="type">
 		<div class="score-background" :style="scoreBackgroundStyle" :class="{ white: blueGlow }">
 			<div class="overlay"></div>
 			<div class="vertical"></div>
@@ -155,7 +174,11 @@
 			<div class="number-container">
 				<div v-if="type !== 'standard'" class="divide"></div>
 				<div class="number" @click="start">
-					<div class="inner">{{ type === 'standard' && pointless ? 'POINTLESS' : current }}</div>
+					<div class="inner">{{
+						wrong ? '✘' :
+						type === 'standard' && pointless ? 'POINTLESS'
+						: current 
+					}}</div>
 				</div>
 			</div>
 			<div class="glow left" :style="glowStyle"></div>
@@ -327,13 +350,18 @@
 		}
 
 		.pointless & {
-			animation: pointless-background 1s linear infinite;
+			animation: scroll-background 1s linear infinite;
 		}
+
+		.wrong & {
+			animation: scroll-background 3s linear infinite;
+		}
+
 		.pointless & .overlay {
 			background: rgba(255, 255, 255, 0);
 		}
 
-		@keyframes pointless-background {
+		@keyframes scroll-background {
 			0% { background-position-y: 0; }
 			100% { background-position-y: s(-100); }
 		}
@@ -403,6 +431,10 @@
 				rgba(204,19,195,1) 83%,
 				rgba(40,23,124,1) 100%
 			);
+
+			.wrong & {
+				filter: hue-rotate(90deg);
+			}
 
 			& .inner {
 				position: relative;
