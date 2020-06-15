@@ -1,6 +1,7 @@
 export interface PLState {
 	game: PointlessGame
-	director?: string
+	director?: string,
+	screen?: string
 }
 
 export interface PointlessGame {

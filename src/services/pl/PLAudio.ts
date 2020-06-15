@@ -16,11 +16,17 @@ async function passedRedLine() {
 	audio(`/pointless/audio/wrong.wav`, 'red-line')
 }
 
+async function pointless() {
+	stop('red-line')
+	audio('/pointless/audio/celebrate.m4a')
+}
+
 export default {
 	stop,
 	setVolume,
 	countdown,
 	correct,
 	wrong,
+	pointless,
 	passedRedLine
 }

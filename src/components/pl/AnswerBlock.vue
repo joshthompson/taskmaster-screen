@@ -5,15 +5,16 @@
 	@Component
 	export default class AnswerBlock extends Vue {
 		@Prop() public answer: PointlessAnswer
+		@Prop({ default: 'medium' }) public size: 'large' | 'medium' | 'small'
 		@Prop() public selected: boolean
 	}
 </script>
 
 <template>
-	<a class="pointless-answer-block" @click="$emit('selected', answer)" :class="{ selected, wrong: !answer }">
-        <div v-if="!answer" class="cross">✘</div>
-		<div v-if="answer" class="answer"> {{ answer.answer }}</div>
-		<div v-if="answer" class="score"> {{ answer.score }}</div>
+	<a class="pointless-answer-block" @click="$emit('selected', answer)" :class="{ selected, wrong: !answer, [size]: true }">
+        <div v-if="!answer" class="cross"><span class="text">✘</span></div>
+		<div v-if="answer" class="answer"><span class="text">{{ answer.answer }}</span></div>
+		<div v-if="answer" class="score"><span class="text">{{ answer.score }}</span></div>
 	</a>
 </template>
 
@@ -24,9 +25,26 @@
         display: flex;
         width: 100%;
 
-        border-radius: s(3);
-        height: s(6);
-        line-height: s(5.5);
+        &.small {
+            font-size: s(4);
+        }
+
+        &.medium {
+            font-size: s(6);
+        }
+
+        &.large {
+            font-size: s(8);
+        }
+
+        .text {
+            font-size: 0.6em;
+        }
+
+        border-radius: 0.5em;
+        height: 1em;
+        line-height: 0.6em;
+
         border: s(0.3) solid #FFFFFF;
         background: linear-gradient(
             0deg,
@@ -70,9 +88,9 @@
             box-shadow: inset 0 0 s(1) rgba(0, 0, 0, 0.5);
             margin: s(-0.3) s(-0.3) 0 0;
             border: s(0.3) solid #FFFFFF;
-            border-radius: s(3);
-            width: s(6);
-            height: s(6);
+            border-radius: 0.5em;
+            width: 1em;
+            height: 1em;
         }
     }
 </style>

@@ -1,0 +1,23 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1116 655">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        opacity: 0;
+      }
+    </style>
+  </defs>
+  <title>split-back</title>
+  <g>
+    <polygon points="421 655 1116 655 1116 0 789 0 421 655"/>
+    <g>
+      <polygon class="cls-1" points="1116 470 1116 500 576 437 576 407 1116 470"/>
+      <polygon points="1116 320 1116 350 576 437 576 407 1116 320"/>
+      <polygon class="cls-1" points="1116 317 1116 347 576 434 576 404 1116 317"/>
+    </g>
+  </g>
+  <rect class="cls-2" width="1116" height="655"/>
+</svg>

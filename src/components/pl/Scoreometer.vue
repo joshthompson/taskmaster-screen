@@ -35,7 +35,7 @@
 		}
 
 		public start() {
-			if (this.active) {
+			if (this.active || this.pointless || this.wrong) {
 				PLAudio.stop()
 				this.active = false
 				this.current = this.question.max
@@ -44,9 +44,12 @@
 			} else {
 				this.active = true
 				this.current = this.question.max
-				this.reduce()
 				this.pointless = false
-				PLAudio.countdown()
+				this.wrong = false
+				this.reduce()
+				if (this.answer.answer !== '✘') {
+					PLAudio.countdown()
+				}
 			}
 		}
 
@@ -77,8 +80,12 @@
 			if (this.current > this.answer.score) {
 				setTimeout(() => this.reduce(), this.step)
 			} else {
-				PLAudio.correct()
 				this.pointless = this.answer.score === 0
+				if (this.pointless) {
+					PLAudio.pointless()
+				} else {
+					PLAudio.correct()
+				}
 				this.blueGlow = true
 				setTimeout(() => this.blueGlow = false, 500)
 			}
