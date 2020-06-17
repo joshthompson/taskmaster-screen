@@ -44,6 +44,7 @@
         border-radius: 0.5em;
         height: 1em;
         line-height: 0.6em;
+        text-align: center;
 
         border: s(0.3) solid #FFFFFF;
         background: linear-gradient(

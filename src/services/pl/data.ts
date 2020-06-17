@@ -71,7 +71,11 @@ export const game: PointlessGame = {
 					type: 'open',
 					question: 'Cool question 2',
 					detail: 'asopdkasd askdnapsdnaps dpa sdoas',
-					openAnswers: []
+					openAnswers: [
+						{ answer: 'Adams', score: fake(), extra: 'John Adams and John Quincy Adams' },
+						{ answer: 'Monroe', score: fake(), extra: 'James Monroe' },
+						{ answer: 'Tyler', score: fake(), extra: 'John Tyler' }
+					]
 				},
 				{
 					max: 50,
@@ -88,6 +92,22 @@ export const game: PointlessGame = {
 					question: 'Cool question 2',
 					detail: 'asopdkasd askdnapsdnaps dpa sdoas',
 					openAnswers: []
+				}
+			]
+		},
+		{
+			questions: [
+				{
+					max: 50,
+					category: 'History',
+					type: 'open',
+					question: 'Cool question 2',
+					detail: 'asopdkasd askdnapsdnaps dpa sdoas',
+					openAnswers: [
+						{ answer: 'Adams', score: fake(), extra: 'John Adams and John Quincy Adams' },
+						{ answer: 'Monroe', score: fake(), extra: 'James Monroe' },
+						{ answer: 'Tyler', score: fake(), extra: 'John Tyler' }
+					]
 				}
 			]
 		}

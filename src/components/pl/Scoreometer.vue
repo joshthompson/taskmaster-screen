@@ -10,12 +10,13 @@
 		@Prop() public type: 'standard' | 'left' | 'right'
 		@Prop() public question: PointlessQuestion
 		@Prop() public answer: PointlessAnswer
+		@Prop() public round: number
 
 		private standardMax: number = 100		// The standard number for timings to be correct
 		private active: boolean = false
 		private current: number = 100
 		private target: number = null
-		private duration: number = 7500			// Duration of a full countdown in ms
+		private baseDuration: number = 7500			// Duration of a full countdown in ms
 		private wobble: boolean = false
 		public percentExtra: number = 100
 		private lastUpdate: number = null		// Used to know the progress between larger steps
@@ -48,9 +49,13 @@
 				this.wrong = false
 				this.reduce()
 				if (this.answer.answer !== '✘') {
-					PLAudio.countdown()
+					PLAudio.countdown(this.finalRound)
 				}
 			}
+		}
+
+		public get duration() {
+			return (this.finalRound ? 2 : 1) * this.baseDuration
 		}
 
 		public get step() {
@@ -157,6 +162,10 @@
 					#2C089B ${p3}%
 				)`
 			}
+		}
+
+		public get finalRound() {
+			return this.round === 3
 		}
 
 		public pointInnerStyle(i: number) {

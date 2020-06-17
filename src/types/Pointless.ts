@@ -20,6 +20,11 @@ export interface PointlessTeam {
 	googleName: string
 }
 
+export const PointlessWrongAnswer: PointlessAnswer = {
+	answer: '✘',
+	score: 100
+}
+
 export interface PointlessQuestion {
 	max: number
 	category: string

@@ -1,7 +1,7 @@
 const ELEMENT_CLASS = 'fake-game-show-music'
 import store from '@/store'
 
-export function audio(file: string, id: string = 'default') {
+export function audio(file: string, id: string = 'default', playbackRate: number = 1) {
 	// Stop the music
 	stop(id)
 
@@ -16,6 +16,7 @@ export function audio(file: string, id: string = 'default') {
 	element.currentTime = 0
 	element.play()
 	element.volume = store.state.volume
+	element.playbackRate = playbackRate
 
 	return element
 }

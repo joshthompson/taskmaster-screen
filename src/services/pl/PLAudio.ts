@@ -1,7 +1,7 @@
 import { audio, stop, setVolume } from '@/services/shared/Audio'
 
-async function countdown() {
-	audio(`/pointless/audio/countdown.wav`)
+async function countdown(finalRound: boolean = false) {
+	audio(`/pointless/audio/countdown.wav`, 'default', finalRound ? 0.5 : 1)
 }
 
 async function correct() {
