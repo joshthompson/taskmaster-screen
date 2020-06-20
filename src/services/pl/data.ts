@@ -7,6 +7,10 @@ function fake() {
 export const game: PointlessGame = {
 	currentRound: 0,
 	currentQuestion: 0,
+	currentBoard: 0,
+	currentPass: 2,
+	currentTeam: null,
+	guessedAnswers: [],
 	rounds: [
 		{
 			questions: [
@@ -26,11 +30,9 @@ export const game: PointlessGame = {
 						{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
 						{ answer: 'Hayes', score: fake(), extra: 'Rutherford B. Hayes' },
 						{ answer: 'Arthur', score: fake(), extra: 'Chester A. Arthur' },
-						{ answer: 'Cleveland', score: fake(), extra: 'Grover Cleveland' },
 						{ answer: 'Taft', score: fake(), extra: 'William Howard Taft' },
 						{ answer: 'Wilson', score: fake(), extra: 'Woodrow Wilson' },
 						{ answer: 'Hoover', score: fake(), extra: 'Herbert Hoover' },
-						{ answer: 'Roosevelt', score: fake(), extra: 'Franklin D. Roosevelt' },
 						{ answer: 'Truman', score: fake(), extra: 'Harry S. Truman' },
 						{ answer: 'Nixon', score: fake(), extra: 'Richard Nixon' },
 						{ answer: 'Ford', score: fake(), extra: 'Gerald Ford' },
@@ -39,6 +41,22 @@ export const game: PointlessGame = {
 						{ answer: 'Bush', score: fake(), extra: 'George H. W. Bush and George W. Bush' },
 						{ answer: 'Obama', score: fake(), extra: 'Barack Obama' },
 						{ answer: 'Trump', score: fake(), extra: 'Donald Trump' }
+					],
+					boards: [
+						[
+							{ hint: `He wasn't a fan of Dexter from Dexters Lab asjdia sdja sdj asd (JC)`, answer: 'Jimmy Carter', score: fake(), extra: 'Jimmy Carter' },
+							{ hint: `He was a head in Futurama (RR)`, answer: 'Ronald Reagan', score: fake(), extra: 'Ronald Reagan' },
+							{ hint: `Both Junior and Senior for this name (GHWB/GWB)`, answer: 'George Bush', score: fake(), extra: 'George H. W. Bush and George W. Bush' },
+							{ hint: `Yes he can (BO)`, answer: 'Barack Obama', score: fake(), extra: 'Barack Obama' },
+							{ hint: `No he can't (DT)`, answer: 'Donald Trump', score: fake(), extra: 'Donald Trump' }
+						],
+						[
+							{ hint: `He wasn't a fan of Dexter from Dexters Lab asjdia sdja sdj asd (JC)`, answer: 'Jimmy Carter', score: fake(), extra: 'Jimmy Carter' },
+							{ hint: `He was a head in Futurama (RR)`, answer: 'Ronald Reagan', score: fake(), extra: 'Ronald Reagan' },
+							{ hint: `Both Junior and Senior for this name (GHWB/GWB)`, answer: 'George Bush', score: fake(), extra: 'George H. W. Bush and George W. Bush' },
+							{ hint: `Yes he can (BO)`, answer: 'Barack Obama', score: fake(), extra: 'Barack Obama' },
+							{ hint: `No he can't (DT)`, answer: 'Donald Trump', score: fake(), extra: 'Donald Trump' }
+						]
 					]
 				},
 				{
@@ -113,9 +131,9 @@ export const game: PointlessGame = {
 		}
 	],
 	teams: [
-		{ name: 'Tom & Miller', googleName: 'Tom' },
-		{ name: 'Nick & Tanya', googleName: 'Nick' },
-		{ name: 'Guy & Lisa', googleName: 'Guy' },
-		{ name: 'Dan & Emily', googleName: 'Dan' }
+		{ name: 'Tom & Miller', googleName: 'Tom', score: 14, answers: 1 },
+		{ name: 'Nick & Tanya', googleName: 'Nick', score: 20, answers: 1 },
+		{ name: 'Guy & Lisa', googleName: 'Guy', score: 18, answers: 1 },
+		{ name: 'Dan & Emily', googleName: 'Dan', score: 2, answers: 1 }
 	]
 }

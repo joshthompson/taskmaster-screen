@@ -2,21 +2,24 @@
 	import { Component, Prop, Vue } from 'vue-property-decorator'
 	import PLAudio from '@/services/pl/PLAudio'
 	import WLAudio from '@/services/wl/WLAudio'
-	import { PointlessAnswer, PointlessQuestion } from '@/types/Pointless'
+	import { PointlessAnswer, PointlessQuestion, PointlessGame } from '@/types/Pointless'
 
 	@Component
 	export default class Scoreometer extends Vue {
 
 		@Prop() public type: 'standard' | 'left' | 'right'
-		@Prop() public question: PointlessQuestion
+		@Prop() public game: PointlessGame
 		@Prop() public answer: PointlessAnswer
-		@Prop() public round: number
 
+		public get question() {
+			return this.game.rounds[this.game.currentRound].questions[this.game.currentQuestion]
+		}
+
+		private redLine: number = null
 		private standardMax: number = 100		// The standard number for timings to be correct
 		private active: boolean = false
 		private current: number = 100
-		private target: number = null
-		private baseDuration: number = 7500			// Duration of a full countdown in ms
+		private baseDuration: number = 7500		// Duration of a full countdown in ms
 		private wobble: boolean = false
 		public percentExtra: number = 100
 		private lastUpdate: number = null		// Used to know the progress between larger steps
@@ -28,6 +31,14 @@
 		public created() {
 			this.current = 0 + this.question.max
 			this.wobbleToggle()
+
+			if (this.game.currentPass === 2 && this.game.currentTeam?.answers === 1) {
+				const highest = this.game.teams
+					.filter((team) => team !== this.game.currentTeam)
+					.map((team) => team.score)
+					.sort((a, b) => a > b ? -1 : 1)[0]
+				this.redLine = highest - this.game.currentTeam.score
+			}
 		}
 
 		private wobbleToggle() {
@@ -68,6 +79,7 @@
 				this.active = false
 				this.wrong = true
 				PLAudio.wrong()
+				this.end()
 				return false
 			}
 
@@ -78,7 +90,7 @@
 			this.current--
 			this.lastUpdate = Date.now()
 
-			if (this.current === this.target) {
+			if (this.current === this.redLine) {
 				PLAudio.passedRedLine()
 			}
 
@@ -91,11 +103,16 @@
 				} else {
 					PLAudio.correct()
 				}
+				this.end()
 				this.blueGlow = true
 				setTimeout(() => this.blueGlow = false, 500)
 			}
 			this.calcPercentExtra()
 			this.current = Math.min(this.question.max, Math.max(this.current, this.answer.score, 0))
+		}
+
+		private end() {
+			this.$emit('answerSubmitted', this.answer)
 		}
 
 		public get percent() {
@@ -116,7 +133,7 @@
 			return {
 				old: this.active && i > this.current,
 				current: this.active && i === this.current,
-				target: i === this.target
+				redLine: i === this.redLine
 			}
 		}
 
@@ -165,7 +182,7 @@
 		}
 
 		public get finalRound() {
-			return this.round === 3
+			return this.game.currentRound === 3
 		}
 
 		public pointInnerStyle(i: number) {
@@ -536,7 +553,7 @@
 					box-shadow: 0 0 s(0.5) s(0.25) rgba(21, 0, 255, 0.5);
 				}
 
-				&.target {
+				&.redLine {
 					z-index: 2;
 					background: #990000;
 					box-shadow: 0 0 s(1) s(0.25) rgba(255, 0, 0, 0.5);
@@ -547,11 +564,11 @@
 					opacity: 0;
 				}
 
-				&.old:not(.target) {
+				&.old:not(.redLine) {
 					animation: fadeUp 0.5s ease-in;
 				}
 
-				&.old.target {
+				&.old.redLine {
 					animation: targetGlow 2s ease-in;
 					border: transparent;
 					height: 0;

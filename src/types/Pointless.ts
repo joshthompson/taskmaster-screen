@@ -7,6 +7,10 @@ export interface PLState {
 export interface PointlessGame {
 	currentRound: number
 	currentQuestion: number
+	currentBoard: number
+	currentPass: 1 | 2
+	currentTeam: PointlessTeam
+	guessedAnswers: PointlessAnswer[]
 	rounds: PointlessRound[]
 	teams: PointlessTeam[]
 }
@@ -18,6 +22,8 @@ export interface PointlessRound {
 export interface PointlessTeam {
 	name: string
 	googleName: string
+	score: number
+	answers: number
 }
 
 export const PointlessWrongAnswer: PointlessAnswer = {
@@ -32,8 +38,10 @@ export interface PointlessQuestion {
 	question: string
 	detail: string
 	openAnswers?: PointlessAnswer[]
-	boardAnswers?: PointlessBoardAnswer[]
+	boards?: PointlessBoard[]
 }
+
+export type PointlessBoard = PointlessBoardAnswer[]
 
 export type PointlessQuestionType = 'open' | 'board'
 
@@ -45,5 +53,5 @@ export interface PointlessAnswer {
 
 export interface PointlessBoardAnswer extends PointlessAnswer {
 	image?: string
-	hint?: number
+	hint?: string
 }

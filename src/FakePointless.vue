@@ -6,12 +6,21 @@
 	import ScriptBar from '@/components/shared/ScriptBar.vue'
 	import Scoreometer from '@/components/pl/Scoreometer.vue'
 	import TeamDivide from '@/components/pl/TeamDivide.vue'
+	import QuestionDisplay from '@/components/pl/QuestionDisplay.vue'
 	import QuestionDetails from '@/components/pl/QuestionDetails.vue'
 	import { PointlessAnswer, PointlessQuestion, PointlessTeam, PointlessGame, PLState, PointlessWrongAnswer } from '@/types/Pointless'
 	import { game } from '@/services/pl/data'
 
 	@Component({
-		components: { DisplayArea, ControlBar, ScriptBar, Scoreometer, TeamDivide, QuestionDetails }
+		components: {
+			DisplayArea,
+			ControlBar,
+			ScriptBar,
+			Scoreometer,
+			TeamDivide,
+			QuestionDisplay,
+			QuestionDetails
+		}
 	})
 	export default class FakePointless extends Vue {
 
@@ -55,7 +64,16 @@
 
 		public setRound(round: number) {
 			this.game.currentRound = round
-			this.game.currentQuestion = 0
+			this.setQuestion(0)
+		}
+
+		public setQuestion(question: number) {
+			this.game.currentQuestion = question
+			this.game.guessedAnswers = []
+			this.game.currentPass = 1
+			this.game.teams.forEach((team) => {
+				team.answers = 0
+			})
 		}
 
 		public get showScore() {
@@ -78,33 +96,40 @@
 			return 'none'
 		}
 
+		public answerSubmitted(answer: PointlessAnswer) {
+			this.game.currentTeam.score = (this.game.currentTeam.score || 0) + answer.score
+			this.game.currentTeam.answers = 0
+			this.game.guessedAnswers.push(answer)
+		}
+
 	}
 </script>
 
 <template>
 	<div id="fake-pointless">
 		<DisplayArea :screenCapture="false">
-			<div class="question">
-				<div class="inner">
-					<div class="text">{{ question.question }}</div>
-				</div>
-			</div>
+			<QuestionDisplay
+				v-show="screen === 'board'"
+				:game="game"
+				:answer="answer1"
+				@setAnswer="setAnswer"
+			/>
 			<TeamDivide :mode="showTeamDivide" />
 			<!-- <TeamScore :team="showTeamScore" /> -->
 			<div :class="{ 'score-container': true, [showScore]: true }">
 				<Scoreometer
-					:round="game.currentRound"
-					:question="question"
+					:game="game"
 					:answer="answer1"
 					:type="double ? 'left' : 'standard'"
 					:key="question.question + 1 + answer1.answer"
+					@answerSubmitted="answerSubmitted"
 				/>
 				<Scoreometer
-					:round="game.currentRound"
-					:question="question"
+					:game="game"
 					:answer="answer2"
 					v-if="double" type="right"
 					:key="question.question + 2 + answer2.answer"
+					@answerSubmitted="answerSubmitted"
 				/>
 			</div>
 		</DisplayArea>
@@ -158,12 +183,24 @@
 
 				<div>
 					<label>Question: </label>
-					<select v-model="game.currentQuestion">
+					<select :value="game.currentQuestion" @change="setQuestion($event.target.value)">
 						<option
 							v-for="(question, i) in round.questions"
 							:key="i"
 							:value="i"
 						>{{ i + 1 }}: {{ question.category }}</option>
+					</select>
+				</div>
+
+				<div>
+					<label>Current Team: </label>
+					<select v-model="game.currentTeam">
+						<option :value="null">None</option>
+						<option
+							v-for="team in game.teams"
+							:key="team.name"
+							:value="team"
+						>{{ team.name }}</option>
 					</select>
 				</div>
 			</div>
@@ -191,32 +228,7 @@
 	}
 
 	@import '@/style/sizing.scss';
-	.question {
-		width: $width;
-		height: $height;
-		background: blue;
-		padding-top: s(50);
-		text-align: center;
-		.inner {
-			display: inline-flex;
-			background: purple;
-			border: s(0.5) solid #FFFFFF;
-			width: s(140);
-			min-height: s(40);
-			border-radius: s(20);
-			padding-top: s(2);
-			padding-bottom: s(2);
-			padding-left: s(10);
-			padding-right: s(10);
-			line-height: s(9);
-			font-size: s(7);
-			text-transform: uppercase;
-			flex-direction: column;
-			justify-content: center;
-			transform: translateY(-50%);
-		}
-	}
-
+	
 	.options {
 		display: table;
 		& > * {
