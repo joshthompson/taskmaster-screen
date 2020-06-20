@@ -22,7 +22,7 @@
 		}
 
 		public get board(): PointlessBoard {
-			return this.question.boards ? this.question.boards[this.game.currentBoard] : null
+			return this.question.boards ? this.question.boards[this.game.currentPass - 1] : null
 		}
 
 		public mode: QuestionDetailsState = 'category'

@@ -3,6 +3,7 @@
 	import PLAudio from '@/services/pl/PLAudio'
 	import WLAudio from '@/services/wl/WLAudio'
 	import { PointlessAnswer, PointlessQuestion, PointlessGame } from '@/types/Pointless'
+	import { scoreToBeat } from '@/services/pl/data'
 
 	@Component
 	export default class Scoreometer extends Vue {
@@ -32,13 +33,7 @@
 			this.current = 0 + this.question.max
 			this.wobbleToggle()
 
-			if (this.game.currentPass === 2 && this.game.currentTeam?.answers === 1) {
-				const highest = this.game.teams
-					.filter((team) => team !== this.game.currentTeam)
-					.map((team) => team.score)
-					.sort((a, b) => a > b ? -1 : 1)[0]
-				this.redLine = highest - this.game.currentTeam.score
-			}
+			this.redLine = scoreToBeat(this.game.currentTeam)
 		}
 
 		private wobbleToggle() {

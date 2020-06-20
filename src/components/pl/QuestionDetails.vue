@@ -1,18 +1,28 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from 'vue-property-decorator'
-	import { PointlessQuestion, PointlessAnswer, PointlessWrongAnswer } from '@/types/Pointless'
+	import { PointlessQuestion, PointlessAnswer, PointlessWrongAnswer, PointlessGame } from '@/types/Pointless'
 	import AnswerBlock from '@/components/pl/AnswerBlock.vue'
 
 	@Component({
 		components: { AnswerBlock }
 	})
 	export default class QuestionDetails extends Vue {
-		@Prop() public question: PointlessQuestion
+		@Prop() public game: PointlessGame
 		@Prop() public answer: PointlessAnswer
 		public wrongAnswer: PointlessAnswer = PointlessWrongAnswer
 
 		public setAnswer(answer: PointlessAnswer) {
 			this.$emit('setAnswer', answer)
+		}
+
+		public get question() {
+			return this.game.rounds[this.game.currentRound].questions[this.game.currentQuestion]
+		}
+
+		public get answers() {
+			return this.question.openAnswers
+				? this.question.openAnswers
+				: this.question.boards[this.game.currentPass - 1]
 		}
 	}
 </script>
@@ -36,7 +46,7 @@
 		<div>
 			<AnswerBlock :answer="null" size="small" @selected="setAnswer" :selected="answer === wrongAnswer" />
 		</div>
-		<div v-for="a in question.openAnswers" :key="a.answer">
+		<div v-for="a in answers" :key="a.answer">
 			<AnswerBlock :answer="a" size="small" @selected="setAnswer" :selected="answer === a" />
 		</div>
     </div>

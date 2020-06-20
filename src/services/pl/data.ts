@@ -1,13 +1,32 @@
-import { PointlessGame } from '@/types/Pointless'
+import { PointlessGame, PointlessTeam } from '@/types/Pointless'
 
 function fake() {
 	return Math.round(Math.random() * 25)
 }
 
+export function scoreToBeat(team: PointlessTeam) {
+	if (game.currentPass === 2 && game.currentTeam?.answers === 1) {	
+		const highest = game.teams
+			.filter((t) => t !== team)
+			.map((t) => t.score)
+			.sort((a, b) => a > b ? -1 : 1)[0]
+		return highest - team.score		
+	}
+	return null
+}
+
+export function potentialMax(team: PointlessTeam) {
+	const currentMax = game.rounds[game.currentRound].questions[game.currentQuestion].max
+	const max = game.teams
+		.filter((t) => t !== team)
+		.map((t) => t.score + (t.answers < 2 ? (2 - t.answers) * currentMax : 0))
+		.sort((a, b) => a > b ? -1 : 1)[0]
+	return max
+}
+
 export const game: PointlessGame = {
 	currentRound: 0,
 	currentQuestion: 0,
-	currentBoard: 0,
 	currentPass: 2,
 	currentTeam: null,
 	guessedAnswers: [],
@@ -41,22 +60,6 @@ export const game: PointlessGame = {
 						{ answer: 'Bush', score: fake(), extra: 'George H. W. Bush and George W. Bush' },
 						{ answer: 'Obama', score: fake(), extra: 'Barack Obama' },
 						{ answer: 'Trump', score: fake(), extra: 'Donald Trump' }
-					],
-					boards: [
-						[
-							{ hint: `He wasn't a fan of Dexter from Dexters Lab asjdia sdja sdj asd (JC)`, answer: 'Jimmy Carter', score: fake(), extra: 'Jimmy Carter' },
-							{ hint: `He was a head in Futurama (RR)`, answer: 'Ronald Reagan', score: fake(), extra: 'Ronald Reagan' },
-							{ hint: `Both Junior and Senior for this name (GHWB/GWB)`, answer: 'George Bush', score: fake(), extra: 'George H. W. Bush and George W. Bush' },
-							{ hint: `Yes he can (BO)`, answer: 'Barack Obama', score: fake(), extra: 'Barack Obama' },
-							{ hint: `No he can't (DT)`, answer: 'Donald Trump', score: fake(), extra: 'Donald Trump' }
-						],
-						[
-							{ hint: `He wasn't a fan of Dexter from Dexters Lab asjdia sdja sdj asd (JC)`, answer: 'Jimmy Carter', score: fake(), extra: 'Jimmy Carter' },
-							{ hint: `He was a head in Futurama (RR)`, answer: 'Ronald Reagan', score: fake(), extra: 'Ronald Reagan' },
-							{ hint: `Both Junior and Senior for this name (GHWB/GWB)`, answer: 'George Bush', score: fake(), extra: 'George H. W. Bush and George W. Bush' },
-							{ hint: `Yes he can (BO)`, answer: 'Barack Obama', score: fake(), extra: 'Barack Obama' },
-							{ hint: `No he can't (DT)`, answer: 'Donald Trump', score: fake(), extra: 'Donald Trump' }
-						]
 					]
 				},
 				{
@@ -77,7 +80,22 @@ export const game: PointlessGame = {
 					type: 'open',
 					question: 'Cool question 2',
 					detail: 'asopdkasd askdnapsdnaps dpa sdoas',
-					openAnswers: []
+					boards: [
+						[
+							{ hint: `He wasn't a fan of Dexter from Dexters Lab asjdia sdja sdj asd (JC)`, answer: 'Jimmy Carter', score: fake(), extra: 'Jimmy Carter' },
+							{ hint: `He was a head in Futurama (RR)`, answer: 'Ronald Reagan', score: fake(), extra: 'Ronald Reagan' },
+							{ hint: `Both Junior and Senior for this name (GHWB/GWB)`, answer: 'George Bush', score: fake(), extra: 'George H. W. Bush and George W. Bush' },
+							{ hint: `Yes he can (BO)`, answer: 'Barack Obama', score: fake(), extra: 'Barack Obama' },
+							{ hint: `No he can't (DT)`, answer: 'Donald Trump', score: fake(), extra: 'Donald Trump' }
+						],
+						[
+							{ hint: `Haskdopaskdoasd)`, answer: 'Jimmy Carter', score: fake(), extra: 'Jimmy Carter' },
+							{ hint: `Heasodkaosd (RR)`, answer: 'Ronald Reagan', score: fake(), extra: 'Ronald Reagan' },
+							{ hint: `Baskdoasd (GHWB/GWB)`, answer: 'George Bush', score: fake(), extra: 'George H. W. Bush and George W. Bush' },
+							{ hint: `asdasd (BO)`, answer: 'Barack Obama', score: fake(), extra: 'Barack Obama' },
+							{ hint: `asdasdasd (DT)`, answer: 'Donald Trump', score: fake(), extra: 'Donald Trump' }
+						]
+					]
 				}
 			]
 		},
@@ -131,9 +149,9 @@ export const game: PointlessGame = {
 		}
 	],
 	teams: [
-		{ name: 'Tom & Miller', googleName: 'Tom', score: 14, answers: 1 },
-		{ name: 'Nick & Tanya', googleName: 'Nick', score: 20, answers: 1 },
-		{ name: 'Guy & Lisa', googleName: 'Guy', score: 18, answers: 1 },
-		{ name: 'Dan & Emily', googleName: 'Dan', score: 2, answers: 1 }
+		{ name: 'Tom & Miller', googleName: 'Tom', score: 3, answers: 1 },
+		{ name: 'Nick & Tanya', googleName: 'Nick', score: 16, answers: 1 },
+		{ name: 'Guy & Lisa', googleName: 'Guy', score: 132, answers: 1 },
+		{ name: 'Dan & Emily', googleName: 'Dan', score: 4, answers: 1 }
 	]
 }

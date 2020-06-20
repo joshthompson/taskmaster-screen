@@ -7,7 +7,6 @@ export interface PLState {
 export interface PointlessGame {
 	currentRound: number
 	currentQuestion: number
-	currentBoard: number
 	currentPass: 1 | 2
 	currentTeam: PointlessTeam
 	guessedAnswers: PointlessAnswer[]

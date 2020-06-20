@@ -6,6 +6,7 @@
 	import ScriptBar from '@/components/shared/ScriptBar.vue'
 	import Scoreometer from '@/components/pl/Scoreometer.vue'
 	import TeamDivide from '@/components/pl/TeamDivide.vue'
+	import TeamScore from '@/components/pl/TeamScore.vue'
 	import QuestionDisplay from '@/components/pl/QuestionDisplay.vue'
 	import QuestionDetails from '@/components/pl/QuestionDetails.vue'
 	import { PointlessAnswer, PointlessQuestion, PointlessTeam, PointlessGame, PLState, PointlessWrongAnswer } from '@/types/Pointless'
@@ -18,6 +19,7 @@
 			ScriptBar,
 			Scoreometer,
 			TeamDivide,
+			TeamScore,
 			QuestionDisplay,
 			QuestionDetails
 		}
@@ -28,17 +30,19 @@
 		public set director(director: string) { this.$store.commit('plSetDirector', director) }
 
 		public get screen() { return (this.$store.state.pl as PLState).screen }
-		public set screen(screen: string) {
-			if (screen.endsWith('_free')) {
-				this.director = 'free'
-			} else {
-				this.game.teams.forEach((team) => {
-					if (screen.endsWith(`_${team.name}`)) {
-						this.director = team.googleName
-					}
-				})
+		public set screen(screen: string) { this.$store.commit('plSetScreen', screen) }
+
+		public autoDirect() {
+			this.director = 'free'
+			if (this.screen.endsWith('_current') && this.game.currentTeam) {
+				this.director = this.game.currentTeam.googleName
 			}
-			this.$store.commit('plSetScreen', screen)
+			this.game.teams.forEach((team) => {
+				if (this.screen.endsWith(`_${team.name}`)) {
+					this.director = team.googleName
+				}
+			})
+			console.log('DIRECTOR', this.director)
 		}
 
 		public game: PointlessGame = game
@@ -76,6 +80,11 @@
 			})
 		}
 
+		public setCurrentTeam(teamName: string) {
+			this.game.currentTeam = this.game.teams.find((t) => t.name === teamName)
+			this.autoDirect()
+		}
+
 		public get showScore() {
 			if (this.screen.startsWith('team_score')) {
 				return 'right'
@@ -96,9 +105,31 @@
 			return 'none'
 		}
 
+		public get showScoreDivideMode() {
+			if (this.screen.startsWith('team_score')) {
+				return 'right'
+			} else if (this.screen.startsWith('score_team')) {
+				return 'left'
+			} else if (this.screen.startsWith('team_')) {
+				return 'normal'
+			}
+			return 'none'
+		}
+
+		public get showScoreDivideTeam() {
+			let teamName: string
+			if (this.screen.startsWith('team_score') || this.screen.startsWith('score_team')) {
+				teamName = this.screen.substr(11)
+			} else if (this.screen.startsWith('team_')) {
+				teamName = this.screen.substr(5)
+			}
+			return this.game.teams.find((t) => t.name === teamName)
+		}
+
 		public answerSubmitted(answer: PointlessAnswer) {
-			this.game.currentTeam.score = (this.game.currentTeam.score || 0) + answer.score
-			this.game.currentTeam.answers = 0
+			const score = answer === PointlessWrongAnswer ? this.question.max : answer.score
+			this.game.currentTeam.score = (this.game.currentTeam.score || 0) + score
+			this.game.currentTeam.answers++
 			this.game.guessedAnswers.push(answer)
 		}
 
@@ -115,7 +146,12 @@
 				@setAnswer="setAnswer"
 			/>
 			<TeamDivide :mode="showTeamDivide" />
-			<!-- <TeamScore :team="showTeamScore" /> -->
+			<TeamScore
+				v-if="showScoreDivideTeam"
+				:mode="showScoreDivideMode"
+				:team="showScoreDivideTeam"
+				:max="question.max"
+			/>
 			<div :class="{ 'score-container': true, [showScore]: true }">
 				<Scoreometer
 					:game="game"
@@ -156,16 +192,15 @@
 						<option value="board">Question Board</option>
 						<option value="score">Score-o-meter</option>
 						<optgroup label="Team View">
-							<option value="team_free">Team View: Free</option>
-							<option v-for="(team, i) in game.teams" :key="i" :value="`team_${team.name}`">Team View: {{ team.name }}</option>
+							<option v-for="(team, i) in game.teams" :key="i" :value="`team_${team.name}`">{{ team.name }}</option>
 						</optgroup>
 						<optgroup label="Team / Score-o-meter">
 							<option value="team_score_free">Team / Meter: Free</option>
-							<option v-for="(team, i) in game.teams" :key="i" :value="`team_score_${team.name}`">Team / Meter: {{ team.name }}</option>
+							<option value="team_score_current">Team / Meter: {{ game.currentTeam ? game.currentTeam.name : 'Current' }}</option>
 						</optgroup>
 						<optgroup label="Score-o-meter / Team">
 							<option value="score_team_free">Meter / Team: Free</option>
-							<option v-for="(team, i) in game.teams" :key="i" :value="`score_team_${team.name}`">Meter / Team: {{ team.name }}</option>
+							<option value="score_team_current">Meter / Team: {{ game.currentTeam ? game.currentTeam.name : 'Current' }}</option>
 						</optgroup>
 					</select>
 				</div>
@@ -194,21 +229,36 @@
 
 				<div>
 					<label>Current Team: </label>
-					<select v-model="game.currentTeam">
+					<select :value="game.currentTeam ? game.currentTeam.name : null" @change="setCurrentTeam($event.target.value)">
 						<option :value="null">None</option>
 						<option
 							v-for="team in game.teams"
 							:key="team.name"
-							:value="team"
+							:value="team.name"
 						>{{ team.name }}</option>
+					</select>
+				</div>
+
+				<div>
+					<label>Pass: </label>
+					<select v-model="game.currentPass">
+						<option :value="1">1</option>
+						<option :value="2">2</option>
 					</select>
 				</div>
 			</div>
 
-			<QuestionDetails :question="question" :answer="answer1" @setAnswer="setAnswer" />
+			<QuestionDetails :game="game" :answer="answer1" @setAnswer="setAnswer" />
 
 		</ControlBar>
-		<ScriptBar />
+		<ScriptBar>
+			<div style="display: flex; width: 100%;">
+				<div style="flex-grow: 1;" v-for="team in game.teams" :key="team.name">
+					<TeamScore :team="team" :max="question.max" />
+					<div style="font-size: 1rem; line-height: 1.5rem;">{{ team }}</div>
+				</div>
+			</div>
+		</ScriptBar>
 	</div>
 </template>
 
