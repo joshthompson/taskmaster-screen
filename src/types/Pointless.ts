@@ -21,8 +21,11 @@ export interface PointlessRound {
 export interface PointlessTeam {
 	name: string
 	googleName: string
+	credits: string[]
 	score: number
+	headToHeadScore: number
 	answers: number
+	out: boolean
 }
 
 export const PointlessWrongAnswer: PointlessAnswer = {
@@ -33,16 +36,13 @@ export const PointlessWrongAnswer: PointlessAnswer = {
 export interface PointlessQuestion {
 	max: number
 	category: string
-	type: PointlessQuestionType
-	question: string
+	question: string | string[]
 	detail: string
 	openAnswers?: PointlessAnswer[]
 	boards?: PointlessBoard[]
 }
 
 export type PointlessBoard = PointlessBoardAnswer[]
-
-export type PointlessQuestionType = 'open' | 'board'
 
 export interface PointlessAnswer {
 	answer: string

@@ -21,7 +21,7 @@
 		<div v-if="!answer" class="cross"><span class="text">✘</span></div>
 		<div v-if="answer" class="answer"><span class="text">{{ answer.answer }}</span></div>
 		<div v-if="answer" class="score"><span class="text">{{ answer.score }}</span></div>
-		<div v-if="showHint" class="hint"><span class="text">{{ answer.hint }}</span></div>
+		<div v-if="showHint" class="hint"><span class="text" v-html="answer.hint"></span></div>
 	</a>
 </template>
 

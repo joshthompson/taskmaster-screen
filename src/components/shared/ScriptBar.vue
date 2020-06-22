@@ -15,7 +15,7 @@
 	@import '@/style/sizing.scss';
 	
 	.script-bar {
-		$textSize: calc((100vh - #{$height}) / 7);
+		$textSize: 1.5rem;
 		position: absolute;
 		bottom: 0;
 		left: 0;

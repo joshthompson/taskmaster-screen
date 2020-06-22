@@ -4,7 +4,7 @@
 	import CircleOverlay from '@/components/pl/CircleOverlay.vue'
 	import AnswerBlock from '@/components/pl/AnswerBlock.vue'
 
-	type QuestionDetailsState = 'category' | 'question' | 'board'
+	type QuestionDetailsState = 'categories' | 'category' | 'question' | 'board'
 	
 	@Component({
 		components: { CircleOverlay, AnswerBlock }
@@ -21,14 +21,27 @@
 			return this.round.questions[this.game.currentQuestion]
 		}
 
+		public get categories(): string[] {
+			return this.round.questions.map((q) => q.category)
+		}
+
 		public get board(): PointlessBoard {
 			return this.question.boards ? this.question.boards[this.game.currentPass - 1] : null
 		}
 
 		public mode: QuestionDetailsState = 'category'
 
+		public mounted() {
+			if (this.game.currentRound === 3) {
+				this.mode = 'categories'
+			}
+		}
+
 		public next() {
 			switch (this.mode) {
+				case 'categories':
+					this.mode = 'category'
+					break
 				case 'category':
 					this.mode = 'question'
 					break
@@ -36,7 +49,7 @@
 					this.mode = this.board ? 'board' : 'category'
 					break
 				case 'board':
-					this.mode = 'category'
+					this.mode = this.game.currentRound === 3 ? 'categories' : 'category'
 					break
 			}
 		}
@@ -46,7 +59,17 @@
 		}
 
 		public showAnswer(answer: PointlessAnswer) {
-			return this.game.guessedAnswers.find((a) => a === answer) 
+			return this.game.guessedAnswers.find((a) => a === answer)
+		}
+
+		public get questions() {
+			return typeof this.question.question === 'string' ? [ this.question.question ] : this.question.question
+		}
+
+		public selectCategory(category: string) {
+			this.game.currentQuestion = this.round.questions.findIndex((q) => q.category === category)
+			this.next()
+			this.next()
 		}
 	}
 </script>
@@ -54,6 +77,13 @@
 <template>
     <CircleOverlay class="question-display">
 		<transition name="slide">
+			<div class="slide" v-if="mode === 'categories'" key="category">
+				<div class="content">
+					<div class="block small" v-for="category in categories" :key="category" @click="selectCategory(category)">
+						{{ category }}
+					</div>
+				</div>
+			</div>
 			<div class="slide" v-if="mode === 'category'" key="category" @click="next">
 				<div class="content">
 					<div class="block">{{ question.category }}</div>
@@ -61,8 +91,14 @@
 			</div>
 			<div class="slide" v-if="mode === 'question'" key="question" @click="next">
 				<div class="content">
-					<div class="block">{{ question.question }}</div></div>
-				
+					<div
+						class="block"
+						v-for="(question, i) in questions"
+						:key="i"
+						:class="questions.length > 1 ? 'small' : ''"
+						v-html="question"
+					></div>
+				</div>
 			</div>
 			<div class="slide" v-if="mode === 'board'" key="board" @click="next">
 				<div class="content">
@@ -119,6 +155,15 @@
 			text-transform: uppercase;
 			flex-direction: column;
 			justify-content: center;
+
+			&.small {
+				padding-top: s(0.5);
+				padding-bottom: s(0.5);
+				min-height: s(20);
+				margin: s(2);
+				font-size: s(6);
+				line-height: s(7);
+			}
 		}
 
 		.answer {

@@ -21,6 +21,11 @@ async function pointless() {
 	audio('/pointless/audio/celebrate.m4a')
 }
 
+async function intro() {
+	stop('red-line')
+	audio('/pointless/audio/intro.mp3')
+}
+
 export default {
 	stop,
 	setVolume,
@@ -28,5 +33,6 @@ export default {
 	correct,
 	wrong,
 	pointless,
-	passedRedLine
+	passedRedLine,
+	intro
 }

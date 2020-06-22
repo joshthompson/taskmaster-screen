@@ -8,7 +8,10 @@
 	import TeamDivide from '@/components/pl/TeamDivide.vue'
 	import TeamScore from '@/components/pl/TeamScore.vue'
 	import QuestionDisplay from '@/components/pl/QuestionDisplay.vue'
+	import ScoresDisplay from '@/components/pl/ScoresDisplay.vue'
 	import QuestionDetails from '@/components/pl/QuestionDetails.vue'
+	import PointlessIntro from '@/components/pl/PointlessIntro.vue'
+	import PointlessCredits from '@/components/pl/PointlessCredits.vue'
 	import { PointlessAnswer, PointlessQuestion, PointlessTeam, PointlessGame, PLState, PointlessWrongAnswer } from '@/types/Pointless'
 	import { game } from '@/services/pl/data'
 
@@ -21,7 +24,10 @@
 			TeamDivide,
 			TeamScore,
 			QuestionDisplay,
-			QuestionDetails
+			ScoresDisplay,
+			QuestionDetails,
+			PointlessIntro,
+			PointlessCredits
 		}
 	})
 	export default class FakePointless extends Vue {
@@ -30,7 +36,10 @@
 		public set director(director: string) { this.$store.commit('plSetDirector', director) }
 
 		public get screen() { return (this.$store.state.pl as PLState).screen }
-		public set screen(screen: string) { this.$store.commit('plSetScreen', screen) }
+		public set screen(screen: string) {
+			this.$store.commit('plSetScreen', screen)
+			this.autoDirect()
+		}
 
 		public autoDirect() {
 			this.director = 'free'
@@ -42,7 +51,6 @@
 					this.director = team.googleName
 				}
 			})
-			console.log('DIRECTOR', this.director)
 		}
 
 		public game: PointlessGame = game
@@ -67,7 +75,7 @@
 		}
 
 		public setRound(round: number) {
-			this.game.currentRound = round
+			this.game.currentRound = parseInt(round as any, 10)
 			this.setQuestion(0)
 		}
 
@@ -107,9 +115,9 @@
 
 		public get showScoreDivideMode() {
 			if (this.screen.startsWith('team_score')) {
-				return 'right'
-			} else if (this.screen.startsWith('score_team')) {
 				return 'left'
+			} else if (this.screen.startsWith('score_team')) {
+				return 'right'
 			} else if (this.screen.startsWith('team_')) {
 				return 'normal'
 			}
@@ -123,6 +131,9 @@
 			} else if (this.screen.startsWith('team_')) {
 				teamName = this.screen.substr(5)
 			}
+			if (teamName === 'current') {
+				return this.game.currentTeam
+			}
 			return this.game.teams.find((t) => t.name === teamName)
 		}
 
@@ -131,6 +142,33 @@
 			this.game.currentTeam.score = (this.game.currentTeam.score || 0) + score
 			this.game.currentTeam.answers++
 			this.game.guessedAnswers.push(answer)
+			setTimeout(() => this.screen = this.screen.replace('_current', '_free'), 1000)
+		}
+
+		public get leftName() {
+			return game.currentTeam?.name.split('&')[0].trim()
+		}
+
+		public get rightName() {
+			return game.currentTeam?.name.split('&')[1].trim()
+		}
+
+		public get currentTeams() {
+			return game.teams.filter((t) => !t.out)
+		}
+
+		public get outTeams() {
+			return game.teams.filter((t) => t.out)
+		}
+
+		public get currentAnswer() {
+			if (game.currentRound === 2) {
+				const teamPos = this.currentTeams.findIndex((t) => t === game.currentTeam)
+				if (teamPos === 2) {
+					return this.answer2
+				}
+			}
+			return this.answer1
 		}
 
 	}
@@ -142,12 +180,17 @@
 			<QuestionDisplay
 				v-show="screen === 'board'"
 				:game="game"
-				:answer="answer1"
+				:answer="currentAnswer"
 				@setAnswer="setAnswer"
+				:key="game.currentRound"
 			/>
+			<ScoresDisplay v-show="screen === 'all_scores'" :game="game"/>
+			<PointlessIntro v-if="screen === 'intro'" @finished="screen = 'nothing'" :game="game" />
+			<PointlessCredits v-if="screen === 'credits'" @finished="screen = 'nothing'" />
 			<TeamDivide :mode="showTeamDivide" />
 			<TeamScore
 				v-if="showScoreDivideTeam"
+				:game="game"
 				:mode="showScoreDivideMode"
 				:team="showScoreDivideTeam"
 				:max="question.max"
@@ -178,7 +221,7 @@
 					<select v-model="director">
 						<option value="free">Free</option>
 						<option
-							v-for="(team, i) in game.teams"
+							v-for="(team, i) in currentTeams"
 							:key="i"
 							:value="team.googleName"
 						>{{ team.name }}</option>
@@ -190,18 +233,44 @@
 					<select v-model="screen">
 						<option value="nothing">Nothing</option>
 						<option value="board">Question Board</option>
+						<option value="all_scores">All Scores</option>
 						<option value="score">Score-o-meter</option>
 						<optgroup label="Team View">
-							<option v-for="(team, i) in game.teams" :key="i" :value="`team_${team.name}`">{{ team.name }}</option>
+							<option v-for="(team, i) in currentTeams" :key="i" :value="`team_${team.name}`">{{ team.name }}</option>
 						</optgroup>
 						<optgroup label="Team / Score-o-meter">
 							<option value="team_score_free">Team / Meter: Free</option>
-							<option value="team_score_current">Team / Meter: {{ game.currentTeam ? game.currentTeam.name : 'Current' }}</option>
+							<option value="team_score_current">Team / Meter: {{ leftName || 'Current' }}</option>
 						</optgroup>
 						<optgroup label="Score-o-meter / Team">
 							<option value="score_team_free">Meter / Team: Free</option>
-							<option value="score_team_current">Meter / Team: {{ game.currentTeam ? game.currentTeam.name : 'Current' }}</option>
+							<option value="score_team_current">Meter / Team: {{ rightName || 'Current' }}</option>
 						</optgroup>
+					</select>
+				</div>
+
+				<div>
+					<label>Team: </label>
+					<select :value="game.currentTeam ? game.currentTeam.name : null" @change="setCurrentTeam($event.target.value)">
+						<option :value="null">None</option>
+						<option
+							v-for="team in currentTeams"
+							:key="team.name"
+							:value="team.name"
+						>{{ team.name }}</option>
+					</select>
+				</div>
+
+				<div class="divide">
+					<div><hr /></div>
+					<div><hr /></div>
+				</div>
+
+				<div>
+					<label>Pass: </label>
+					<select v-model="game.currentPass">
+						<option :value="1">1</option>
+						<option :value="2">2</option>
 					</select>
 				</div>
 
@@ -226,39 +295,37 @@
 						>{{ i + 1 }}: {{ question.category }}</option>
 					</select>
 				</div>
-
-				<div>
-					<label>Current Team: </label>
-					<select :value="game.currentTeam ? game.currentTeam.name : null" @change="setCurrentTeam($event.target.value)">
-						<option :value="null">None</option>
-						<option
-							v-for="team in game.teams"
-							:key="team.name"
-							:value="team.name"
-						>{{ team.name }}</option>
-					</select>
-				</div>
-
-				<div>
-					<label>Pass: </label>
-					<select v-model="game.currentPass">
-						<option :value="1">1</option>
-						<option :value="2">2</option>
-					</select>
-				</div>
 			</div>
 
-			<QuestionDetails :game="game" :answer="answer1" @setAnswer="setAnswer" />
+			<hr />
+			
+			<h3>Actions</h3>
+
+			<div class="actions">
+				<div><button class="btn" @click="screen = 'intro'">Title Sequence</button></div>
+				<div><button class="btn" @click="screen = 'credits'">Credits</button></div>
+			</div>
+
+			<hr />
+
+			<QuestionDetails :game="game" :answer="currentAnswer" @setAnswer="setAnswer" :key="question.category" />
 
 		</ControlBar>
 		<ScriptBar>
 			<div style="display: flex; width: 100%;">
 				<div style="flex-grow: 1;" v-for="team in game.teams" :key="team.name">
-					<TeamScore :team="team" :max="question.max" />
+					<TeamScore v-if="!team.out" :team="team" :game="game" :max="question.max" />
+					<div v-if="team.out">{{ team.name }}</div>
+
+					<div :key="team.name" class="actions">
+						<div><button v-if="!team.out" class="btn" @click="team.out = true">Remove Team</button></div>
+						<div><button v-if="team.out" class="btn" @click="team.out = false">Add Team Back</button></div>
+					</div>
+
 					<div style="font-size: 1rem; line-height: 1.5rem;">{{ team }}</div>
 				</div>
 			</div>
-		</ScriptBar>
+		</ScriptBar> 
 	</div>
 </template>
 
@@ -277,16 +344,35 @@
 		text-align: left;
 	}
 
+	hr {
+		border: none;
+		border-top: 1px solid rgba(255, 255, 255, 0.25);
+		margin: 1rem 0;
+	}
+
+	.actions {
+		& > div {
+			margin-bottom: 0.5rem;
+		}
+	}
+
 	@import '@/style/sizing.scss';
 	
 	.options {
 		display: table;
 		& > * {
 			display: table-row;
+
+			&.divide > *,
+			&.divide > *:nth-child(1) {
+				padding-right: 0;
+			}
+
 			& > * {
 				display: table-cell;
 				&:nth-child(1) {
 					padding-right: 0.5em;
+
 				}
 				&:nth-child(2) {
 					width: 100%;
