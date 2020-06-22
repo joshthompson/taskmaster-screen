@@ -20,9 +20,19 @@
 		}
 
 		public get answers() {
-			return this.question.openAnswers
-				? this.question.openAnswers
-				: this.question.boards[this.game.currentPass - 1]
+			if (this.question.openAnswers) {
+				return [ this.question.openAnswers ]
+			} else if (this.question.boards) {
+				return [ this.question.boards[this.game.currentPass - 1] ]
+			} else if (this.question.groupedAnswers) {
+				return this.question.groupedAnswers
+			} else {
+				return []
+			}
+		}
+
+		public get questions() {
+			return typeof this.question.question === 'string' ? [ this.question.question ] : this.question.question
 		}
 	}
 </script>
@@ -36,18 +46,24 @@
 			</div>
 			<div>
 				<label>Question:</label>
-				<span>{{ question.question }}</span>
+				<ul>
+					<li v-for="(question, i) in questions" :key="i" v-html="question"></li>
+				</ul>
 			</div>
 			<div>
 				<label>Detail:</label>
-				<span>{{ question.detail }}</span>
+				<span v-html="question.detail"></span>
 			</div>
 		</div>
 		<div>
 			<AnswerBlock :answer="null" size="small" @selected="setAnswer" :selected="answer === wrongAnswer" />
 		</div>
-		<div v-for="a in answers" :key="a.answer">
-			<AnswerBlock :answer="a" size="small" @selected="setAnswer" :selected="answer === a" />
+		<div v-for="(group, i) in answers" :key="i">
+			<hr />
+			<div v-if="answers.length > 1" class="group-title">{{ question.question[i] }}</div>
+			<div v-for="a in group" :key="a.answer">
+				<AnswerBlock :answer="a" size="small" @selected="setAnswer" :selected="answer === a" />
+			</div>
 		</div>
     </div>
 </template>
@@ -57,6 +73,10 @@
 
 	.question-details {
 		margin-top: 1em;
+	}
+
+	.group-title {
+		text-align: center;
 	}
 
     label {
@@ -79,5 +99,8 @@
 		}
 	}
 
+	ul {
+		padding-left: 1rem;
+	}
 
 </style>

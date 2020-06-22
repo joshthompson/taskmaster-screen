@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from 'vue-property-decorator'
-	import { PointlessAnswer } from '@/types/Pointless'
+	import { PointlessAnswer, PointlessBoardAnswer } from '@/types/Pointless'
 
 	@Component
 	export default class AnswerBlock extends Vue {
@@ -9,28 +9,33 @@
 		@Prop() public selected: boolean
 		@Prop({ default: false }) public showHint: boolean
 		@Prop({ default: false }) public hideAnswer: boolean
+		@Prop({ default: false }) public showImage: boolean
+
+		public get image() {
+			return this.showImage && (this.answer as PointlessBoardAnswer).image ? true : false
+		}
 	}
 </script>
 
 <template>
-	<a
-		class="pointless-answer-block"
-		:class="{ selected, hideAnswer, showHint, wrong: !answer, [size]: true }"
-		@click="$emit('selected', answer)"
-	>
-		<div v-if="!answer" class="cross"><span class="text">✘</span></div>
-		<div v-if="answer" class="answer"><span class="text">{{ answer.answer }}</span></div>
-		<div v-if="answer" class="score"><span class="text">{{ answer.score }}</span></div>
-		<div v-if="showHint" class="hint"><span class="text" v-html="answer.hint"></span></div>
-	</a>
+	<div :class="{ image, selected }" @click="$emit('selected', answer)">
+		<img v-if="image" :src="answer.image" />
+		<a class="answer-block" :class="{ hideAnswer, showHint, wrong: !answer, [size]: true }">
+			<div v-if="!answer" class="cross"><span class="text">✘</span></div>
+			<div v-if="answer" class="answer"><span class="text">{{ answer.answer }}</span></div>
+			<div v-if="answer" class="score"><span class="text">{{ answer.score }}</span></div>
+			<div v-if="showHint && !image" class="hint"><span class="text" v-html="answer.hint"></span></div>
+		</a>
+	</div>
 </template>
 
 <style lang="scss">
 	@import '@/style/sizing.scss';
 
-	.pointless-answer-block {
+	.answer-block {
 		display: flex;
 		width: 100%;
+		overflow: hidden;
 
 		&.showHint {
 			flex-direction: row-reverse;
@@ -54,7 +59,6 @@
 
 		&.large {
 			font-size: s(6);
-			// font-size: s(8);
 			
 			height: 1.6em;
 
@@ -66,6 +70,7 @@
 				padding: 0.3em;
 				height: 1.6em;
 				width: 1.6em;
+				min-width: 1.6em;
 			}
 
 			.text {
@@ -114,12 +119,12 @@
 
 		&.wrong {
 			filter: hue-rotate(90deg);
-			&.selected {
+			.selected & {
 				filter: hue-rotate(90deg) brightness(1.25);
 			}
 		}
 
-		&.selected {
+		.selected & {
 			box-shadow: inset 0 0 s(1) rgba(6, 5, 80, 1), 0 0 s(2) #FFFFFF;
 			filter: brightness(1.25);
 		}
@@ -147,6 +152,31 @@
 			border-radius: 50%;
 			width: 1em;
 			height: 1em;
+			min-width: 1em;
+		}
+	}
+
+	.image {
+		display: inline-block;
+		width: s(30 * 16/9);
+		min-height: s(40);
+		height: s(40);
+		border-radius: s(5);
+		img {
+			width: s(30 * 16/9);
+			height: s(30);
+			border-radius: s(5);
+			border: s(0.3) solid #FFFFFF;
+			margin-bottom: 0;
+
+			.selected & {
+				box-shadow: inset 0 0 s(1) rgba(6, 5, 80, 1), 0 0 s(2) #FFFFFF;
+				filter: brightness(1.25);
+			}
+		}
+
+		.answer-block.showHint {
+			flex-direction: row;
 		}
 	}
 </style>

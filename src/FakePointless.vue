@@ -71,7 +71,8 @@
 		}
 
 		public setAnswer(answer: PointlessAnswer) {
-			this.answer1 = answer || PointlessWrongAnswer
+			console.log('setAnswer')
+			this.currentAnswer = answer || PointlessWrongAnswer
 		}
 
 		public setRound(round: number) {
@@ -142,7 +143,6 @@
 			this.game.currentTeam.score = (this.game.currentTeam.score || 0) + score
 			this.game.currentTeam.answers++
 			this.game.guessedAnswers.push(answer)
-			setTimeout(() => this.screen = this.screen.replace('_current', '_free'), 1000)
 		}
 
 		public get leftName() {
@@ -162,13 +162,21 @@
 		}
 
 		public get currentAnswer() {
-			if (game.currentRound === 2) {
-				const teamPos = this.currentTeams.findIndex((t) => t === game.currentTeam)
-				if (teamPos === 2) {
-					return this.answer2
-				}
+			const teamPos = this.currentTeams.findIndex((t) => t === game.currentTeam)
+			if (game.currentRound === 2 && teamPos === 1) {
+				return this.answer2
+			} else {
+				return this.answer1
 			}
-			return this.answer1
+		}
+
+		public set currentAnswer(answer: PointlessAnswer) {
+			const teamPos = this.currentTeams.findIndex((t) => t === game.currentTeam)
+			if (game.currentRound === 2 && teamPos === 1) {
+				this.answer2 = answer
+			} else {
+				this.answer1 = answer
+			}
 		}
 
 	}
@@ -308,21 +316,29 @@
 
 			<hr />
 
+			<div>answer1: {{ answer1 }}</div>
+			<div>answer2: {{ answer2 }}</div>
+
+			<hr />
+
 			<QuestionDetails :game="game" :answer="currentAnswer" @setAnswer="setAnswer" :key="question.category" />
 
 		</ControlBar>
 		<ScriptBar>
 			<div style="display: flex; width: 100%;">
 				<div style="flex-grow: 1;" v-for="team in game.teams" :key="team.name">
-					<TeamScore v-if="!team.out" :team="team" :game="game" :max="question.max" />
-					<div v-if="team.out">{{ team.name }}</div>
+					<TeamScore :team="team" :off="team.out" :game="game" :max="question.max" />
 
 					<div :key="team.name" class="actions">
 						<div><button v-if="!team.out" class="btn" @click="team.out = true">Remove Team</button></div>
 						<div><button v-if="team.out" class="btn" @click="team.out = false">Add Team Back</button></div>
+						<div v-if="team !== game.currentTeam && !team.out">
+							<button class="btn" @click="setCurrentTeam(team.name)">Set Current Team</button>
+						</div>
+						<div v-if="team === game.currentTeam"><small>Current Team</small></div>
 					</div>
 
-					<div style="font-size: 1rem; line-height: 1.5rem;">{{ team }}</div>
+					<!-- <div style="font-size: 1rem; line-height: 1.5rem;">{{ team }}</div> -->
 				</div>
 			</div>
 		</ScriptBar> 

@@ -15,19 +15,22 @@ export function scoreToBeat(team: PointlessTeam) {
 	return null
 }
 
-export function potentialMax(team: PointlessTeam) {
-	const currentMax = game.rounds[game.currentRound].questions[game.currentQuestion].max
+export function potentialMax() {
+	const questionMax = game.rounds[game.currentRound].questions[game.currentQuestion].max
 	const max = game.teams
-		.filter((t) => t !== team)
-		.map((t) => t.score + (t.answers < 2 ? (2 - t.answers) * currentMax : 0))
+		.map((t) => t.score + (2 - t.answers) * questionMax)
 		.sort((a, b) => a > b ? -1 : 1)[0]
 	return max
 }
 
+export function potentialMin(team: PointlessTeam) {
+	return team.score || 0
+}
+
 export const game: PointlessGame = {
 	currentRound: 2,
-	currentQuestion: 0,
-	currentPass: 2,
+	currentQuestion: 1,
+	currentPass: 1,
 	currentTeam: null,
 	guessedAnswers: [],
 	rounds: [
@@ -74,12 +77,12 @@ export const game: PointlessGame = {
 					detail: 'We have top position and year it reached that',
 					boards: [
 						[
-							{ hint: 'HTF (#13 - 1984)', answer: '', score: fake(), extra: '' },
-							{ hint: 'FBG (#11 - 1978)', answer: '', score: fake(), extra: '' },
-							{ hint: 'IWTBF (#3 - 1984)', answer: '', score: fake(), extra: '' },
-							{ hint: 'KQ (#2 - 1974)', answer: '', score: fake(), extra: '' },
-							{ hint: 'RGG (#2 - 1984)', answer: '', score: fake(), extra: '' },
-							{ hint: 'YMBF (#7 - 1976)', answer: '', score: fake(), extra: '' }
+							{ hint: 'HTF (#13 - 1984)', answer: 'Hammer To Fall', score: fake(), extra: '' },
+							{ hint: 'FBG (#11 - 1978)', answer: 'Fat Bottomed Girls', score: fake(), extra: '' },
+							{ hint: 'IWTBF (#3 - 1984)', answer: 'I Want To Break Free', score: fake(), extra: '' },
+							{ hint: 'KQ (#2 - 1974)', answer: 'Killer Queen', score: fake(), extra: '' },
+							{ hint: 'RGG (#2 - 1984)', answer: 'Radio Ga Ga', score: fake(), extra: 'Famously the inspiration for the name of Lady Gaga' },
+							{ hint: 'YMBF (#7 - 1976)', answer: `You're My Best Friend`, score: fake(), extra: '' }
 						],
 						[
 							{ hint: 'AOBTD (#7 - 1980)', answer: 'Another One Bites The Dust', score: fake(), extra: '' },
@@ -99,16 +102,16 @@ export const game: PointlessGame = {
 				{
 					max: 25,
 					category: 'Television',
-					question: 'What are the Netflix original series',
+					question: 'What are these Netflix original series',
 					detail: 'asopdkasd askdnapsdnaps dpa sdoas',
 					boards: [
 						[
-							{ hint: 'H_U_E _F _A_D_', answer: 'HOUSE OF CARDS', score: fake(), extra: '' },
-							{ hint: 'O_A_G_ I_ T_E _E_ B_A_K', answer: 'ORANGE IS THE NEW BLACK', score: fake(), extra: '' },
-							{ hint: 'B_J_C_ H_R_E_A_', answer: 'BOJACK HORSEMAN', score: fake(), extra: '' },
-							{ hint: 'U_B_E_K_B_E _I_M_ S_H_I_T', answer: 'UNBREAKABLE KIMMY SCHMIDT', score: fake(), extra: '' },
-							{ hint: 'S_X _D_C_T_O_', answer: 'SEX EDUCATION', score: fake(), extra: '' },
-							{ hint: 'R_V_R_A_E', answer: 'RIVERDALE', score: fake(), extra: '' }
+							{ hint: 'H_U_E _F _A_D_', answer: 'House Of Card', score: fake(), extra: '' },
+							{ hint: 'O_A_G_ I_ T_E _E_ B_A_K', answer: 'Orange Is The New Black', score: fake(), extra: '' },
+							{ hint: 'B_J_C_ H_R_E_A_', answer: 'Bojack Horseman', score: fake(), extra: '' },
+							{ hint: 'U_B_E_K_B_E _I_M_ S_H_I_T', answer: 'Unbreakable Kimmy Schmidt', score: fake(), extra: '' },
+							{ hint: 'S_X _D_C_T_O_', answer: 'Sex Education', score: fake(), extra: '' },
+							{ hint: 'R_V_R_A_E', answer: 'Riverdale', score: fake(), extra: '' }
 						]
 					]
 				},
@@ -119,12 +122,12 @@ export const game: PointlessGame = {
 					detail: 'asopdkasd askdnapsdnaps dpa sdoas',
 					boards: [
 						[
-							{ image: '/pointless/questions/flags/france.svg', answer: 'France', score: fake(), extra: '' },
-							{ image: '/pointless/questions/flags/cambodia.svg', answer: 'Cambodia', score: fake(), extra: '' },
-							{ image: '/pointless/questions/flags/new-zealand.svg', answer: 'New Zealand', score: fake(), extra: '' },
-							{ image: '/pointless/questions/flags/czech-republic.svg', answer: 'Czech Republic', score: fake(), extra: '' },
-							{ image: '/pointless/questions/flags/iceland.svg', answer: 'Iceland', score: fake(), extra: '' },
-							{ image: '/pointless/questions/flags/cuba.svg', answer: 'Cuba', score: fake(), extra: '' }
+							{ image: '/pointless/questions/flags/france.png', answer: 'France', score: fake(), extra: '' },
+							{ image: '/pointless/questions/flags/cambodia.png', answer: 'Cambodia', score: fake(), extra: '' },
+							{ image: '/pointless/questions/flags/new-zealand.png', answer: 'New Zealand', score: fake(), extra: '' },
+							{ image: '/pointless/questions/flags/czech-republic.png', answer: 'Czech Republic', score: fake(), extra: '' },
+							{ image: '/pointless/questions/flags/iceland.png', answer: 'Iceland', score: fake(), extra: '' },
+							{ image: '/pointless/questions/flags/cuba.png', answer: 'Cuba', score: fake(), extra: '' }
 						]
 					]
 				},
@@ -159,7 +162,23 @@ export const game: PointlessGame = {
 						'Movies starring Jack Nicholson'
 					],
 					detail: 'Any movie on their IMDB page',
-					openAnswers: []
+					groupedAnswers: [
+						[
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' }
+						],
+						[
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' }
+						],
+						[
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' }
+						]
+					]
 				},
 				{
 					max: 25,
@@ -167,14 +186,30 @@ export const game: PointlessGame = {
 					question: [
 						'Winners of NBA Finals<br />since 2000',
 						'Winners of Tour de France<br />since 2000',
-						'Winners of UEFA Champions League<br />since 1980'
+						'Winners of Champions League<br />since 1980'
 					],
 					detail: `
-						For UEFA Champions League we also mean European Cup before it was renamed -
+						For UEFA Champions League we also mean European Cup before it was renamed<br />
 						We're not including winner that has been stripped of their win -
 						but we will include replacement winners
 					`,
-					openAnswers: []
+					groupedAnswers: [
+						[
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' }
+						],
+						[
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' }
+						],
+						[
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' }
+						]
+					]
 				},
 				{
 					max: 25,
@@ -184,8 +219,27 @@ export const game: PointlessGame = {
 						'French town/city with a population of over 150,000',
 						'Greek town/city with a population of over 100,000'
 					],
-					detail: `Germany and Greece is based off 2011 cencus data. France is based of 2017 data from their National Institute of Statistics and Economic Studies`,
-					openAnswers: []
+					detail: `
+						Germany and Greece is based off 2011 cencus data.<br />
+						France is based of 2017 data from their National Institute of Statistics and Economic Studies
+					`,
+					groupedAnswers: [
+						[
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' }
+						],
+						[
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' }
+						],
+						[
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
+							{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' }
+						]
+					]
 				}
 			]
 		}
@@ -207,7 +261,7 @@ export const game: PointlessGame = {
 			score: null,
 			answers: 0,
 			headToHeadScore: 0,
-			out: true
+			out: false
 		},
 		{
 			name: 'Guy & Lisa',
@@ -216,7 +270,7 @@ export const game: PointlessGame = {
 			score: null,
 			answers: 0,
 			headToHeadScore: 0,
-			out: true
+			out: false
 		},
 		{
 			name: 'Lara & Dana',

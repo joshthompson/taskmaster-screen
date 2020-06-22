@@ -1,26 +1,26 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from 'vue-property-decorator'
 	import { PointlessTeam, PointlessGame } from '@/types/Pointless'
-	import { scoreToBeat, potentialMax } from '@/services/pl/data'
+	import { scoreToBeat, potentialMax, potentialMin } from '@/services/pl/data'
 
 	@Component
 	export default class TeamScore extends Vue {
 		@Prop() public game: PointlessGame
 		@Prop() public team: PointlessTeam
 		@Prop({ default: 'none' }) public mode: string
+		@Prop({ default: false }) public off: boolean
 
 		public get out() {
-			const score = scoreToBeat(this.team)
-			const max = potentialMax(this.team)
-			if (score !== null) {
-				return score < 0 && this.team.answers === 2
-					|| max < this.team.score
-			}
-			return false
+			const max = potentialMax()
+			const min = potentialMin(this.team)
+			return min >= max
 		}
 
+		public get max() { return potentialMax() }
+		public get min() { return potentialMin(this.team) }
+
 		public get scoreString(): string | number {
-			return this.team.score === null ? 'Pointless' : this.team.score
+			return this.team.score === null || this.off ? 'Pointless' : this.team.score
 		}
 
 		public get pos() {
@@ -33,13 +33,9 @@
 			return this.game.currentRound === 2
 		}
 
-		public get classes() {
-			return {
-				[this.mode]: true,
-				logo: this.scoreString === 'Pointless',
-				out: this.out,
-				headToHead: this.headToHead
-			}
+
+		public get logo() {
+			return this.scoreString === 'Pointless'
 		}
 
 		public get h2h() { return this.team.headToHeadScore }
@@ -52,9 +48,9 @@
 
 <template>
 	<div>
-		<div class="team-score" :class="classes" :pos="pos">
-			<div v-if="!headToHead" class="inner">{{ scoreString }}</div>
-			<div v-if="headToHead" class="head-to-head">
+		<div class="team-score" :class="{ [mode]: true, logo, out, headToHead, off }" :pos="pos">
+			<div v-if="!headToHead || off" class="inner">{{ scoreString }}</div>
+			<div v-if="headToHead && !off" class="head-to-head">
 				<div class="circle" :class="{ filled: h2h >= 1 }" @click="h2h = 1"><div></div></div>
 				<div class="circle" :class="{ filled: h2h >= 2 }" @click="h2h = 2"><div></div></div>
 			</div>
@@ -97,8 +93,12 @@
 			line-height: s($textSize * 0.25);
 		}
 
-		&.out {
+		&.out .inner {
 			color: #CC0000;
+		}
+
+		&.off {
+			filter: brightness(0.5);
 		}
 
 		&.headToHead {

@@ -39,10 +39,9 @@ export interface PointlessQuestion {
 	question: string | string[]
 	detail: string
 	openAnswers?: PointlessAnswer[]
-	boards?: PointlessBoard[]
+	groupedAnswers?: PointlessAnswer[][]
+	boards?: PointlessBoardAnswer[][]
 }
-
-export type PointlessBoard = PointlessBoardAnswer[]
 
 export interface PointlessAnswer {
 	answer: string

@@ -66,6 +66,10 @@
 			return typeof this.question.question === 'string' ? [ this.question.question ] : this.question.question
 		}
 
+		public get imageBoard() {
+			return this.question.boards && this.question.boards[0][0].image ? true : false
+		}
+
 		public selectCategory(category: string) {
 			this.game.currentQuestion = this.round.questions.findIndex((q) => q.category === category)
 			this.next()
@@ -102,12 +106,13 @@
 			</div>
 			<div class="slide" v-if="mode === 'board'" key="board" @click="next">
 				<div class="content">
-					<div v-for="a in board" :key="a.answer" class="answer" @click="$event.stopPropagation()">
+					<div v-for="a in board" :key="a.answer" class="answer" :class="{ imageBoard }" @click="$event.stopPropagation()">
 						<AnswerBlock
 							:answer="a"
 							size="large"
 							:showHint="true"
 							:hideAnswer="!showAnswer(a)"
+							:showImage="true"
 							:selected="a === answer"
 							@selected="setAnswer"
 						/>
@@ -167,8 +172,11 @@
 		}
 
 		.answer {
-			padding-top: s(1);
-			padding-bottom: s(1);
+			padding: s(1);
+
+			&.imageBoard {
+				display: inline-block;
+			}
 		}
 
 		.content {
