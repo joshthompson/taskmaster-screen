@@ -1,7 +1,11 @@
 import { audio, stop, setVolume } from '@/services/shared/Audio'
 
-async function countdown(finalRound: boolean = false) {
-	audio(`/pointless/audio/countdown.wav`, 'default', finalRound ? 0.5 : 1)
+async function countdown() {
+	audio(`/pointless/audio/countdown.wav`, 'default')
+}
+
+async function countdownFinal() {
+	audio(`/pointless/audio/countdown - final.mp3`, 'default')
 }
 
 async function correct() {
@@ -22,17 +26,22 @@ async function pointless() {
 }
 
 async function intro() {
-	stop('red-line')
 	audio('/pointless/audio/intro.mp3')
+}
+
+async function flick() {
+	audio('/pointless/audio/flick.mp3')
 }
 
 export default {
 	stop,
 	setVolume,
 	countdown,
+	countdownFinal,
 	correct,
 	wrong,
 	pointless,
 	passedRedLine,
-	intro
+	intro,
+	flick
 }

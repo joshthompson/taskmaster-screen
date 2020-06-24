@@ -15,7 +15,7 @@
 					this.screenCaptureOut.srcObject = await (navigator.mediaDevices as any).getDisplayMedia()
 					this.screenCaptureOut.play()
 				} catch (error) {
-					console.log('Error', error)
+					// console.log('Error', error)
 				}
 			}
 		}

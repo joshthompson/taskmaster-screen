@@ -2,10 +2,11 @@
 	import { Component, Prop, Vue } from 'vue-property-decorator'
 	import PLAudio from '@/services/pl/PLAudio'
 	import CircleOverlay from '@/components/pl/CircleOverlay.vue'
+	import Logo from '@/components/pl/Logo.vue'
 	import { PointlessGame } from '@/types/Pointless'
 
 	@Component({
-		components: { CircleOverlay }
+		components: { CircleOverlay, Logo }
 	})
 	export default class PointlessIntro extends Vue {
 
@@ -71,9 +72,7 @@
 				{{ number.value }}
 			</div>
 		</div>
-		<div class="ending" v-if="ending">
-			<h1>Fake<br/>Pointless</h1>
-		</div>
+		<Logo class="ending" v-if="ending" />
 		<div class="starring" :key="starring" v-if="starring">
 			{{ starring }}
 		</div>
@@ -122,7 +121,8 @@
 
 		font-size: s(10);
 		color: #FFFFFF;
-		text-shadow: 0 0 s(1) rgba(0, 0, 0, 0.5);
+		text-shadow: -0.05em 0 #D8D6D6,
+					 0 0 s(1) #00000080;
 		animation: number 4s ease-in;
 		opacity: 0;
 	}
@@ -132,9 +132,8 @@
 		left: s(50 * 16/9);
 		transform: translateX(-50%) translateY(-50%) rotate(-10deg);
 		font-size: s(15);
-		text-shadow: 0 0 s(2.5) rgba(0, 0, 0, 0.5);
 		opacity: 1;
-		animation: ending 1.4s ease-out;
+		animation: ending 6s ease-out;
 	}
 
 	.starring {
@@ -142,7 +141,8 @@
 		top: s(90);
 		left: s(50 * 16/9);
 		font-size: s(6);
-		text-shadow: 0 0 s(2.5) rgba(0, 0, 0, 0.5);
+		text-shadow: -0.04em 0 #D8D6D6,
+					 0 0 s(2.5) #00000080;
 		opacity: 0;
 		animation: starring 2.5s ease-out;
 		transform: translateX(-50%);
@@ -168,6 +168,16 @@
 		0% {
 			opacity: 0;
 			transform: scale(3) translateX(-50%) translateY(-50%) rotate(5deg);
+		}
+		10% {
+			opacity: 1;
+			transform: scale(1) translateX(-50%) translateY(-50%) rotate(-10deg);
+		}
+		95% {
+			transform: scale(1.2) translateX(-50%) translateY(-50%) rotate(-15deg);
+		}
+		100% {
+			transform: scale(5) translateX(-30%) translateY(-70%) rotate(-20deg);
 		}
 	}
 

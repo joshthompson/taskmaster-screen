@@ -5,9 +5,12 @@
 	import ControlBar from '@/components/shared/ControlBar.vue'
 	import ScriptBar from '@/components/shared/ScriptBar.vue'
 	import Scoreometer from '@/components/pl/Scoreometer.vue'
+	import Timer from '@/components/pl/Timer.vue'
+	import ChangeRound from '@/components/pl/ChangeRound.vue'
 	import TeamDivide from '@/components/pl/TeamDivide.vue'
 	import TeamScore from '@/components/pl/TeamScore.vue'
 	import QuestionDisplay from '@/components/pl/QuestionDisplay.vue'
+	import FinalAnswers from '@/components/pl/FinalAnswers.vue'
 	import ScoresDisplay from '@/components/pl/ScoresDisplay.vue'
 	import QuestionDetails from '@/components/pl/QuestionDetails.vue'
 	import PointlessIntro from '@/components/pl/PointlessIntro.vue'
@@ -21,9 +24,12 @@
 			ControlBar,
 			ScriptBar,
 			Scoreometer,
+			Timer,
+			ChangeRound,
 			TeamDivide,
 			TeamScore,
 			QuestionDisplay,
+			FinalAnswers,
 			ScoresDisplay,
 			QuestionDetails,
 			PointlessIntro,
@@ -31,6 +37,8 @@
 		}
 	})
 	export default class FakePointless extends Vue {
+
+		public finalAnswers: string = ''
 
 		public get director() { return (this.$store.state.pl as PLState).director }
 		public set director(director: string) { this.$store.commit('plSetDirector', director) }
@@ -71,11 +79,11 @@
 		}
 
 		public setAnswer(answer: PointlessAnswer) {
-			console.log('setAnswer')
 			this.currentAnswer = answer || PointlessWrongAnswer
 		}
 
 		public setRound(round: number) {
+			this.screen = 'change_round'
 			this.game.currentRound = parseInt(round as any, 10)
 			this.setQuestion(0)
 		}
@@ -139,9 +147,11 @@
 		}
 
 		public answerSubmitted(answer: PointlessAnswer) {
-			const score = answer === PointlessWrongAnswer ? this.question.max : answer.score
-			this.game.currentTeam.score = (this.game.currentTeam.score || 0) + score
-			this.game.currentTeam.answers++
+			if (this.game.currentTeam) {
+				const score = answer === PointlessWrongAnswer ? this.question.max : answer.score
+				this.game.currentTeam.score = (this.game.currentTeam.score || 0) + score
+				this.game.currentTeam.answers++
+			}
 			this.game.guessedAnswers.push(answer)
 		}
 
@@ -179,6 +189,11 @@
 			}
 		}
 
+		public revealAnswer() {
+			game.guessedAnswers.push(this.currentAnswer)
+			this.currentAnswer = PointlessWrongAnswer
+		}
+
 	}
 </script>
 
@@ -195,9 +210,12 @@
 			<ScoresDisplay v-show="screen === 'all_scores'" :game="game"/>
 			<PointlessIntro v-if="screen === 'intro'" @finished="screen = 'nothing'" :game="game" />
 			<PointlessCredits v-if="screen === 'credits'" @finished="screen = 'nothing'" />
+			<ChangeRound v-if="screen === 'change_round'" @finished="screen = 'nothing'" :round="game.currentRound" />
+			<Timer v-if="screen === 'timer'" @finished="screen = 'nothing'" />
+			<FinalAnswers v-if="screen === 'final_answers'" :answers="finalAnswers" />
 			<TeamDivide :mode="showTeamDivide" />
 			<TeamScore
-				v-if="showScoreDivideTeam"
+				v-if="showScoreDivideTeam && game.currentRound < 3"
 				:game="game"
 				:mode="showScoreDivideMode"
 				:team="showScoreDivideTeam"
@@ -311,15 +329,21 @@
 
 			<div class="actions">
 				<div><button class="btn" @click="screen = 'intro'">Title Sequence</button></div>
+				<div v-if="game.currentRound === 3"><button class="btn" @click="screen = 'trophy'">Show Trophy</button></div>
+				<div v-if="game.currentRound === 3"><button class="btn" @click="screen = 'timer'">Show Timer</button></div>
+				<div v-if="game.currentRound === 3"><button class="btn" @click="screen = 'final_answers'">Show Final Answers</button></div>
 				<div><button class="btn" @click="screen = 'credits'">Credits</button></div>
+				<div><button class="btn" @click="revealAnswer">Reveal Current Answer</button></div>
 			</div>
 
 			<hr />
 
-			<div>answer1: {{ answer1 }}</div>
-			<div>answer2: {{ answer2 }}</div>
-
-			<hr />
+			<div v-if="game.currentRound === 3">
+				<div>Answers (split on line)</div>
+				<textarea style="height: 5em; width: 100%" v-model="finalAnswers"></textarea>
+				<div><button class="btn" @click="screen = 'finalAnswers'">Submit</button></div>
+				<hr />
+			</div>
 
 			<QuestionDetails :game="game" :answer="currentAnswer" @setAnswer="setAnswer" :key="question.category" />
 
@@ -328,7 +352,6 @@
 			<div style="display: flex; width: 100%;">
 				<div style="flex-grow: 1;" v-for="team in game.teams" :key="team.name">
 					<TeamScore :team="team" :off="team.out" :game="game" :max="question.max" />
-
 					<div :key="team.name" class="actions">
 						<div><button v-if="!team.out" class="btn" @click="team.out = true">Remove Team</button></div>
 						<div><button v-if="team.out" class="btn" @click="team.out = false">Add Team Back</button></div>
@@ -337,8 +360,6 @@
 						</div>
 						<div v-if="team === game.currentTeam"><small>Current Team</small></div>
 					</div>
-
-					<!-- <div style="font-size: 1rem; line-height: 1.5rem;">{{ team }}</div> -->
 				</div>
 			</div>
 		</ScriptBar> 

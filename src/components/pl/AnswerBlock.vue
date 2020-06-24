@@ -37,14 +37,18 @@
 		width: 100%;
 		overflow: hidden;
 
+		.lc {
+			text-transform: lowercase;
+		}
+
 		&.showHint {
 			flex-direction: row-reverse;
 		}
 
 		&.hideAnswer {
 			.score, .answer {
-				.text{
-					visibility: hidden;
+				.text {
+					opacity: 0;
 				}
 			}
 		}
@@ -83,6 +87,8 @@
 			display: block;
 			font-size: 0.6em;
 			transform: translateY(-50%);
+			opacity: 1;
+			transition: opacity 0.2s ease-out;
 		}
 
 		border-radius: 10em;
@@ -153,6 +159,8 @@
 			width: 1em;
 			height: 1em;
 			min-width: 1em;
+			position: relative;
+			z-index: 10;
 		}
 	}
 
@@ -168,11 +176,12 @@
 			border-radius: s(5);
 			border: s(0.3) solid #FFFFFF;
 			margin-bottom: 0;
+			transition: filter 0.3s ease-in, box-shadow 0.3s ease-in;
+		}
 
-			.selected & {
-				box-shadow: inset 0 0 s(1) rgba(6, 5, 80, 1), 0 0 s(2) #FFFFFF;
-				filter: brightness(1.25);
-			}
+		&.selected img {
+			box-shadow: 0 0 s(2) #FFFFFF;
+			filter: brightness(1.25);
 		}
 
 		.answer-block.showHint {

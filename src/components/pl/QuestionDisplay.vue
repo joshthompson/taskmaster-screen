@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from 'vue-property-decorator'
-	import { PointlessQuestion, PointlessGame, PointlessRound, PointlessBoard, PointlessAnswer } from '@/types/Pointless'
+	import { PointlessQuestion, PointlessGame, PointlessRound, PointlessBoardAnswer, PointlessAnswer } from '@/types/Pointless'
 	import CircleOverlay from '@/components/pl/CircleOverlay.vue'
 	import AnswerBlock from '@/components/pl/AnswerBlock.vue'
 
@@ -25,7 +25,7 @@
 			return this.round.questions.map((q) => q.category)
 		}
 
-		public get board(): PointlessBoard {
+		public get board(): PointlessBoardAnswer[] {
 			return this.question.boards ? this.question.boards[this.game.currentPass - 1] : null
 		}
 

@@ -17,15 +17,17 @@
 		}
 
 		private redLine: number = null
-		private standardMax: number = 100		// The standard number for timings to be correct
+		private standardMax: number = 100			// The standard number for timings to be correct
 		private active: boolean = false
 		private current: number = 100
-		private baseDuration: number = 7500		// Duration of a full countdown in ms
+		private baseDuration: number = 7500			// Duration of a full countdown in ms
+		private baseDurationFinal: number = 6000	// Duration of a full final countdown in ms
 		private wobble: boolean = false
 		public percentExtra: number = 100
-		private lastUpdate: number = null		// Used to know the progress between larger steps
+		private lastUpdate: number = null			// Used to know the progress between larger steps
 		public pointless: boolean = false
 		public wrong: boolean = false
+		public finalAdjust: number = 0
 
 		private blueGlow: boolean = false
 
@@ -53,15 +55,18 @@
 				this.current = this.question.max
 				this.pointless = false
 				this.wrong = false
+				this.finalAdjust = 12
 				this.reduce()
 				if (this.answer.answer !== '✘') {
-					PLAudio.countdown(this.finalRound)
+					if (!this.finalRound) {
+						PLAudio.countdown()
+					}
 				}
 			}
 		}
 
 		public get duration() {
-			return (this.finalRound ? 2 : 1) * this.baseDuration
+			return this.finalRound ? this.baseDurationFinal : this.baseDuration
 		}
 
 		public get step() {
@@ -90,7 +95,13 @@
 			}
 
 			if (this.current > this.answer.score) {
-				setTimeout(() => this.reduce(), this.step)
+				let step = this.step
+				if (this.finalRound) {
+					PLAudio.countdownFinal()
+					step += this.finalAdjust * -10
+					this.finalAdjust--
+				}
+				setTimeout(() => this.reduce(), step)
 			} else {
 				this.pointless = this.answer.score === 0
 				if (this.pointless) {
