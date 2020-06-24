@@ -3,7 +3,7 @@
 
 	@Component
 	export default class Logo extends Vue {
-		@Prop() extra: string
+		@Prop() public extra: string
 	}
 </script>
 
