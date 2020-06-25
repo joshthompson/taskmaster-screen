@@ -2,6 +2,7 @@
 	import { Component, Prop, Vue } from 'vue-property-decorator'
 	import { PointlessTeam, PointlessGame } from '@/types/Pointless'
 	import { scoreToBeat, potentialMax, potentialMin } from '@/services/pl/data'
+import PLAudio from '../../services/pl/PLAudio'
 
 	@Component
 	export default class TeamScore extends Vue {
@@ -41,6 +42,9 @@
 		public get h2h() { return this.team.headToHeadScore }
 		public set h2h(score: number) {
 			this.team.headToHeadScore = score !== this.h2h ? score : 0
+			if (this.team.headToHeadScore) {
+				PLAudio.ting()
+			}
 		}
 
 	}

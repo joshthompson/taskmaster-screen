@@ -17,7 +17,7 @@ async function wrong() {
 }
 
 async function passedRedLine() {
-	audio(`/pointless/audio/wrong.wav`, 'red-line')
+	audio(`/pointless/audio/ting.mp3`, 'red-line')
 }
 
 async function pointless() {
@@ -33,6 +33,10 @@ async function flick() {
 	audio('/pointless/audio/flick.mp3')
 }
 
+async function ting() {
+	audio('/pointless/audio/ting.mp3')
+}
+
 export default {
 	stop,
 	setVolume,
@@ -43,5 +47,6 @@ export default {
 	pointless,
 	passedRedLine,
 	intro,
-	flick
+	flick,
+	ting
 }

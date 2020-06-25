@@ -55,7 +55,7 @@
 				this.current = this.question.max
 				this.pointless = false
 				this.wrong = false
-				this.finalAdjust = 12
+				this.finalAdjust = Math.floor(this.question.max / 2)
 				this.reduce()
 				if (this.answer.answer !== '✘') {
 					if (!this.finalRound) {
@@ -106,6 +106,9 @@
 				this.pointless = this.answer.score === 0
 				if (this.pointless) {
 					PLAudio.pointless()
+					if (this.finalRound) {
+						setTimeout(() => PLAudio.flick(), 1500)
+					}
 				} else {
 					PLAudio.correct()
 				}

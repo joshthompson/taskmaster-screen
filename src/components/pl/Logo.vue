@@ -9,8 +9,8 @@
 
 <template>
 	<div class="pointless-logo">
-		<div>Fake</div>
-		<div>
+		<div class="fake">Fake</div>
+		<div class="pointless">
 			<span>Po</span>
 			<div class="i">
 				<div v-for="i in 12" :key="i"></div>
@@ -33,7 +33,9 @@
 					 -0.09em 0 0 #F0EBEB;
 		
 		.extra {
-			text-shadow: -0.08em 0 #F0EBEB;
+			color: #EDC834;
+			text-shadow: -0.08em 0 #FAE074;
+			text-align: right;
 		}
 
 		.i {
