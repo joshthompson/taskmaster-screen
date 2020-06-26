@@ -17,6 +17,8 @@
 	import PointlessCredits from '@/components/pl/PointlessCredits.vue'
 	import { PointlessAnswer, PointlessQuestion, PointlessTeam, PointlessGame, PLState, PointlessWrongAnswer } from '@/types/Pointless'
 	import { game } from '@/services/pl/data'
+	import { AppState } from '@/types'
+	import PLAudio from '@/services/pl/PLAudio'
 
 	@Component({
 		components: {
@@ -194,6 +196,14 @@
 			this.currentAnswer = PointlessWrongAnswer
 		}
 
+		public get volume() {
+			return (this.$store.state as AppState).volume
+		}
+
+		public setVolume(event) {
+			PLAudio.setVolume(parseFloat(event.target.value))
+		}
+
 	}
 </script>
 
@@ -334,6 +344,11 @@
 				<div v-if="game.currentRound === 3"><button class="btn" @click="screen = 'final_answers'">Show Final Answers</button></div>
 				<div><button class="btn" @click="screen = 'credits'">Credits</button></div>
 				<div><button class="btn" @click="revealAnswer">Reveal Current Answer</button></div>
+			</div>
+
+			<div>
+				<h3>Volume: {{ volume * 100 }}%</h3>
+				<input type="range" min="0" max="1" step="0.01" :value="volume" @change="setVolume" />
 			</div>
 
 			<hr />

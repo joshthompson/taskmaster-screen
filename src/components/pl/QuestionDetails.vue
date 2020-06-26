@@ -54,13 +54,21 @@
 				<label>Detail:</label>
 				<span v-html="question.detail"></span>
 			</div>
+			<div>
+				<label>Answer:</label>
+				<span v-html="answer.answer"></span>
+			</div>
+			<div>
+				<label>Extra:</label>
+				<span v-html="answer.extra"></span>
+			</div>
 		</div>
 		<div>
 			<AnswerBlock :answer="null" size="small" @selected="setAnswer" :selected="answer === wrongAnswer" />
 		</div>
 		<div v-for="(group, i) in answers" :key="i">
 			<hr />
-			<div v-if="answers.length > 1" class="group-title">{{ question.question[i] }}</div>
+			<div v-if="answers.length > 1" class="group-title" v-html="question.question[i]"></div>
 			<div v-for="a in group" :key="a.answer">
 				<AnswerBlock :answer="a" size="small" @selected="setAnswer" :selected="answer === a" />
 			</div>

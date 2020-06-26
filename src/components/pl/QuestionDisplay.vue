@@ -4,7 +4,7 @@
 	import CircleOverlay from '@/components/pl/CircleOverlay.vue'
 	import AnswerBlock from '@/components/pl/AnswerBlock.vue'
 
-	type QuestionDetailsState = 'categories' | 'category' | 'question' | 'board'
+	type QuestionDetailsState = 'categories' | 'category' | 'question' | 'board' | 'pointless' | 'top'
 	
 	@Component({
 		components: { CircleOverlay, AnswerBlock }
@@ -12,6 +12,11 @@
 	export default class QuestionDisplay extends Vue {
 		@Prop() public game: PointlessGame
 		@Prop() public answer: PointlessAnswer
+		
+		public group: number = 0
+		public page: number = 0
+		public perPage: number = 6
+		public top: number = 0
 
 		public get round(): PointlessRound {
 			return this.game.rounds[this.game.currentRound]
@@ -46,11 +51,45 @@
 					this.mode = 'question'
 					break
 				case 'question':
-					this.mode = this.board ? 'board' : 'category'
+					this.group = 0
+					this.page = 0
+					this.mode = this.board ? 'board' : 'pointless'
+					break
+				case 'pointless':
+					const pages = Math.floor(this.pointlessAnswers.length / this.perPage)
+					if (this.page < pages) {
+						this.page++
+					} else if (this.group < this.groups - 1) {
+						this.group++
+					} else {
+						this.top = 1
+						this.group = 0
+						this.mode = 'top'
+					}
+					break
+				case 'top':
+					if (this.top < this.topAnswers.length) {
+						this.top++
+					} else if (this.group < this.groups - 1) {
+						this.group++
+						this.top = 1
+					} else {
+						this.mode = this.game.currentRound === 3 ? 'categories' : 'category'
+					}
 					break
 				case 'board':
 					this.mode = this.game.currentRound === 3 ? 'categories' : 'category'
 					break
+			}
+
+			while (this.mode === 'pointless' && this.pointlessAnswers.length === 0) {
+				if (this.group < this.groups - 1) {
+					this.group++
+				} else {
+					this.top = 1
+					this.group = 0
+					this.mode = 'top'
+				}
 			}
 		}
 
@@ -74,6 +113,35 @@
 			this.game.currentQuestion = this.round.questions.findIndex((q) => q.category === category)
 			this.next()
 			this.next()
+		}
+
+		private get revealableAnswers() {
+			return this.question.groupedAnswers
+				? this.question.groupedAnswers[this.group]
+				: this.question.openAnswers
+		}
+
+		public get pointlessAnswers() {
+			return this.revealableAnswers.filter((a) => a.score === 0)
+		}
+
+		public get topAnswers() {
+			return this.revealableAnswers
+				.filter((a) => a.score > 0)
+				.sort((a, b) => a.score > b.score ? -1 : 1)
+				.splice(0, this.perPage)
+		}
+
+		public get groupName() {
+			return typeof this.question.question === 'object'
+				? this.question.question[this.group]
+				: this.question.question
+		}
+
+		public get groups() {
+			return typeof this.question.question === 'object'
+				? this.question.question.length
+				: 1
 		}
 	}
 </script>
@@ -106,7 +174,13 @@
 			</div>
 			<div class="slide" v-if="mode === 'board'" key="board" @click="next">
 				<div class="content">
-					<div v-for="a in board" :key="a.answer" class="answer" :class="{ imageBoard }" @click="$event.stopPropagation()">
+					<div
+						v-for="a in board"
+						:key="a.answer"
+						class="answer"
+						:class="{ imageBoard }"
+						@click="$event.stopPropagation()"
+					>
 						<AnswerBlock
 							:answer="a"
 							size="large"
@@ -115,6 +189,30 @@
 							:showImage="true"
 							:selected="a === answer"
 							@selected="setAnswer"
+						/>
+					</div>
+				</div>
+			</div>
+			<div class="slide" v-if="mode === 'pointless'" :key="`pointless_${group}_${page}`" @click="next">
+				<div class="content">
+					<div v-if="groupName" class="block small" v-html="groupName"></div>
+					<div v-for="i in 6" :key="i">
+						<AnswerBlock
+							v-if="pointlessAnswers[i - 1 + page * perPage]"
+							:answer="pointlessAnswers[i - 1 + page * perPage]"
+							size="large"
+						/>
+					</div>
+				</div>
+			</div>
+			<div class="slide" v-if="mode === 'top'" :key="`top_${group}`" @click="next">
+				<div class="content">
+					<div v-if="groupName" class="block small" v-html="groupName"></div>
+					<div v-for="(answer, i) in topAnswers" :key="i" class="top-answer" :style="{ opacity: topAnswers.length - i >= top + 1 ? 0 : 1 }">
+						<AnswerBlock
+							v-if="answer"
+							:answer="answer"
+							size="large"
 						/>
 					</div>
 				</div>
@@ -134,6 +232,10 @@
 		height: $height;
 		padding-top: s(50);
 		cursor: pointer;
+	}
+
+	.top-answer {
+		transition: opacity 0.4s ease-out;
 	}
 
 	.question-display {

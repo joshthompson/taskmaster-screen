@@ -6,7 +6,7 @@
 	export default class AnswerBlock extends Vue {
 		@Prop() public answer: PointlessAnswer
 		@Prop({ default: 'medium' }) public size: 'large' | 'medium' | 'small'
-		@Prop() public selected: boolean
+		@Prop({ default: false }) public selected: boolean
 		@Prop({ default: false }) public showHint: boolean
 		@Prop({ default: false }) public hideAnswer: boolean
 		@Prop({ default: false }) public showImage: boolean
@@ -22,7 +22,7 @@
 		<img v-if="image" :src="answer.image" />
 		<a class="answer-block" :class="{ hideAnswer, showHint, wrong: !answer, [size]: true }">
 			<div v-if="!answer" class="cross"><span class="text">✘</span></div>
-			<div v-if="answer" class="answer"><span class="text">{{ answer.answer }}</span></div>
+			<div v-if="answer" class="answer"><span class="text" v-html="answer.answer"></span></div>
 			<div v-if="answer" class="score"><span class="text">{{ answer.score }}</span></div>
 			<div v-if="showHint && !image" class="hint"><span class="text" v-html="answer.hint"></span></div>
 		</a>

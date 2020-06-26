@@ -21,7 +21,7 @@ const initialState: AppState = {
 		director: 'free',
 		screen: 'nothing'
 	},
-	volume: 0.7
+	volume: 0.45
 }
 
 const mutations: MutationTree<AppState> = {

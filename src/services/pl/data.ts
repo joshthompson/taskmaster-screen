@@ -28,8 +28,8 @@ export function potentialMin(team: PointlessTeam) {
 }
 
 export const game: PointlessGame = {
-	currentRound: 3,
-	currentQuestion: 1,
+	currentRound: 0,
+	currentQuestion: 0,
 	currentPass: 1,
 	currentTeam: null,
 	guessedAnswers: [],
@@ -47,26 +47,26 @@ export const game: PointlessGame = {
 						- that surname is only included once
 					`,
 					openAnswers: [
-						{ answer: 'Adams', score: fake(), extra: 'John Adams and John Quincy Adams' },
-						{ answer: 'Monroe', score: fake(), extra: 'James Monroe' },
-						{ answer: 'Tyler', score: fake(), extra: 'John Tyler' },
-						{ answer: 'Polk', score: fake(), extra: 'James K. Polk' },
-						{ answer: 'Taylor', score: fake(), extra: 'Zachary Taylor' },
-						{ answer: 'Pierce', score: fake(), extra: 'Franklin Pierce' },
-						{ answer: 'Grant', score: fake(), extra: 'Ulysses S. Grant' },
-						{ answer: 'Hayes', score: fake(), extra: 'Rutherford B. Hayes' },
-						{ answer: 'Arthur', score: fake(), extra: 'Chester A. Arthur' },
-						{ answer: 'Taft', score: fake(), extra: 'William Howard Taft' },
-						{ answer: 'Wilson', score: fake(), extra: 'Woodrow Wilson' },
-						{ answer: 'Hoover', score: fake(), extra: 'Herbert Hoover' },
-						{ answer: 'Truman', score: fake(), extra: 'Harry S. Truman' },
-						{ answer: 'Nixon', score: fake(), extra: 'Richard Nixon' },
-						{ answer: 'Ford', score: fake(), extra: 'Gerald Ford' },
-						{ answer: 'Carter', score: fake(), extra: 'Jimmy Carter' },
-						{ answer: 'Reagan', score: fake(), extra: 'Ronald Reagan' },
-						{ answer: 'Bush', score: fake(), extra: 'George H. W. Bush and George W. Bush' },
-						{ answer: 'Obama', score: fake(), extra: 'Barack Obama' },
-						{ answer: 'Trump', score: fake(), extra: 'Donald Trump' }
+						{ answer: 'Adams', score: 3, extra: 'Father and son - John and John Quincy Adams - 2nd and 6th President' },
+						{ answer: 'Monroe', score: 0, extra: 'James Monroe - Bought Florida for $5 million - died on 4th July' },
+						{ answer: 'Tyler', score: 0, extra: 'John Tyler - First Vice President to take over after President William Henry Harrison passed away' },
+						{ answer: 'Polk', score: 0, extra: 'James K. Polk - Known for his polka dot print suits (Not true)' },
+						{ answer: 'Taylor', score: 0, extra: 'Zachary Taylor - His nickname was Old Rough and Ready' },
+						{ answer: 'Pierce', score: 0, extra: 'Franklin Pierce - He was the first president to "promise" his oath instead of "swearing" it' },
+						{ answer: 'Grant', score: 0, extra: `Ulysses S. Grant - S doesn't stand for anything - His phantom middle initial is the result of an error from Ohio Congressman Thomas Hamer, who accidentally added for a form and it just stuck` },
+						{ answer: 'Hayes', score: 0, extra: `Rutherford B. Hayes - His whitehouse saw America's first Siamese cat - His wife Lucy Hayes loved cats - was gifted it` },
+						{ answer: 'Arthur', score: 0, extra: 'Chester A. Arthur - Nicknames included Elegant Arthur and Gentleman Boss' },
+						{ answer: 'Taft', score: 0, extra: 'William Howard Taft - He was a heavyweight wrestling champion at Yale - rumours he got stuck in the white house bathtub' },
+						{ answer: 'Wilson', score: 4, extra: 'Woodrow Wilson - Only president with the word wood in his name' },
+						{ answer: 'Hoover', score: 4, extra: 'Herbert Hoover - Has been known to be mistaken with Henry Hoover on the real Pointless' },
+						{ answer: 'Truman', score: 1, extra: 'Harry S. Truman - His middle name is just S. as given by parents' },
+						{ answer: 'Nixon', score: 12, extra: 'Richard Nixon - Avid Bowler -  He had a bowling alley installed under the White House' },
+						{ answer: 'Ford', score: 4, extra: 'Gerald Ford - He was a male model and he locked himself out of the white house once' },
+						{ answer: 'Carter', score: 1, extra: 'Jimmy Carter - Currently 95 years old - the longest living US president' },
+						{ answer: 'Reagan', score: 12, extra: 'Ronald Reagan - Loved jelly beans' },
+						{ answer: 'Bush', score: 19, extra: 'George H. W. Bush and George W. Bush - George H.W. Bush went skydiving to celebrate his 80th, 85th and 90th birthdays' },
+						{ answer: 'Obama', score: 15, extra: `Barack Obama - Still very popular - but would he be as popular if people knew that he didn't like ice cream?` },
+						{ answer: 'Trump', score: 14, extra: 'Donald Trump - Nothing' }
 					]
 				}
 			]
