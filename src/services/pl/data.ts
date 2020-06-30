@@ -60,13 +60,13 @@ export const game: PointlessGame = {
 						{ answer: 'Wilson', score: 4, extra: 'Woodrow Wilson - Only president with the word wood in his name' },
 						{ answer: 'Hoover', score: 5, extra: 'Herbert Hoover - Has been known to be mistaken with Henry Hoover on the real Pointless' },
 						{ answer: 'Truman', score: 1, extra: 'Harry S. Truman - His middle name is just S. as given by parents' },
-						{ answer: 'Nixon', score: 12, extra: 'Richard Nixon - Avid Bowler -  He had a bowling alley installed under the White House' },
+						{ answer: 'Nixon', score: 13, extra: 'Richard Nixon - Avid Bowler -  He had a bowling alley installed under the White House' },
 						{ answer: 'Ford', score: 4, extra: 'Gerald Ford - He was a male model and he locked himself out of the white house once' },
 						{ answer: 'Carter', score: 1, extra: 'Jimmy Carter - Currently 95 years old - the longest living US president' },
-						{ answer: 'Reagan', score: 13, extra: 'Ronald Reagan - Loved jelly beans' },
+						{ answer: 'Reagan', score: 14, extra: 'Ronald Reagan - Loved jelly beans' },
 						{ answer: 'Bush', score: 20, extra: 'George H. W. Bush and George W. Bush - George H.W. Bush went skydiving to celebrate his 80th, 85th and 90th birthdays' },
 						{ answer: 'Obama', score: 16, extra: `Barack Obama - Still very popular - but would he be as popular if people knew that he didn't like ice cream?` },
-						{ answer: 'Trump', score: 15, extra: 'Donald Trump - Nothing' }
+						{ answer: 'Trump', score: 16, extra: 'Donald Trump - Nothing' }
 					]
 				}
 			]
@@ -74,7 +74,7 @@ export const game: PointlessGame = {
 		{
 			// Round 2
 			questions: [
-				{
+				{  
 					max: 25,
 					category: 'Music',
 					question: 'Queen Songs',
@@ -86,20 +86,20 @@ export const game: PointlessGame = {
 					`,
 					boards: [
 						[
-							{ hint: 'HTF (#13 - 1984)', answer: 'Hammer To Fall', score: fake(), extra: `` },
-							{ hint: 'FBG (#11 - 1978)', answer: 'Fat Bottomed Girls', score: fake(), extra: `` },
-							{ hint: 'IWTBF (#3 - 1984)', answer: 'I Want To Break Free', score: fake(), extra: `` },
-							{ hint: 'KQ (#2 - 1974)', answer: 'Killer Queen', score: fake(), extra: `` },
-							{ hint: 'RGG (#2 - 1984)', answer: 'Radio Ga Ga', score: fake(), extra: 'Famously the inspiration for the name of Lady Gaga' },
-							{ hint: 'YMBF (#7 - 1976)', answer: `You're My Best Friend`, score: fake(), extra: `` }
-						],
-						[
 							{ hint: 'AOBTD (#7 - 1980)', answer: 'Another One Bites The Dust', score: fake(), extra: `` },
 							{ hint: 'S (#25 - 1989)', answer: 'Scandal', score: fake(), extra: `` },
 							{ hint: 'WATC (#2 - 1977)', answer: 'We Are The Champions', score: fake(), extra: `` },
-							{ hint: 'F (#10 - 1980)', answer: 'Flash', score: fake(), extra: `` },
+							{ hint: 'F (#10 - 1980)', answer: 'Flash', score: fake(), extra: `Only reached #1 in one national chart - Austria. In US only got to #42` },
 							{ hint: 'UP (#1 - 1981)', answer: 'Under Pressure', score: fake(), extra: 'Featuring David Bowie' },
-							{ hint: 'BR (#1 - 1975, #1 - 1991)', answer: 'Bohemian Rhapsody', score: fake(), extra: `` }
+							{ hint: 'BR (#1 - 1975, #1 - 1991)', answer: 'Bohemian Rhapsody', score: fake(), extra: `It is the most streamed song from the 20th century` }
+						],
+						[
+							{ hint: 'HTF (#13 - 1984)', answer: 'Hammer To Fall', score: fake(), extra: `On songfacts.com Mr. B from Doon Bish, England said "Well Queen did about 8billion apaling songs but this is one of those 30 or so that are pretty mint."` },
+							{ hint: 'FBG (#11 - 1978)', answer: 'Fat Bottomed Girls', score: fake(), extra: `Released as a double A-side with Bicyle Race - both songs contain a references to each other "Fat bottomed girls, they'll be riding today, so look out for those beauties, oh yeah." "get on your bikes and ride!"` },
+							{ hint: 'IWTBF (#3 - 1984)', answer: 'I Want To Break Free', score: fake(), extra: `Music video has them famously all dressed as women. Have you performed this on stage Craig?` },
+							{ hint: 'KQ (#2 - 1974)', answer: 'Killer Queen', score: fake(), extra: `An Extraordinarily nice answer. Guarenteed to blow the score thingy` },
+							{ hint: 'RGG (#2 - 1984)', answer: 'Radio Ga Ga', score: fake(), extra: 'Famously the inspiration for the name of Lady Gaga' },
+							{ hint: 'YMBF (#7 - 1976)', answer: `You're My Best Friend`, score: fake(), extra: `John Deacon wrote this song about his wife` }
 						]
 					]
 				}
@@ -117,12 +117,12 @@ export const game: PointlessGame = {
 					`,
 					boards: [
 						[
-							{ hint: 'H_U_E _F _A_D_', answer: 'House Of Card', score: fake(), extra: `` },
-							{ hint: 'O_A_G_ I_ T_E _E_ B_A_K', answer: 'Orange Is The New Black', score: fake(), extra: `` },
-							{ hint: 'B_J_C_ H_R_E_A_', answer: 'Bojack Horseman', score: fake(), extra: `` },
-							{ hint: 'U_B_E_K_B_E _I_M_ S_H_I_T', answer: 'Unbreakable Kimmy Schmidt', score: fake(), extra: `` },
-							{ hint: 'S_X _D_C_T_O_', answer: 'Sex Education', score: fake(), extra: `` },
-							{ hint: 'R_V_R_A_E', answer: 'Riverdale', score: fake(), extra: `` }
+							{ hint: 'H_U_E _F _A_D_', answer: 'House Of Card', score: fake(), extra: `Netflix's first original series` },
+							{ hint: 'O_A_G_ I_ T_E _E_ B_A_K', answer: 'Orange Is The New Black', score: fake(), extra: `Netflix's 3rd original series` },
+							{ hint: 'B_J_C_ H_R_E_A_', answer: 'Bojack Horseman', score: fake(), extra: `Netflix's best original series. - BoJack Horseman has contributed to the rise of the "sadcom", a tragicomic format that balances humour and sadness.` },
+							{ hint: 'U_B_E_K_B_E _I_M_ S_H_I_T', answer: 'Unbreakable Kimmy Schmidt', score: fake(), extra: `It is about one of the Indiana mole women - a group of women who were kidnapped by a cult leader and how they reintergrate into the world` },
+							{ hint: 'S_X _D_C_T_O_', answer: 'Sex Education', score: fake(), extra: `Two different people thought this was Sexy Doctor - which sounds like it would work as a show also - so netflix, if you're listening` },
+							{ hint: 'R_V_R_A_E', answer: 'Riverdale', score: fake(), extra: `Based on the characters of Archie Comics which also featued Sabrina the teenage witch so it is set in the same Universe as the Netflix seriss Chilling Adventures of Sabrina` }
 						]
 					]
 				},
@@ -133,9 +133,9 @@ export const game: PointlessGame = {
 					detail: 'What country do these flags represent',
 					boards: [
 						[
-							{ image: '/pointless/questions/flags/france.png', answer: 'France', score: fake(), extra: `` },
-							{ image: '/pointless/questions/flags/cambodia.png', answer: 'Cambodia', score: fake(), extra: `` },
-							{ image: '/pointless/questions/flags/new-zealand.png', answer: 'New Zealand', score: fake(), extra: `` },
+							{ image: '/pointless/questions/flags/france.png', answer: 'France', score: fake(), extra: `To the people, the three colours eventually came to represent liberty, equality and fraternity; these were the main ideologies of the French Revolution` },
+							{ image: '/pointless/questions/flags/cambodia.png', answer: 'Cambodia', score: fake(), extra: `Features a depiction of the temple complex of Angkor Wat which is the largest religious monument in the world` },
+							{ image: '/pointless/questions/flags/new-zealand.png', answer: 'New Zealand', score: fake(), extra: `The had two referendums in 2015 and 2016 to change it - but ended up keeping their original flag. Members of the public were invited to send some in.` },
 							{ image: '/pointless/questions/flags/czech-republic.png', answer: 'Czech Republic', score: fake(), extra: `` },
 							{ image: '/pointless/questions/flags/iceland.png', answer: 'Iceland', score: fake(), extra: `` },
 							{ image: '/pointless/questions/flags/cuba.png', answer: 'Cuba', score: fake(), extra: `` }

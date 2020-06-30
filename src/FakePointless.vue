@@ -13,6 +13,7 @@
 	import FinalAnswers from '@/components/pl/FinalAnswers.vue'
 	import ScoresDisplay from '@/components/pl/ScoresDisplay.vue'
 	import QuestionDetails from '@/components/pl/QuestionDetails.vue'
+	import NewZealandExtra from '@/components/pl/NewZealandExtra.vue'
 	import PointlessIntro from '@/components/pl/PointlessIntro.vue'
 	import PointlessCredits from '@/components/pl/PointlessCredits.vue'
 	import { PointlessAnswer, PointlessQuestion, PointlessTeam, PointlessGame, PLState, PointlessWrongAnswer } from '@/types/Pointless'
@@ -34,6 +35,7 @@
 			FinalAnswers,
 			ScoresDisplay,
 			QuestionDetails,
+			NewZealandExtra,
 			PointlessIntro,
 			PointlessCredits
 		}
@@ -222,6 +224,7 @@
 			<PointlessCredits v-if="screen === 'credits'" @finished="screen = 'nothing'" />
 			<ChangeRound v-if="screen === 'change_round'" @finished="screen = 'nothing'" :round="game.currentRound" />
 			<Timer v-if="screen === 'timer'" @finished="screen = 'nothing'" />
+			<NewZealandExtra v-if="screen === 'new_zealand'" />
 			<FinalAnswers v-if="screen === 'final_answers'" :answers="finalAnswers" />
 			<TeamDivide :mode="showTeamDivide" />
 			<TeamScore
@@ -344,6 +347,7 @@
 				<div v-if="game.currentRound === 3"><button class="btn" @click="screen = 'final_answers'">Show Final Answers</button></div>
 				<div><button class="btn" @click="screen = 'credits'">Credits</button></div>
 				<div><button class="btn" @click="revealAnswer">Reveal Current Answer</button></div>
+				<div><button class="btn" @click="screen = 'new_zealand'">New Zealand</button></div>
 			</div>
 
 			<div>
