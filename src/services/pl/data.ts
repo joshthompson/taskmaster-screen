@@ -136,9 +136,9 @@ export const game: PointlessGame = {
 							{ image: '/pointless/questions/flags/france.png', answer: 'France', score: fake(), extra: `To the people, the three colours eventually came to represent liberty, equality and fraternity; these were the main ideologies of the French Revolution` },
 							{ image: '/pointless/questions/flags/cambodia.png', answer: 'Cambodia', score: fake(), extra: `Features a depiction of the temple complex of Angkor Wat which is the largest religious monument in the world` },
 							{ image: '/pointless/questions/flags/new-zealand.png', answer: 'New Zealand', score: fake(), extra: `The had two referendums in 2015 and 2016 to change it - but ended up keeping their original flag. Members of the public were invited to send some in.` },
-							{ image: '/pointless/questions/flags/czech-republic.png', answer: 'Czech Republic', score: fake(), extra: `` },
-							{ image: '/pointless/questions/flags/iceland.png', answer: 'Iceland', score: fake(), extra: `` },
-							{ image: '/pointless/questions/flags/cuba.png', answer: 'Cuba', score: fake(), extra: `` }
+							{ image: '/pointless/questions/flags/czech-republic.png', answer: 'Czech Republic', score: fake(), extra: `Same flag used by former Czechoslovakia and it originally didn't have the blue triangle. They added it to make it more distinctive from Poland's flag` },
+							{ image: '/pointless/questions/flags/iceland.png', answer: 'Iceland', score: fake(), extra: `One of the Nordic cross flags - the others being Denmark, Finland, Norway, Sweden and many other Nordic teritories - they all share the off centre cross` },
+							{ image: '/pointless/questions/flags/cuba.png', answer: 'Cuba', score: fake(), extra: `t is one of the two flags of a currently socialist country (the other being Laos) that does not use any communist symbolism.` }
 						]
 					]
 				},
