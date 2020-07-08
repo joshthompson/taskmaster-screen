@@ -12,7 +12,7 @@
 	export default class QuestionDisplay extends Vue {
 		@Prop() public game: PointlessGame
 		@Prop() public answer: PointlessAnswer
-		
+
 		public group: number = 0
 		public page: number = 0
 		public perPage: number = 6

@@ -74,7 +74,7 @@ export const game: PointlessGame = {
 		{
 			// Round 2
 			questions: [
-				{  
+				{
 					max: 25,
 					category: 'Music',
 					question: 'Queen Songs',
@@ -86,20 +86,20 @@ export const game: PointlessGame = {
 					`,
 					boards: [
 						[
-							{ hint: 'AOBTD (#7 - 1980)', answer: 'Another One Bites The Dust', score: fake(), extra: `` },
-							{ hint: 'S (#25 - 1989)', answer: 'Scandal', score: fake(), extra: `` },
-							{ hint: 'WATC (#2 - 1977)', answer: 'We Are The Champions', score: fake(), extra: `` },
-							{ hint: 'F (#10 - 1980)', answer: 'Flash', score: fake(), extra: `Only reached #1 in one national chart - Austria. In US only got to #42` },
-							{ hint: 'UP (#1 - 1981)', answer: 'Under Pressure', score: fake(), extra: 'Featuring David Bowie' },
-							{ hint: 'BR (#1 - 1975, #1 - 1991)', answer: 'Bohemian Rhapsody', score: fake(), extra: `It is the most streamed song from the 20th century` }
+							{ hint: 'AOBTD (#7 - 1980)', answer: 'Another One Bites The Dust', score: 7, extra: `Micheal Jackson fought for it to be a single` },
+							{ hint: 'S (#25 - 1989)', answer: 'Scandal', score: 0, extra: `Roger Taylor said it was one of the most boring videos they ever made` },
+							{ hint: 'WATC (#2 - 1977)', answer: 'We Are The Champions', score: 9, extra: `We Will rock you - wrote at same time` },
+							{ hint: 'F (#10 - 1980)', answer: 'Flash', score: 3, extra: `Only reached #1 in one national chart - Austria. In US only got to #42` },
+							{ hint: 'UP (#1 - 1981)', answer: 'Under Pressure', score: 9, extra: 'Featuring David Bowie but they never got together to play it live' },
+							{ hint: 'BR (#1 - 1975, #1 - 1991)', answer: 'Bohemian Rhapsody', score: 14, extra: `It is the most streamed song from the 20th century` }
 						],
 						[
-							{ hint: 'HTF (#13 - 1984)', answer: 'Hammer To Fall', score: fake(), extra: `On songfacts.com Mr. B from Doon Bish, England said "Well Queen did about 8billion apaling songs but this is one of those 30 or so that are pretty mint."` },
-							{ hint: 'FBG (#11 - 1978)', answer: 'Fat Bottomed Girls', score: fake(), extra: `Released as a double A-side with Bicyle Race - both songs contain a references to each other "Fat bottomed girls, they'll be riding today, so look out for those beauties, oh yeah." "get on your bikes and ride!"` },
-							{ hint: 'IWTBF (#3 - 1984)', answer: 'I Want To Break Free', score: fake(), extra: `Music video has them famously all dressed as women. Have you performed this on stage Craig?` },
-							{ hint: 'KQ (#2 - 1974)', answer: 'Killer Queen', score: fake(), extra: `An Extraordinarily nice answer. Guarenteed to blow the score thingy` },
-							{ hint: 'RGG (#2 - 1984)', answer: 'Radio Ga Ga', score: fake(), extra: 'Famously the inspiration for the name of Lady Gaga' },
-							{ hint: 'YMBF (#7 - 1976)', answer: `You're My Best Friend`, score: fake(), extra: `John Deacon wrote this song about his wife` }
+							{ hint: 'HTF (#13 - 1984)', answer: 'Hammer To Fall', score: 2, extra: `On songfacts.com Mr. B from Doon Bish, England said "Well Queen did about 8billion apaling songs but this is one of those 30 or so that are pretty mint."` },
+							{ hint: 'FBG (#11 - 1978)', answer: 'Fat Bottomed Girls', score: 9, extra: `Released as a double A-side with Bicyle Race - both songs contain a references to each other "Fat bottomed girls, they'll be riding today, so look out for those beauties, oh yeah." "get on your bikes and ride!"` },
+							{ hint: 'IWTBF (#3 - 1984)', answer: 'I Want To Break Free', score: 13, extra: `Music video has them famously all dressed as women. Have you performed this on stage Craig?` },
+							{ hint: 'KQ (#2 - 1974)', answer: 'Killer Queen', score: 13, extra: `An Extraordinarily nice answer. Guarenteed to blow the score thingy` },
+							{ hint: 'RGG (#2 - 1984)', answer: 'Radio Ga Ga', score: 8, extra: 'Famously the inspiration for the name of Lady Gaga' },
+							{ hint: 'YMBF (#7 - 1976)', answer: `You're My Best Friend`, score: 4, extra: `John Deacon wrote this song about his wife` }
 						]
 					]
 				}
@@ -117,12 +117,12 @@ export const game: PointlessGame = {
 					`,
 					boards: [
 						[
-							{ hint: 'H_U_E _F _A_D_', answer: 'House Of Card', score: fake(), extra: `Netflix's first original series` },
-							{ hint: 'O_A_G_ I_ T_E _E_ B_A_K', answer: 'Orange Is The New Black', score: fake(), extra: `Netflix's 3rd original series` },
-							{ hint: 'B_J_C_ H_R_E_A_', answer: 'Bojack Horseman', score: fake(), extra: `Netflix's best original series. - BoJack Horseman has contributed to the rise of the "sadcom", a tragicomic format that balances humour and sadness.` },
-							{ hint: 'U_B_E_K_B_E _I_M_ S_H_I_T', answer: 'Unbreakable Kimmy Schmidt', score: fake(), extra: `It is about one of the Indiana mole women - a group of women who were kidnapped by a cult leader and how they reintergrate into the world` },
-							{ hint: 'S_X _D_C_T_O_', answer: 'Sex Education', score: fake(), extra: `Two different people thought this was Sexy Doctor - which sounds like it would work as a show also - so netflix, if you're listening` },
-							{ hint: 'R_V_R_A_E', answer: 'Riverdale', score: fake(), extra: `Based on the characters of Archie Comics which also featued Sabrina the teenage witch so it is set in the same Universe as the Netflix seriss Chilling Adventures of Sabrina` }
+							{ hint: 'H_U_E _F _A_D_', answer: 'House Of Card', score: 7, extra: `Netflix's first original series` },
+							{ hint: 'O_A_G_ I_ T_E _E_ B_A_K', answer: 'Orange Is The New Black', score: 16, extra: `Netflix's 3rd original series` },
+							{ hint: 'B_J_C_ H_R_E_A_', answer: 'Bojack Horseman', score: 13, extra: `Netflix's best original series. - BoJack Horseman has contributed to the rise of the "sadcom", a tragicomic format that balances humour and sadness.` },
+							{ hint: 'U_B_E_K_B_E _I_M_ S_H_I_T', answer: 'Unbreakable Kimmy Schmidt', score: 8, extra: `It is about one of the Indiana mole women - a group of women who were kidnapped by a cult leader and how they reintergrate into the world` },
+							{ hint: 'S_X _D_C_T_O_', answer: 'Sex Education', score: 10, extra: `Two different people thought this was Sexy Doctor - which sounds like it would work as a show also - so netflix, if you're listening` },
+							{ hint: 'R_V_R_A_E', answer: 'Riverdale', score: 7, extra: `Based on the characters of Archie Comics which also featued Sabrina the teenage witch so it is set in the same Universe as the Netflix seriss Chilling Adventures of Sabrina` }
 						]
 					]
 				},
@@ -133,12 +133,12 @@ export const game: PointlessGame = {
 					detail: 'What country do these flags represent',
 					boards: [
 						[
-							{ image: '/pointless/questions/flags/france.png', answer: 'France', score: fake(), extra: `To the people, the three colours eventually came to represent liberty, equality and fraternity; these were the main ideologies of the French Revolution` },
-							{ image: '/pointless/questions/flags/cambodia.png', answer: 'Cambodia', score: fake(), extra: `Features a depiction of the temple complex of Angkor Wat which is the largest religious monument in the world` },
-							{ image: '/pointless/questions/flags/new-zealand.png', answer: 'New Zealand', score: fake(), extra: `The had two referendums in 2015 and 2016 to change it - but ended up keeping their original flag. Members of the public were invited to send some in.` },
-							{ image: '/pointless/questions/flags/czech-republic.png', answer: 'Czech Republic', score: fake(), extra: `Same flag used by former Czechoslovakia and it originally didn't have the blue triangle. They added it to make it more distinctive from Poland's flag` },
-							{ image: '/pointless/questions/flags/iceland.png', answer: 'Iceland', score: fake(), extra: `One of the Nordic cross flags - the others being Denmark, Finland, Norway, Sweden and many other Nordic teritories - they all share the off centre cross` },
-							{ image: '/pointless/questions/flags/cuba.png', answer: 'Cuba', score: fake(), extra: `t is one of the two flags of a currently socialist country (the other being Laos) that does not use any communist symbolism.` }
+							{ image: '/pointless/questions/flags/france.png', answer: 'France', score: 19, extra: `To the people, the three colours eventually came to represent liberty, equality and fraternity; these were the main ideologies of the French Revolution` },
+							{ image: '/pointless/questions/flags/cambodia.png', answer: 'Cambodia', score: 8, extra: `Features a depiction of the temple complex of Angkor Wat which is the largest religious monument in the world` },
+							{ image: '/pointless/questions/flags/new-zealand.png', answer: 'New Zealand', score: 15, extra: `The had two referendums in 2015 and 2016 to change it - but ended up keeping their original flag. Members of the public were invited to send some in.` },
+							{ image: '/pointless/questions/flags/czech-republic.png', answer: 'Czech Republic', score: 12, extra: `Same flag used by former Czechoslovakia and it originally didn't have the blue triangle. They added it to make it more distinctive from Poland's flag` },
+							{ image: '/pointless/questions/flags/iceland.png', answer: 'Iceland', score: 11, extra: `One of the Nordic cross flags - the others being Denmark, Finland, Norway, Sweden and many other Nordic teritories - they all share the off centre cross` },
+							{ image: '/pointless/questions/flags/cuba.png', answer: 'Cuba', score: 9, extra: `t is one of the two flags of a currently socialist country (the other being Laos) that does not use any communist symbolism.` }
 						]
 					]
 				},
@@ -149,13 +149,13 @@ export const game: PointlessGame = {
 					detail: 'All of them have much more common names in English',
 					boards: [
 						[
-							{ hint: 'CO', answer: 'Carbon monoxide', score: fake(), extra: `` },
-							{ hint: 'H<sub>2</sub>O', answer: 'Water', score: fake(), extra: `` },
-							{ hint: 'N<span class="lc">a</span>C<span class="lc">l</span>', answer: 'Salt', score: fake(), extra: 'Sodium Chloride' },
-							{ hint: 'KNO<sub>3</sub>', answer: 'Potassium Nitrate', score: fake(), extra: `` },
-							{ hint: 'O<sub>3</sub>', answer: 'Ozone', score: fake(), extra: 'Hole in the contestants knowledge' },
-							{ hint: 'CH<sub>4</sub>', answer: 'Methane', score: fake(), extra: `` },
-							{ hint: 'CO<sub>2</sub>', answer: 'Carbon Dioxide', score: fake(), extra: `` }
+							{ hint: 'CO', answer: 'Carbon monoxide', score: 11, extra: `Cats can sense a carbon monoxide leak and are known to refuse to come into the house` },
+							{ hint: 'H<sub>2</sub>O', answer: 'Water', score: 24, extra: `68.7% of the fresh water on Earth is trapped in glaciers.` },
+							{ hint: 'N<span class="lc">a</span>C<span class="lc">l</span>', answer: 'Salt', score: 11, extra: `Sodium Chloride - It is the only mineral most humans eat intentially as it's raw mineral form` },
+							// { hint: 'KNO<sub>3</sub>', answer: 'Potassium Nitrate', score: 4, extra: `It is the main ingredient in gunpowder` },
+							{ hint: 'O<sub>3</sub>', answer: 'Ozone', score: 9, extra: 'If the ozone layer was compressed to the pressure of the air at sea level - it would only be about a 3mm thick' },
+							{ hint: 'CH<sub>4</sub>', answer: 'Methane', score: 3, extra: `It is the one of the gases that make up a fart (hydrogen, carbon dioxide, and methane combine with hydrogen sulfide and ammonia) - [ Real fact from the internet ] All people fart sometimes, whether they live in France, the Fiji islands, or Fresno, California!` },
+							{ hint: 'CO<sub>2</sub>', answer: 'Carbon Dioxide', score: 21, extra: `There are roughly 500 parts per million, meaning that 0.05% of the Earth’s atmosphere is carbon dioxide` }
 						]
 					]
 				}

@@ -90,6 +90,9 @@
 			this.screen = 'change_round'
 			this.game.currentRound = parseInt(round as any, 10)
 			this.setQuestion(0)
+			this.game.teams.forEach((team) => {
+				team.headToHeadScore = 0
+			})
 		}
 
 		public setQuestion(question: number) {
@@ -97,12 +100,14 @@
 			this.game.guessedAnswers = []
 			this.game.currentPass = 1
 			this.game.teams.forEach((team) => {
+				team.score = null
 				team.answers = 0
 			})
 		}
 
 		public setCurrentTeam(teamName: string) {
 			this.game.currentTeam = this.game.teams.find((t) => t.name === teamName)
+			this.currentAnswer = PointlessWrongAnswer
 			this.autoDirect()
 		}
 

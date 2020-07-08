@@ -2,7 +2,7 @@
 	import { Component, Prop, Vue } from 'vue-property-decorator'
 	import { PointlessTeam, PointlessGame } from '@/types/Pointless'
 	import { scoreToBeat, potentialMax, potentialMin } from '@/services/pl/data'
-import PLAudio from '../../services/pl/PLAudio'
+	import PLAudio from '@/services/pl/PLAudio'
 
 	@Component
 	export default class TeamScore extends Vue {
