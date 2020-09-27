@@ -13,16 +13,18 @@ async function correct() {
 }
 
 async function wrong() {
-	audio(`/pointless/audio/wrong.wav`)
+	// audio(`/pointless/audio/wrong.wav`)
+	audio(`/pointless/audio/wrong.mp4`)
 }
 
 async function passedRedLine() {
-	audio(`/pointless/audio/ting.mp3`, 'red-line')
+	// audio(`/pointless/audio/ting.mp3`, 'red-line')
 }
 
 async function pointless() {
 	stop('red-line')
-	audio('/pointless/audio/celebrate.m4a')
+	// audio('/pointless/audio/celebrate.m4a')
+	audio('/pointless/audio/pointless-answer.m4a')
 }
 
 async function intro() {

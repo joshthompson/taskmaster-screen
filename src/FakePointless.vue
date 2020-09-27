@@ -226,7 +226,7 @@
 			/>
 			<ScoresDisplay v-show="screen === 'all_scores'" :game="game"/>
 			<PointlessIntro v-if="screen === 'intro'" @finished="screen = 'nothing'" :game="game" />
-			<PointlessCredits v-if="screen === 'credits'" @finished="screen = 'nothing'" />
+			<PointlessCredits v-if="screen === 'credits'" @finished="screen = 'nothing'" :game="game" />
 			<ChangeRound v-if="screen === 'change_round'" @finished="screen = 'nothing'" :round="game.currentRound" />
 			<Timer v-if="screen === 'timer'" @finished="screen = 'nothing'" />
 			<NewZealandExtra v-if="screen === 'new_zealand'" />

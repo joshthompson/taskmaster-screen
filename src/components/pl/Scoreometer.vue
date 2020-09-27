@@ -107,7 +107,7 @@
 				if (this.pointless) {
 					PLAudio.pointless()
 					if (this.finalRound) {
-						setTimeout(() => PLAudio.flick(), 1500)
+						setTimeout(() => PLAudio.flick(), 3500)
 					}
 				} else {
 					PLAudio.correct()
