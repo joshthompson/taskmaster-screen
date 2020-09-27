@@ -20,6 +20,7 @@
 	import { game } from '@/services/pl/data'
 	import { AppState } from '@/types'
 	import PLAudio from '@/services/pl/PLAudio'
+	import PLSettings from '@/services/pl/PLSettings'
 
 	@Component({
 		components: {
@@ -43,6 +44,8 @@
 	export default class FakePointless extends Vue {
 
 		public finalAnswers: string = ''
+
+		public settings = PLSettings;
 
 		public get director() { return (this.$store.state.pl as PLState).director }
 		public set director(director: string) { this.$store.commit('plSetDirector', director) }
@@ -264,6 +267,10 @@
 					<label>Director: </label>
 					<select v-model="director">
 						<option value="free">Free</option>
+						<option disabled>-----</option>
+						<option :value="settings.hostGoogleName">{{ settings.host }}</option>
+						<option :value="settings.cohostGoogleName">{{ settings.cohost }}</option>
+						<option disabled>-----</option>
 						<option
 							v-for="(team, i) in currentTeams"
 							:key="i"

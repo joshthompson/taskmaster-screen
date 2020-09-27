@@ -1,4 +1,6 @@
 export default {
-	host: 'Craig Pitcher',		// Host name - for credits
-	cohost: 'Josh Thompson',	// Host name - for credits
+	host: 'Craig Pitcher',		// For credits
+	cohost: 'Josh Thompson',	// For credits
+	hostGoogleName: 'Craig',	// For auto director
+	cohostGoogleName: 'Josh',	// For auto director
 }
