@@ -4,6 +4,7 @@
 	import CircleOverlay from '@/components/pl/CircleOverlay.vue'
 	import Logo from '@/components/pl/Logo.vue'
 	import { PointlessGame } from '@/types/Pointless'
+	import PLSettings from '@/services/pl/PLSettings'
 
 	@Component({
 		components: { CircleOverlay, Logo }
@@ -22,7 +23,7 @@
 		public created() {
 			PLAudio.intro()
 
-			const ringsPerSecond = 4
+			const ringsPerSecond = 7
 			const totalRings = this.length * ringsPerSecond
 			for (let i = 0; i < totalRings; i++) {
 				this.rings.push({
@@ -32,7 +33,7 @@
 				})
 			}
 
-			const numbersPerSecond = 1
+			const numbersPerSecond = 2
 			for (let i = 0; i < this.length * numbersPerSecond; i++) {
 				this.numbers.push({
 					value: Math.floor(Math.random() * 26),
@@ -56,6 +57,7 @@
 			}, (this.length - 6) * 1000)
 
 			setTimeout(() => {
+				this.$store.commit('plSetDirector', PLSettings.hostGoogleName)
 				this.$emit('finished')
 			}, this.length * 1000)
 		}

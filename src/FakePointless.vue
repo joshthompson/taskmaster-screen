@@ -45,7 +45,7 @@
 
 		public finalAnswers: string = ''
 
-		public settings = PLSettings;
+		public settings = PLSettings
 
 		public get director() { return (this.$store.state.pl as PLState).director }
 		public set director(director: string) { this.$store.commit('plSetDirector', director) }
@@ -59,11 +59,15 @@
 		public autoDirect() {
 			this.director = 'free'
 			if (this.screen.endsWith('_current') && this.game.currentTeam) {
-				this.director = this.game.currentTeam.googleName
+				if (this.screen.startsWith('team_') || this.game.currentTeam.googleNames.length === 1) {
+					this.director = this.game.currentTeam.googleNames[0]
+				} else {
+					this.director = this.game.currentTeam.googleNames[1]
+				}
 			}
 			this.game.teams.forEach((team) => {
 				if (this.screen.endsWith(`_${team.name}`)) {
-					this.director = team.googleName
+					this.director = team.googleNames[0]
 				}
 			})
 		}
@@ -214,6 +218,11 @@
 			PLAudio.setVolume(parseFloat(event.target.value))
 		}
 
+		public setTeamScore(team: PointlessTeam) {
+			const score = prompt(`Set ${team.name}'s score to:`, team.score === null ? '' : team.score.toString())
+			team.score = score === '' ? null : parseInt(score)
+		}
+
 	}
 </script>
 
@@ -228,7 +237,7 @@
 				:key="game.currentRound"
 			/>
 			<ScoresDisplay v-show="screen === 'all_scores'" :game="game"/>
-			<PointlessIntro v-if="screen === 'intro'" @finished="screen = 'nothing'" :game="game" />
+			<PointlessIntro v-if="screen === 'intro'" @finished="screen = 'nothing'; director = settings.hostGoogleName" :game="game" />
 			<PointlessCredits v-if="screen === 'credits'" @finished="screen = 'nothing'" :game="game" />
 			<ChangeRound v-if="screen === 'change_round'" @finished="screen = 'nothing'" :round="game.currentRound" />
 			<Timer v-if="screen === 'timer'" @finished="screen = 'nothing'" />
@@ -271,11 +280,12 @@
 						<option :value="settings.hostGoogleName">{{ settings.host }}</option>
 						<option :value="settings.cohostGoogleName">{{ settings.cohost }}</option>
 						<option disabled>-----</option>
-						<option
-							v-for="(team, i) in currentTeams"
-							:key="i"
-							:value="team.googleName"
-						>{{ team.name }}</option>
+						<optgroup v-for="(team, i) in currentTeams" :key="i" :label="team.name">
+							<option
+								v-for="(name, j) in team.googleNames" :key="j"
+								:value="name"
+							>{{ name }}</option>
+						</optgroup>
 					</select>
 				</div>
 
@@ -382,7 +392,7 @@
 		<ScriptBar>
 			<div style="display: flex; width: 100%;">
 				<div style="flex-grow: 1;" v-for="team in game.teams" :key="team.name">
-					<TeamScore :team="team" :off="team.out" :game="game" :max="question.max" />
+					<TeamScore :team="team" :off="team.out" :game="game" :max="question.max" size="small"/>
 					<div :key="team.name" class="actions">
 						<div><button v-if="!team.out" class="btn" @click="team.out = true">Remove Team</button></div>
 						<div><button v-if="team.out" class="btn" @click="team.out = false">Add Team Back</button></div>
@@ -390,6 +400,7 @@
 							<button class="btn" @click="setCurrentTeam(team.name)">Set Current Team</button>
 						</div>
 						<div v-if="team === game.currentTeam"><small>Current Team</small></div>
+						<div v-if="!team.out"><button @click="setTeamScore(team)">Edit Score</button></div>
 					</div>
 				</div>
 			</div>

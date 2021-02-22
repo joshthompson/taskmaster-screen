@@ -10,6 +10,7 @@
 		@Prop() public team: PointlessTeam
 		@Prop({ default: 'none' }) public mode: string
 		@Prop({ default: false }) public off: boolean
+		@Prop({ default: '' }) public size: string
 
 		public get out() {
 			const max = potentialMax()
@@ -52,7 +53,7 @@
 
 <template>
 	<div>
-		<div class="team-score" :class="{ [mode]: true, logo, out, headToHead, off }" :pos="pos">
+		<div class="team-score" :class="{ [mode]: true, logo, out, headToHead, off, [size]: true }" :pos="pos">
 			<div v-if="!headToHead || off" class="inner">{{ scoreString }}</div>
 			<div v-if="headToHead && !off" class="head-to-head">
 				<div class="circle" :class="{ filled: h2h >= 1 }" @click="h2h = 1"><div></div></div>
@@ -78,6 +79,10 @@
 
 		width: s($size);
 		height: s($size * 0.75);
+
+		&.small {
+			 zoom: 0.6;
+		}
 
 		border: s($border) solid #333333;
 		border-radius: s($border / 2);

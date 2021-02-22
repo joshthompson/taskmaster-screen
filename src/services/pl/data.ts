@@ -40,7 +40,7 @@ export const game: PointlessGame = {
 				{
 					max: 25,
 					category: 'US Politics',
-					question: 'US President Surnames that are 6 letters of fewer',
+					question: 'Former US President Surnames that are 6 letters of fewer',
 					detail: `
 						We don't need the first name here
 						- so if there are any presidents that have the same surname
@@ -496,17 +496,8 @@ export const game: PointlessGame = {
 	],
 	teams: [
 		{
-			name: 'Tom & Miller',
-			googleName: 'Tom',
-			credits: [ 'Tom Upton', 'James Miller' ],
-			score: null,
-			answers: 0,
-			headToHeadScore: 0,
-			out: false
-		},
-		{
 			name: 'Nick & Tanya',
-			googleName: 'Nick',
+			googleNames: ['Tanya'],
 			credits: [ 'Nick Pearson', 'Tanya Alam' ],
 			score: null,
 			answers: 0,
@@ -514,18 +505,27 @@ export const game: PointlessGame = {
 			out: false
 		},
 		{
-			name: 'Guy & Lisa',
-			googleName: 'Guy',
-			credits: [ 'Guy Stephens', 'Lisa Reinfelder' ],
+			name: 'Holly & Adam',
+			googleNames: ['Holly'],
+			credits: [ 'Holly Young', 'Adam Smith' ],
 			score: null,
 			answers: 0,
 			headToHeadScore: 0,
 			out: false
 		},
 		{
-			name: 'Lara & Dana',
-			googleName: 'Lara',
-			credits: [ 'Lara Elble', 'Dana Hempel' ],
+			name: 'Vicki & Leo',
+			googleNames: ['Vicki', 'Leo'],
+			credits: [ 'Vicki Church', 'Leo Baines-Jump' ],
+			score: null,
+			answers: 0,
+			headToHeadScore: 0,
+			out: false
+		},
+		{
+			name: 'Paul & Sarah',
+			googleNames: ['Paul'],
+			credits: [ 'Paul Barratt', 'Sarah Bell' ],
 			score: null,
 			answers: 0,
 			headToHeadScore: 0,

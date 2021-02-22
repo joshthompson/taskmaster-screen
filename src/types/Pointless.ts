@@ -20,7 +20,7 @@ export interface PointlessRound {
 
 export interface PointlessTeam {
 	name: string
-	googleName: string
+	googleNames: string[]
 	credits: string[]
 	score: number
 	headToHeadScore: number
