@@ -21,11 +21,11 @@
 
 		public get answers() {
 			if (this.question.openAnswers) {
-				return [ this.question.openAnswers ]
+				return [ this.question.openAnswers.sort((a, b) => a.answer > b.answer ? 1 : -1) ]
 			} else if (this.question.boards) {
 				return [ this.question.boards[this.game.currentPass - 1] ]
 			} else if (this.question.groupedAnswers) {
-				return this.question.groupedAnswers
+				return this.question.groupedAnswers.map((group) => group.sort((a, b) => a.answer > b.answer ? 1 : -1))
 			} else {
 				return []
 			}

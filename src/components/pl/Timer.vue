@@ -1,12 +1,20 @@
 <script lang="ts">
-	import { Component, Vue } from 'vue-property-decorator'
+	import PLAudio from '@/services/pl/PLAudio'
+import { Component, Vue } from 'vue-property-decorator'
 
 	@Component
 	export default class Timer extends Vue {
 		public timer: number = 60
+
 		public created() {
 			setTimeout(() => this.reduce(), 1000)
+			PLAudio.ticking()
 		}
+
+		public destroyed() {
+			PLAudio.stop()
+		}
+
 		private reduce() {
 			this.timer--
 			if (this.timer <= 0) {
@@ -32,7 +40,7 @@
 
 	.timer {
 		position: absolute;
-		bottom: s(3);
+		top: s(3);
 		right: s(3);
 
 		width: s(20);

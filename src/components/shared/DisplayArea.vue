@@ -43,12 +43,12 @@
 		user-select: none;
 		overflow: hidden;
 
-		video {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: $width;
-			height: $height;
-		}
+		// video {
+		// 	position: absolute;
+		// 	top: 0;
+		// 	left: 0;
+		// 	width: $width;
+		// 	height: $height;
+		// }
 	}
 </style>

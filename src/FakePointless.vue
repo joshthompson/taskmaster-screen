@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Component, Watch, Vue } from 'vue-property-decorator'
+	import { Component, Vue } from 'vue-property-decorator'
 	
 	import DisplayArea from '@/components/shared/DisplayArea.vue'
 	import ControlBar from '@/components/shared/ControlBar.vue'
@@ -10,13 +10,15 @@
 	import TeamDivide from '@/components/pl/TeamDivide.vue'
 	import TeamScore from '@/components/pl/TeamScore.vue'
 	import QuestionDisplay from '@/components/pl/QuestionDisplay.vue'
+	import QuestionDisplayBottom from '@/components/pl/QuestionDisplayBottom.vue'
 	import FinalAnswers from '@/components/pl/FinalAnswers.vue'
 	import ScoresDisplay from '@/components/pl/ScoresDisplay.vue'
 	import QuestionDetails from '@/components/pl/QuestionDetails.vue'
 	import NewZealandExtra from '@/components/pl/NewZealandExtra.vue'
 	import PointlessIntro from '@/components/pl/PointlessIntro.vue'
+	import PointlessTrophy from '@/components/pl/PointlessTrophy.vue'
 	import PointlessCredits from '@/components/pl/PointlessCredits.vue'
-	import { PointlessAnswer, PointlessQuestion, PointlessTeam, PointlessGame, PLState, PointlessWrongAnswer } from '@/types/Pointless'
+	import { PointlessAnswer, PointlessTeam, PointlessGame, PLState, PointlessWrongAnswer } from '@/types/Pointless'
 	import { game } from '@/services/pl/data'
 	import { AppState } from '@/types'
 	import PLAudio from '@/services/pl/PLAudio'
@@ -33,12 +35,14 @@
 			TeamDivide,
 			TeamScore,
 			QuestionDisplay,
+			QuestionDisplayBottom,
 			FinalAnswers,
 			ScoresDisplay,
 			QuestionDetails,
 			NewZealandExtra,
 			PointlessIntro,
-			PointlessCredits
+			PointlessCredits,
+			PointlessTrophy
 		}
 	})
 	export default class FakePointless extends Vue {
@@ -220,7 +224,7 @@
 
 		public setTeamScore(team: PointlessTeam) {
 			const score = prompt(`Set ${team.name}'s score to:`, team.score === null ? '' : team.score.toString())
-			team.score = score === '' ? null : parseInt(score)
+			team.score = score === '' ? null : parseInt(score, 10)
 		}
 
 	}
@@ -234,10 +238,12 @@
 				:game="game"
 				:answer="currentAnswer"
 				@setAnswer="setAnswer"
-				:key="game.currentRound"
+				:key="game.currentRound + game.currentQuestion"
 			/>
+			<QuestionDisplayBottom v-show="screen === 'board-bottom' || screen === 'timer'" :game="game" :key="'board-bottom' + game.currentRound" />
 			<ScoresDisplay v-show="screen === 'all_scores'" :game="game"/>
 			<PointlessIntro v-if="screen === 'intro'" @finished="screen = 'nothing'; director = settings.hostGoogleName" :game="game" />
+			<PointlessTrophy v-if="screen === 'trophy'" @finished="screen = 'nothing'; director = settings.hostGoogleName" />
 			<PointlessCredits v-if="screen === 'credits'" @finished="screen = 'nothing'" :game="game" />
 			<ChangeRound v-if="screen === 'change_round'" @finished="screen = 'nothing'" :round="game.currentRound" />
 			<Timer v-if="screen === 'timer'" @finished="screen = 'nothing'" />
@@ -294,6 +300,7 @@
 					<select v-model="screen">
 						<option value="nothing">Nothing</option>
 						<option value="board">Question Board</option>
+						<option value="board-bottom">Question Board - Bottom</option>
 						<option value="all_scores">All Scores</option>
 						<option value="score">Score-o-meter</option>
 						<optgroup label="Team View">
@@ -359,17 +366,26 @@
 			</div>
 
 			<hr />
-			
-			<h3>Actions</h3>
 
-			<div class="actions">
-				<div><button class="btn" @click="screen = 'intro'">Title Sequence</button></div>
-				<div v-if="game.currentRound === 3"><button class="btn" @click="screen = 'trophy'">Show Trophy</button></div>
-				<div v-if="game.currentRound === 3"><button class="btn" @click="screen = 'timer'">Show Timer</button></div>
-				<div v-if="game.currentRound === 3"><button class="btn" @click="screen = 'final_answers'">Show Final Answers</button></div>
-				<div><button class="btn" @click="screen = 'credits'">Credits</button></div>
-				<div><button class="btn" @click="revealAnswer">Reveal Current Answer</button></div>
-				<div><button class="btn" @click="screen = 'new_zealand'">New Zealand</button></div>
+			<div style="display: flex">
+				<div style="margin-right: 1rem;">
+					<h3>View</h3>
+					<div class="actions">
+						<div><button class="btn" @click="screen = 'nothing'; director = 'free'">Nothing</button></div>
+						<div v-if="game.currentRound === 2 && game.question === 1"><button class="btn" @click="screen = 'new_zealand'">New Zealand</button></div>
+						<div><button class="btn" @click="screen = 'intro'">Title Sequence</button></div>
+						<div><button class="btn" @click="screen = 'credits'">Credits</button></div>
+						<div v-if="game.currentRound === 3"><button class="btn" @click="screen = 'trophy'">Trophy</button></div>
+					</div>
+				</div>
+				<div>
+					<h3>Actions</h3>
+					<div class="actions">
+						<div><button class="btn" @click="revealAnswer">Reveal Current Answer</button></div>
+						<div v-if="game.currentRound === 3"><button class="btn" @click="screen = 'timer'">Show Timer</button></div>
+						<div v-if="game.currentRound === 3"><button class="btn" @click="screen = 'final_answers'">Show Final Answers</button></div>
+					</div>
+				</div>
 			</div>
 
 			<div>
