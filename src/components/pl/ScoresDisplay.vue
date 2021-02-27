@@ -26,7 +26,6 @@
 			<div class="score" v-for="team in teams" :key="team.name">
 				<div class="inner">
 					<TeamScore :team="team" :max="question.max" :game="game" />
-					<div>{{ team.name }}</div>
 				</div>
 			</div>
 		</div>
@@ -59,7 +58,7 @@
 			line-height: s(10);
 			font-size: s(5);
 			.inner {
-				margin-top: s(25);
+				margin-top: s(20);
 				transform: translateY(-50%) scale(1.2);
 			}
 		}

@@ -18,11 +18,13 @@
 	import PointlessIntro from '@/components/pl/PointlessIntro.vue'
 	import PointlessTrophy from '@/components/pl/PointlessTrophy.vue'
 	import PointlessCredits from '@/components/pl/PointlessCredits.vue'
+	import Logo from '@/components/pl/Logo.vue'
 	import { PointlessAnswer, PointlessTeam, PointlessGame, PLState, PointlessWrongAnswer } from '@/types/Pointless'
 	import { game } from '@/services/pl/data'
 	import { AppState } from '@/types'
 	import PLAudio from '@/services/pl/PLAudio'
 	import PLSettings from '@/services/pl/PLSettings'
+	import Director from '@/services/shared/Director'
 
 	@Component({
 		components: {
@@ -42,7 +44,8 @@
 			NewZealandExtra,
 			PointlessIntro,
 			PointlessCredits,
-			PointlessTrophy
+			PointlessTrophy,
+			Logo
 		}
 	})
 	export default class FakePointless extends Vue {
@@ -52,7 +55,10 @@
 		public settings = PLSettings
 
 		public get director() { return (this.$store.state.pl as PLState).director }
-		public set director(director: string) { this.$store.commit('plSetDirector', director) }
+		public set director(director: string) {
+			this.$store.commit('plSetDirector', director)
+			Director.update(director)
+		}
 
 		public get screen() { return (this.$store.state.pl as PLState).screen }
 		public set screen(screen: string) {
@@ -244,7 +250,7 @@
 			<ScoresDisplay v-show="screen === 'all_scores'" :game="game"/>
 			<PointlessIntro v-if="screen === 'intro'" @finished="screen = 'nothing'; director = settings.hostGoogleName" :game="game" />
 			<PointlessTrophy v-if="screen === 'trophy'" @finished="screen = 'nothing'; director = settings.hostGoogleName" />
-			<PointlessCredits v-if="screen === 'credits'" @finished="screen = 'nothing'" :game="game" />
+			<PointlessCredits v-if="screen === 'credits'" @finished="screen = 'post-show'" :game="game" />
 			<ChangeRound v-if="screen === 'change_round'" @finished="screen = 'nothing'" :round="game.currentRound" />
 			<Timer v-if="screen === 'timer'" @finished="screen = 'nothing'" />
 			<NewZealandExtra v-if="screen === 'new_zealand'" />
@@ -273,6 +279,8 @@
 					@answerSubmitted="answerSubmitted"
 				/>
 			</div>
+			<div v-show="screen === 'pre-show'" class="pre-show"><Logo extra="Starting Soon" class="logo" /></div>
+			<div v-show="screen === 'post-show'" class="post-show"><Logo extra="Thank you for watching" class="logo" /></div>
 		</DisplayArea>
 		<ControlBar class="contol-bar">
 			<h3>Pointless</h3>
@@ -371,11 +379,13 @@
 				<div style="margin-right: 1rem;">
 					<h3>View</h3>
 					<div class="actions">
+						<div><button class="btn" @click="screen = 'pre-show';">Preshow</button></div>
+						<div><button class="btn" @click="screen = 'change_round';">Logo Sting</button></div>
 						<div><button class="btn" @click="screen = 'nothing'; director = 'free'">Nothing</button></div>
-						<div v-if="game.currentRound === 2 && game.question === 1"><button class="btn" @click="screen = 'new_zealand'">New Zealand</button></div>
+						<div v-if="game.currentRound === 2"><button class="btn" @click="screen = 'new_zealand'">New Zealand</button></div>
 						<div><button class="btn" @click="screen = 'intro'">Title Sequence</button></div>
 						<div><button class="btn" @click="screen = 'credits'">Credits</button></div>
-						<div v-if="game.currentRound === 3"><button class="btn" @click="screen = 'trophy'">Trophy</button></div>
+						<div v-if="game.currentRound === 3 || game.currentRound === 0"><button class="btn" @click="screen = 'trophy'">Trophy</button></div>
 					</div>
 				</div>
 				<div>
@@ -491,6 +501,23 @@
 
 		&.none {
 			display: none;
+		}
+	}
+
+	.pre-show,
+	.post-show {
+		width: $width;
+		height: $height;
+		background: black;
+		position: relative;
+		.logo {
+			position: absolute;
+			top: s(50);
+			left: s(50 * 16/9);
+			transform: translateX(-50%) translateY(-50%) rotate(-10deg);
+			font-size: s(10);
+			opacity: 1;
+			animation: ending 6s ease-out;
 		}
 	}
 

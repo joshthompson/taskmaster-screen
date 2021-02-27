@@ -73,6 +73,7 @@
 
 		public created() {
 			PLAudio.intro()
+			setTimeout(() => this.$emit('finished'), 29000)
 		}
 	}
 </script>

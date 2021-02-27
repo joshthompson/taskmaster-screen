@@ -20,7 +20,7 @@
 
 		public get blocks() {
 			if (this.question.boards) {
-				return (this.question.boards[this.game.currentPass - 1] || []).map(answer => (
+				return (this.question.boards[this.game.currentPass - 1] || []).map((answer) => (
 					answer.image ? '' : answer.hint
 				))
 			}
@@ -38,10 +38,11 @@
 					block: true,
 					small: blocks.length > 1,
 					smaller: game.currentRound === 3,
-					images: question.boards[0][0].image
+					images: question.boards && question.boards[0][0].image
 				}"
 				:style="{
-					[ question.boards[0][0].image ? 'backgroundImage' : '']: question.boards[0][0].image ? `url(${question.boards[0][i].image})` : ''
+					[ (question.boards && question.boards[0][0].image) ? 'backgroundImage' : '']
+					: (question.boards && question.boards[0][0].image) ? `url(${question.boards[0][i].image})` : ''
 				}"
 				v-for="(block, i) in blocks"
 				:key="'question-display-bottom-block' + i"
@@ -117,5 +118,9 @@
 		margin: s(0.25) s(1);
 		background-size: 100% 100%;
 		border-radius: s(2.5);
+	}
+
+	.lc {
+		text-transform: lowercase;
 	}
 </style>

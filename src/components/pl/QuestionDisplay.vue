@@ -127,7 +127,9 @@
 		}
 
 		public get pointlessAnswers() {
-			return this.revealableAnswers.filter((a) => a.score === 0)
+			return this.revealableAnswers
+				.filter((a) => a.score === 0)
+				.splice(this.page * this.perPage, this.perPage)
 		}
 
 		public get topAnswers() {
@@ -138,7 +140,6 @@
 		}
 
 		public get groupName() {
-			console.log(this.group, this.question.question)
 			return typeof this.question.question === 'object'
 				? this.question.question[this.group]
 				: this.question.question
@@ -204,8 +205,8 @@
 					<div v-if="groupName" class="block small" v-html="groupName"></div>
 					<div v-for="i in 6" :key="i">
 						<AnswerBlock
-							v-if="pointlessAnswers[i - 1 + page * perPage]"
-							:answer="pointlessAnswers[i - 1 + page * perPage]"
+							v-if="pointlessAnswers[i - 1]"
+							:answer="pointlessAnswers[i - 1]"
 							size="large"
 						/>
 					</div>
