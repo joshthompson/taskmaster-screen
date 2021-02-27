@@ -39,7 +39,7 @@ async function ting() {
 }
 
 async function ticking() {
-	audio('/pointless/audio/ticking.mp3', )
+	audio('/pointless/audio/ticking.mp3')
 }
 
 export default {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import PLAudio from '@/services/pl/PLAudio'
-import { Component, Vue } from 'vue-property-decorator'
+	import { Component, Vue } from 'vue-property-decorator'
 
 	@Component
 	export default class Timer extends Vue {

@@ -431,16 +431,6 @@ export const game: PointlessGame = {
 					`,
 					groupedAnswers: [
 						[
-							{ answer: `Athens`, score: 22, extra: `` },
-							{ answer: `Thessaloniki`, score: 5, extra: `` },
-							{ answer: `Patras`, score: 1, extra: `` },
-							{ answer: `Piraeus`, score: 0, extra: `` },
-							{ answer: `Larissa`, score: 0, extra: `` },
-							{ answer: `Heraklion`, score: 1, extra: `` },
-							{ answer: `Peristeri`, score: 0, extra: `` },
-							{ answer: `Kallithea`, score: 0, extra: `` }
-						],
-						[
 							{ answer: `Berlin`, score: 21, extra: `` },
 							{ answer: `Hamburg`, score: 13, extra: `` },
 							{ answer: `Munich`, score: 16, extra: `` },
@@ -488,6 +478,16 @@ export const game: PointlessGame = {
 							{ answer: `Dijon`, score: 3, extra: `` },
 							{ answer: `Angers`, score: 0, extra: `` },
 							{ answer: `Nîmes`, score: 0, extra: `` }
+						],
+						[
+							{ answer: `Athens`, score: 22, extra: `` },
+							{ answer: `Thessaloniki`, score: 5, extra: `` },
+							{ answer: `Patras`, score: 1, extra: `` },
+							{ answer: `Piraeus`, score: 0, extra: `` },
+							{ answer: `Larissa`, score: 0, extra: `` },
+							{ answer: `Heraklion`, score: 1, extra: `` },
+							{ answer: `Peristeri`, score: 0, extra: `` },
+							{ answer: `Kallithea`, score: 0, extra: `` }
 						]
 					]
 				}

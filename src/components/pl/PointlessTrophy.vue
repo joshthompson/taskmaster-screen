@@ -3,12 +3,12 @@
 	
 	@Component
 	export default class PointlessTrophy extends Vue {
-		mounted() {
+		public mounted() {
 			const video = this.$refs.video as HTMLVideoElement
 			video.addEventListener('ended', () => this.$emit('finished'))
 		}
 	}
-</script>
+</script>s
 
 <template>
 	<video ref="video" src="/pointless/video/trophy.mp4" autoplay></video>

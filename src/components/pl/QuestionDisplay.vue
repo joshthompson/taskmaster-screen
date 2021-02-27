@@ -4,7 +4,7 @@
 	import AnswerBlock from '@/components/pl/AnswerBlock.vue'
 	import Slides from '@/components/pl/Slides.vue'
 
-	type QuestionDetailsState = 'categories' | 'category' | 'question' | 'board' | 'pointless' | 'top'
+	type QuestionDetailsState = 'categories' | 'category' | 'question' | 'board' | 'pointless' | 'top' |  'end'
 	
 	@Component({
 		components: { AnswerBlock, Slides }
@@ -60,6 +60,7 @@
 					if (this.page < pages) {
 						this.page++
 					} else if (this.group < this.groups - 1) {
+						this.page = 0
 						this.group++
 					} else {
 						this.top = 1
@@ -74,16 +75,20 @@
 						this.group++
 						this.top = 1
 					} else {
-						this.mode = this.game.currentRound === 3 ? 'categories' : 'category'
+						this.mode = 'end'
 					}
 					break
 				case 'board':
+					this.mode = 'end'
+					break
+				case 'end':
 					this.mode = this.game.currentRound === 3 ? 'categories' : 'category'
 					break
 			}
 
 			while (this.mode === 'pointless' && this.pointlessAnswers.length === 0) {
 				if (this.group < this.groups - 1) {
+					this.page = 0
 					this.group++
 				} else {
 					this.top = 1
@@ -133,6 +138,7 @@
 		}
 
 		public get groupName() {
+			console.log(this.group, this.question.question)
 			return typeof this.question.question === 'object'
 				? this.question.question[this.group]
 				: this.question.question
@@ -217,6 +223,7 @@
 					</div>
 				</div>
 			</div>
+			<div class="slide" v-if="mode === 'end'" key="end`" @click="next"></div>
 		</Slides>
     </div>
 </template>
