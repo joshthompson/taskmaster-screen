@@ -32,6 +32,14 @@
 					people: [ 'Mikael Hellman', 'Josh Thompson' ]
 				},
 				{
+					role: 'Play Testing',
+					people: [ 'Siân Steggles' ]
+				},
+				{
+					role: 'Live Video Assistance',
+					people: [ 'Jonas Eriksson' ]
+				},
+				{
 					role: 'Starring',
 					people: this.game.teams.map((t) => t.credits).flat().sort((a, b) => a > b ? 1 : -1)
 				},
@@ -98,7 +106,7 @@
 
 	.pointless-credits {
 		animation: scroll linear;
-		transform: translateY(-360%);
+		transform: translateY(-420%);
 
 		width: $width;
 		height: $height;

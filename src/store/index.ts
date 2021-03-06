@@ -19,7 +19,8 @@ const initialState: AppState = {
 	pl: {
 		game: null,
 		director: 'free',
-		screen: 'nothing'
+		screen: 'nothing',
+		jackpot: 4
 	},
 	volume: 0.45
 }
@@ -42,6 +43,9 @@ const mutations: MutationTree<AppState> = {
 	},
 	plSetScreen: (state, screen: string) => {
 		state.pl.screen = screen
+	},
+	plSetJackpot: (state, jackpot: number) => {
+		state.pl.jackpot = jackpot
 	},
 	setVolume: (state, volume: number) => {
 		state.volume = volume

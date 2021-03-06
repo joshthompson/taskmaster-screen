@@ -17,6 +17,7 @@
 	import NewZealandExtra from '@/components/pl/NewZealandExtra.vue'
 	import PointlessIntro from '@/components/pl/PointlessIntro.vue'
 	import PointlessTrophy from '@/components/pl/PointlessTrophy.vue'
+	import PointlessJackpot from '@/components/pl/PointlessJackpot.vue'
 	import PointlessCredits from '@/components/pl/PointlessCredits.vue'
 	import Logo from '@/components/pl/Logo.vue'
 	import { PointlessAnswer, PointlessTeam, PointlessGame, PLState, PointlessWrongAnswer } from '@/types/Pointless'
@@ -45,6 +46,7 @@
 			PointlessIntro,
 			PointlessCredits,
 			PointlessTrophy,
+			PointlessJackpot,
 			Logo
 		}
 	})
@@ -65,6 +67,9 @@
 			this.$store.commit('plSetScreen', screen)
 			this.autoDirect()
 		}
+
+		public get jackpot() { return (this.$store.state.pl as PLState).jackpot }
+		public set jackpot(jackpot) { this.$store.commit('plSetJackpot', jackpot) }
 
 		public autoDirect() {
 			this.director = 'free'
@@ -247,9 +252,10 @@
 				:key="game.currentRound + game.currentQuestion"
 			/>
 			<QuestionDisplayBottom v-show="screen === 'board-bottom' || screen === 'timer'" :game="game" :key="'board-bottom' + game.currentRound" />
-			<ScoresDisplay v-show="screen === 'all_scores'" :game="game"/>
+			<ScoresDisplay v-show="screen === 'all_scores'" :game="game" />
 			<PointlessIntro v-if="screen === 'intro'" @finished="screen = 'nothing'; director = settings.hostGoogleName" :game="game" />
 			<PointlessTrophy v-if="screen === 'trophy'" @finished="screen = 'nothing'; director = settings.hostGoogleName" />
+			<PointlessJackpot v-if="screen === 'jackpot'" @finished="screen = 'nothing'" :game="game" />
 			<PointlessCredits v-if="screen === 'credits'" @finished="screen = 'post-show'" :game="game" />
 			<ChangeRound v-if="screen === 'change_round'" @finished="screen = 'nothing'" :round="game.currentRound" />
 			<Timer v-if="screen === 'timer'" @finished="screen = 'nothing'" />
@@ -385,6 +391,7 @@
 						<div v-if="game.currentRound === 2"><button class="btn" @click="screen = 'new_zealand'">New Zealand</button></div>
 						<div><button class="btn" @click="screen = 'intro'">Title Sequence</button></div>
 						<div><button class="btn" @click="screen = 'credits'">Credits</button></div>
+						<div><button class="btn" @click="screen = 'jackpot'">Jackpot</button></div>
 						<div v-if="game.currentRound === 3 || game.currentRound === 0"><button class="btn" @click="screen = 'trophy'">Trophy</button></div>
 					</div>
 				</div>
@@ -394,6 +401,13 @@
 						<div><button class="btn" @click="revealAnswer">Reveal Current Answer</button></div>
 						<div v-if="game.currentRound === 3"><button class="btn" @click="screen = 'timer'">Show Timer</button></div>
 						<div v-if="game.currentRound === 3"><button class="btn" @click="screen = 'final_answers'">Show Final Answers</button></div>
+						<div>
+							<div>
+								<button @click="jackpot++">Jackpot++</button>
+								<button @click="jackpot--">Jackpot--</button>
+							</div>
+							<div>{{ jackpot }} {{ game.jackpotName }}</div>
+						</div>
 					</div>
 				</div>
 			</div>

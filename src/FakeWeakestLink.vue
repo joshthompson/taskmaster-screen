@@ -20,6 +20,7 @@
 
 <style lang="scss">
 	@import '@/style/sizing.scss';
+
 	#fake-weakest-link {
 		height: 100vh;
 		width: 100vw;

@@ -1,9 +1,5 @@
 import { PointlessGame, PointlessTeam } from '@/types/Pointless'
 
-function fake() {
-	return Math.round(Math.random() * 25)
-}
-
 export function scoreToBeat(team: PointlessTeam) {
 	if (game.currentPass === 2 && game.currentTeam?.answers === 1) {
 		const highest = game.teams
@@ -33,6 +29,7 @@ export const game: PointlessGame = {
 	currentPass: 1,
 	currentTeam: null,
 	guessedAnswers: [],
+	jackpotName: 'Scratch Cards',
 	rounds: [
 		{
 			// Round 1
@@ -40,7 +37,7 @@ export const game: PointlessGame = {
 				{
 					max: 25,
 					category: 'US Politics',
-					question: 'Former US President Surnames that are 6 letters of fewer',
+					question: 'Former US President Surnames that are 6 letters or fewer',
 					detail: `
 						We don't need the first name here
 						- so if there are any presidents that have the same surname
@@ -117,7 +114,7 @@ export const game: PointlessGame = {
 					`,
 					boards: [
 						[
-							{ hint: 'H_U_E _F _A_D_', answer: 'House Of Card', score: 7, extra: `Netflix's first original series` },
+							{ hint: 'H_U_E _F _A_D_', answer: 'House Of Cards', score: 7, extra: `Netflix's first original series` },
 							{ hint: 'O_A_G_ I_ T_E _E_ B_A_K', answer: 'Orange Is The New Black', score: 16, extra: `Netflix's 3rd original series` },
 							{ hint: 'B_J_C_ H_R_E_A_', answer: 'Bojack Horseman', score: 13, extra: `Netflix's best original series. - BoJack Horseman has contributed to the rise of the "sadcom", a tragicomic format that balances humour and sadness.` },
 							{ hint: 'U_B_E_K_B_E _I_M_ S_H_I_T', answer: 'Unbreakable Kimmy Schmidt', score: 8, extra: `It is about one of the Indiana mole women - a group of women who were kidnapped by a cult leader and how they reintergrate into the world` },
@@ -524,7 +521,7 @@ export const game: PointlessGame = {
 		},
 		{
 			name: 'Paul & Sarah',
-			googleNames: ['Paul'],
+			googleNames: ['Neo'],
 			credits: [ 'Paul Barratt', 'Sarah Bell' ],
 			score: null,
 			answers: 0,

@@ -1,7 +1,8 @@
 export interface PLState {
 	game: PointlessGame
-	director?: string,
+	director?: string
 	screen?: string
+	jackpot: number
 }
 
 export interface PointlessGame {
@@ -12,6 +13,7 @@ export interface PointlessGame {
 	guessedAnswers: PointlessAnswer[]
 	rounds: PointlessRound[]
 	teams: PointlessTeam[]
+	jackpotName: string
 }
 
 export interface PointlessRound {

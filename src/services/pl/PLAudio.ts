@@ -22,7 +22,6 @@ async function passedRedLine() {
 
 async function pointless() {
 	stop('red-line')
-	// audio('/pointless/audio/celebrate.m4a')
 	audio('/pointless/audio/pointless-answer.m4a')
 }
 

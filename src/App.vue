@@ -3,13 +3,18 @@
 	import FakeTaskmaster from './FakeTaskmaster.vue'
 	import FakeWeakestLink from './FakeWeakestLink.vue'
 	import FakePointless from './FakePointless.vue'
+	import FakeWheelOfFortune from './FakeWheelOfFortune.vue'
 
 	@Component({
-		components: { FakeTaskmaster, FakeWeakestLink, FakePointless }
+		components: { FakeTaskmaster, FakeWeakestLink, FakePointless, FakeWheelOfFortune }
 	})
 	export default class App extends Vue {
 		public started: boolean = false
 		public game: 'taskmaster' | 'weakest-link' | 'pointless' | 'wheel-of-fortune' = null
+		
+		public created() {
+			this.game = 'wheel-of-fortune'
+		}
 	}
 </script>
 
@@ -33,6 +38,7 @@
 		<FakeTaskmaster v-if="game === 'taskmaster'" />
 		<FakeWeakestLink v-if="game === 'weakest-link'" />
 		<FakePointless v-if="game === 'pointless'" />
+		<FakeWheelOfFortune v-if="game === 'wheel-of-fortune'" />
 	</div>
 </template>
 
