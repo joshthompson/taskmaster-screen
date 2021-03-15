@@ -4,7 +4,7 @@
 	import { Clue, ClueClass } from '@/types/WheelOfFortune'
 
 	@Component
-	export default class FakeWheelOfFortune extends Vue {
+	export default class WOFWheel extends Vue {
 
 		@Prop({
 			default: {

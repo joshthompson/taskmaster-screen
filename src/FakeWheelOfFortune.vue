@@ -1,11 +1,15 @@
 <script lang="ts">
 	import { Component, Vue } from 'vue-property-decorator'
+	import OBSWebSocket from 'obs-websocket-js'
+
 	
 	import DisplayArea from '@/components/shared/DisplayArea.vue'
 	import ControlBar from '@/components/shared/ControlBar.vue'
 	import ScriptBar from '@/components/shared/ScriptBar.vue'
 	import WOFBoard from '@/components/wof/WOFBoard.vue'
+	import WOFWheel from '@/components/wof/WOFWheel.vue'
 	import WOFAudio from '@/services/wof/WOFAudio'
+	import OBS from '@/services/shared/OBS'
 
 	interface Clue {
 		original: string
@@ -35,16 +39,31 @@
 			DisplayArea,
 			ControlBar,
 			ScriptBar,
-			WOFBoard
+			WOFBoard,
+			WOFWheel
 		}
 	})
 	export default class FakeWheelOfFortune extends Vue {
 
 		public clue: Clue = this.createClue('')
+		public scenes: OBSWebSocket.Scene[] = []
 
-		public created() {
+		public async created() {
 			// this.createClue('IN THE TWINKLING OF AN EYE', 'Phrases')
 			this.clue = this.createClue('Well done to be players I guess', 'Cool things to say')
+
+			OBS.setTextAndCenter('Wheel Of Fortune', 'Category Name', this.clue.category.toUpperCase())
+
+
+			// const settings = await OBS.getSourceSettings()
+			this.scenes = (await OBS.getScenes()).scenes
+
+
+			console.log({
+				// settings,
+				scenes: this.scenes
+			})
+			
 		}
 
 		public consonants = 'BCDFGHJKLMNPQRSTVWXYZ'
@@ -157,6 +176,7 @@
 <template>
 	<div id="fake-wheel-of-fortune">
 		<DisplayArea :screenCapture="false" id="fake-wheel-of-fortune">
+			<!-- <WOFWheel /> -->
 			<WOFBoard :clue="clue" @updateClue="clue = $event" />
 		</DisplayArea>
 		<ControlBar class="contol-bar">
