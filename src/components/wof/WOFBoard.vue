@@ -30,15 +30,17 @@
 
 <template>
 	<div class="board">
-		<div v-for="(row, i) in clue.classes" :key="'row_' + i" class="row">
-			<div
-				v-for="(charClass, j) in row"
-				:key="'char_' + i + '_' + j"
-				class="cell"
-				:class="'char' + charClass"
-				@click="reveal(i, j)"
-			>
-				<div class="tile">{{ charClass === 'O' ? clue.letters[i][j] : ''}}</div>
+		<div class="rows">
+			<div v-for="(row, i) in clue.classes" :key="'row_' + i" class="row">
+				<div
+					v-for="(charClass, j) in row"
+					:key="'char_' + i + '_' + j"
+					class="cell"
+					:class="'char' + charClass"
+					@click="reveal(i, j)"
+				>
+					<div class="tile">{{ charClass === 'O' ? clue.letters[i][j] : ''}}</div>
+				</div>
 			</div>
 		</div>
 		<div class="category">{{ clue.category }}</div>
@@ -55,6 +57,27 @@
 
 		margin: s(10) auto;
 		display: block;
+
+		.rows {
+			$fs: 2;
+			$c1: #D0502C;
+			$c2: #F5E95C;
+			$c3: #5EC7EE;
+			filter: drop-shadow(0 s($fs) 0 $c1)
+					drop-shadow(0 s(-$fs) 0 $c1)
+					drop-shadow(s($fs) 0 0 $c1)
+					drop-shadow(s(-$fs) 0 0 $c1)
+
+					drop-shadow(0 s($fs) 0 $c2)
+					drop-shadow(0 s(-$fs) 0 $c2)
+					drop-shadow(s($fs) 0 0 $c2)
+					drop-shadow(s(-$fs) 0 0 $c2)
+
+					drop-shadow(0 s($fs) 0 $c3)
+					drop-shadow(0 s(-$fs) 0 $c3)
+					drop-shadow(s($fs) 0 0 $c3)
+					drop-shadow(s(-$fs) 0 0 $c3);
+		}
 
 		.row {
 			display: block;
@@ -107,6 +130,7 @@
 			font-size: s(10);
 			font-weight: bold;
 			text-shadow: s(0.5) s(0.5) 0 #000000;
+			margin-top: s(6.5);
 		}
 	}
 

@@ -13,7 +13,7 @@
 		public game: 'taskmaster' | 'weakest-link' | 'pointless' | 'wheel-of-fortune' = null
 		
 		public created() {
-			this.game = 'wheel-of-fortune'
+			// this.game = 'wheel-of-fortune'
 		}
 	}
 </script>
@@ -31,9 +31,9 @@
 			<a v-if="!game" @click="game = 'pointless'" class="pointless">
 				<img src="./assets/pointless/logo.png" />
 			</a>
-			<a v-if="!game" @click="game = 'wheel-of-fortune'" class="wheel-of-fortune">
+			<!-- <a v-if="!game" @click="game = 'wheel-of-fortune'" class="wheel-of-fortune">
 				<img src="./assets/wheel-of-fortune/logo.png" />
-			</a>
+			</a> -->
 		</div>
 		<FakeTaskmaster v-if="game === 'taskmaster'" />
 		<FakeWeakestLink v-if="game === 'weakest-link'" />

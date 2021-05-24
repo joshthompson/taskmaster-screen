@@ -23,7 +23,7 @@
 
 <template>
 	<div class="vt" :class="{ faded }">
-		<video ref="video">
+		<video ref="video" autoplay>
 			<source :src="video" type="video/mp4" />
 		</video>
 	</div>

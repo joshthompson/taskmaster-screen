@@ -89,7 +89,7 @@ export default class WLRound {
 
 		if (Math.random() < 0.2) {
 			Director.set(WLSettings.hostGoogle)
-			setTimeout(() => Director.set(this.currentContestant.googleName), 3000)
+			window.setTimeout(() => Director.set(this.currentContestant.googleName), 3000)
 		} else {
 			Director.set(this.currentContestant.googleName)
 		}
@@ -124,7 +124,7 @@ export default class WLRound {
 			this.chainPosition++
 		} else {
 			this.chainPosition = Math.min(WLSettings.chain.length, this.chainPosition + 0.5)
-			setTimeout(() => {
+			window.setTimeout(() => {
 				this.chainPosition = Math.min(WLSettings.chain.length, this.chainPosition + 0.5)
 				this.save()
 			}, 300)
@@ -165,7 +165,7 @@ export default class WLRound {
 			this.timer = 0
 			this.end()
 		} else {
-			this.timeoutId = setTimeout(() => this.runTimer(), 1000)
+			this.timeoutId = window.setTimeout(() => this.runTimer(), 1000)
 		}
 		this.save()
 	}
@@ -177,7 +177,7 @@ export default class WLRound {
 		this.started = true
 		this.getQuestion()
 		this.questionStart = Date.now()
-		setTimeout(() => this.runTimer(), 1000)
+		window.setTimeout(() => this.runTimer(), 1000)
 		this.save()
 	}
 

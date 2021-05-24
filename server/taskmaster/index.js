@@ -1,8 +1,9 @@
 const router = require('express').Router()
 
-const contestants = require('./contestants')
-const tm_screen = require('./screen')
-const scores = require('./score')
+const episode = 's02e01';
+const contestants = require(`./${episode}/contestants`)
+const tm_screen = require(`./${episode}/screen`)
+const scores = require(`./${episode}/score`)
 
 router.get('/state', (_req, res) => {
 	res.send({

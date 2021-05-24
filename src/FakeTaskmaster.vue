@@ -4,6 +4,7 @@
 	import Scores from '@/components/tm/Scores.vue'
 	import VT from '@/components/tm/VT.vue'
 	import Slide from '@/components/tm/Slide.vue'
+	import Portraits from '@/components/tm/Portraits.vue'
 	import Letter from '@/components/tm/Letter.vue'
 	import { TMContestant, TMScreenState } from '@/types/TaskMaster'
 	import { getState } from '@/services/tm/TMFetchData'
@@ -14,6 +15,7 @@
 			Scores,
 			VT,
 			Slide,
+			Portraits,
 			Letter
 		}
 	})
@@ -36,11 +38,12 @@
 
 <template>
 	<div id="fake-taskmaster">
-		<Logo   v-if="screen.type === 'logo'" />
-		<Scores v-if="screen.type === 'scores'" :contestants="contestants" />
-		<VT     v-if="screen.type === 'video'"  :video="screen.video" :key="screen.video" />
-		<Slide  v-if="screen.type === 'slide'"  :slide="screen.image" />
-		<Letter v-if="screen.type === 'letter'" :letter="screen.letter" />
+		<Logo      v-if="screen.type === 'logo'" />
+		<Scores    v-if="screen.type === 'scores'" :contestants="contestants" />
+		<VT        v-if="screen.type === 'video'"  :video="screen.video" :key="screen.video" />
+		<Slide     v-if="screen.type === 'slide'"  :slide="screen.image" />
+		<Portraits v-if="screen.type === 'portrait'"  :portraits="screen.portraits" />
+		<Letter    v-if="screen.type === 'letter'" :letter="screen.letter" />
 	</div>
 </template>
 
