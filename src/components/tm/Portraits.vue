@@ -4,6 +4,7 @@
 	interface Portrait {
 		name: string
 		image: string
+		rotate?: boolean
 	}
 
 	@Component
@@ -17,9 +18,13 @@
 		<div
 			v-for="(portrait, i) in portraits"
 			:key="i"
-			:style="{ backgroundImage: `url(${portrait.image})` }" 
-			class="portrait"
-			:class="portraits.length > 1 ? 'small' : 'big'"
+			:style="{ backgroundImage: `url(${portrait.image})` }"
+			:class="{
+				portrait: true,
+				small: portraits.length > 1,
+				big: portraits.length <= 1,
+				rotate: portrait.rotate
+			}"
 		>
 			<div class="frame" />
 			<div class="plaque">{{ portrait.name }}</div> 
@@ -29,7 +34,7 @@
 
 <style scoped lang="scss">
 	.portraits {
-		background-image: url('../../assets/slide-bg.jpg');
+		background-image: url('../../assets/taskmaster/logo-bg.jpg');
 		background-size: cover;
 		background-position: center;
 		width: 100vw;
@@ -46,8 +51,8 @@
 			background-size: 65% 69%;
 			background-position: center;
 			background-repeat: no-repeat;
-			height: 1em;
 			width: 0.8em;
+			height: 1em;
 			position: relative;
 			margin: 0.01em;
 			user-select: none;
@@ -63,8 +68,20 @@
 			.frame {
 				width: 100%;
 				height: 100%;
-				background: url('../../assets/taskmaster/frame.png');
+				background-image: url('../../assets/taskmaster/frame.png');
 				background-size: 100% 100%;
+			}
+
+			&.rotate {
+				width: 1em;
+				height: 0.8em;
+				background-size: 74% 67%;
+				.frame {
+					background-image: url('../../assets/taskmaster/frame-landscape.png');
+				}
+				.plaque {
+					transform: translate(-50%, 10%);
+				}
 			}
 
 			.plaque {

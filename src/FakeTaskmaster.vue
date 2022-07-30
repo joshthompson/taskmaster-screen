@@ -37,10 +37,10 @@
 </script>
 
 <template>
-	<div id="fake-taskmaster">
+	<div id="fake-taskmaster" :class="[screen.type]">
 		<Logo      v-if="screen.type === 'logo'" />
 		<Scores    v-if="screen.type === 'scores'" :contestants="contestants" />
-		<VT        v-if="screen.type === 'video'"  :video="screen.video" :key="screen.video" />
+		<VT        v-if="screen.type === 'video' || screen.type === 'audio'" :screen="screen" :key="screen.video || screen.audio" />
 		<Slide     v-if="screen.type === 'slide'"  :slide="screen.image" />
 		<Portraits v-if="screen.type === 'portrait'"  :portraits="screen.portraits" />
 		<Letter    v-if="screen.type === 'letter'" :letter="screen.letter" />
@@ -51,8 +51,12 @@
 	#fake-taskmaster {
 		margin-top: 0;
 		font-family: 'Veteran-Typewriter'; 
-		background: url('assets/bg.jpg');
+		background: url('assets/taskmaster/logo-bg.jpg');
 		background-size: cover;
 		min-height: 100vh;
+
+		&.scores {
+			background-image: url('assets/taskmaster/scores-bg.jpg');
+		}
 	}
 </style>

@@ -13,7 +13,12 @@
 		public game: 'taskmaster' | 'weakest-link' | 'pointless' | 'wheel-of-fortune' = null
 		
 		public created() {
-			// this.game = 'wheel-of-fortune'
+			// this.setGame('wheel-of-fortune'
+		}
+
+		public setGame(game: 'taskmaster' | 'weakest-link' | 'pointless' | 'wheel-of-fortune') {
+			window.document.title = game.toUpperCase()
+			this.game = game
 		}
 	}
 </script>
@@ -22,16 +27,16 @@
 	<div id="app" :class="{ started: game !== null }">
 		<div class="actions">
 			<h1 v-if="!game">Select Game</h1>
-			<a v-if="!game" @click="game = 'taskmaster'" class="taskmaster">
+			<a v-if="!game" @click="setGame('taskmaster')" class="taskmaster">
 				Taskmaster
 			</a>
-			<a v-if="!game" @click="game = 'weakest-link'" class="weakest-link">
+			<a v-if="!game" @click="setGame('weakest-link')" class="weakest-link">
 				<img src="./assets/weakest-link/logo.png" />
 			</a>
-			<a v-if="!game" @click="game = 'pointless'" class="pointless">
+			<a v-if="!game" @click="setGame('pointless')" class="pointless">
 				<img src="./assets/pointless/logo.png" />
 			</a>
-			<!-- <a v-if="!game" @click="game = 'wheel-of-fortune'" class="wheel-of-fortune">
+			<!-- <a v-if="!game" @click="setGame('wheel-of-fortune')" class="wheel-of-fortune">
 				<img src="./assets/wheel-of-fortune/logo.png" />
 			</a> -->
 		</div>

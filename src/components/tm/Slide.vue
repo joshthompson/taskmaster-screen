@@ -15,7 +15,7 @@
 
 <style scoped lang="scss">
 	.slide {
-		background-image: url('../../assets/slide-bg.jpg');
+		background-image: url('../../assets/taskmaster/logo-bg.jpg');
 		background-size: cover;
 		background-position: center;
 		width: 100vw;

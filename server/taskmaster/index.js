@@ -1,8 +1,8 @@
 const router = require('express').Router()
 
-const episode = 's02e01';
+const episode = 's02e03';
 const contestants = require(`./${episode}/contestants`)
-const tm_screen = require(`./${episode}/screen`)
+let tm_screen = require(`./${episode}/screen`)
 const scores = require(`./${episode}/score`)
 
 router.get('/state', (_req, res) => {
@@ -20,8 +20,9 @@ router.get('/state', (_req, res) => {
 	})
 })
 
-router.post('/state/logo', (_req, res) => {
-	tm_screen.type = 'logo'
+router.get('/state/set', (req, res) => {
+	console.log(req._parsedUrl.query.replace('state=', ''))
+	tm_screen = JSON.parse(req._parsedUrl.query.replace('state=', '').replace(/%22/g, '"'));
 	res.sendStatus(200)
 })
 

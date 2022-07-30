@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 app.use(bodyParser.json())
+
 console.log('\033cGAME SHOW SCREEN')
 
 /* tslint:disable:no-console */

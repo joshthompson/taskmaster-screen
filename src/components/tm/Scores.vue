@@ -16,7 +16,7 @@
 			const offset = pos - 2
 			return {
 				[`pos_${pos}`]: true,
-				top: contestant.score !== 0 && contestant.score === copy[4].score
+				top: contestant.score > 0 && contestant.score === copy[4].score
 			}
 		}
 	}
@@ -36,7 +36,6 @@
 </template>
 
 <style scoped lang="scss">
-
 	.scores {
 		max-width: 90vw;
 		margin: 0 auto;

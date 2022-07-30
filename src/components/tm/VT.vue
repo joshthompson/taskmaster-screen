@@ -1,21 +1,30 @@
 <script lang="ts">
 	import { Component, Prop, Vue } from 'vue-property-decorator'
-	import { setStateToLogo } from '@/services/tm/TMFetchData'
+	import { setServerState } from '@/services/tm/TMFetchData'
+	import { TMScreenState } from '@/types/TaskMaster'
 
 	@Component
 	export default class VT extends Vue {
-		@Prop() public video: string
+		@Prop() public screen: TMScreenState
 		public faded: boolean = false
 
+		public get video() {
+			return this.screen.video;
+		}
+
+		public get audio() {
+			return this.screen.audio;
+		}
+
 		public mounted() {
-			const video = this.$refs.video as HTMLVideoElement
-			video.play()
-			video.onload = () => video.play()
-			video.onclick = () => video.paused ? video.play() : video.pause()
-			video.onplay = () => this.faded = false
-			video.onended = () => {
+			const media = this.$refs.media as HTMLMediaElement
+			media.play()
+			media.onload = () => media.play()
+			media.onclick = () => media.paused ? media.play() : media.pause()
+			media.onplay = () => this.faded = false
+			media.onended = () => {
 				this.faded = true
-				setStateToLogo()
+				setServerState(this.screen.after || { type: 'logo' });
 			}
 		}
 	}
@@ -23,9 +32,12 @@
 
 <template>
 	<div class="vt" :class="{ faded }">
-		<video ref="video" autoplay>
+		<video v-if="video" ref="media" autoplay>
 			<source :src="video" type="video/mp4" />
 		</video>
+		<audio v-if="audio" ref="media" autoplay>
+			<source :src="audio" type="audio/m4a" />
+		</audio>
 	</div>
 </template>
 

@@ -176,8 +176,8 @@
 <template>
 	<div id="fake-wheel-of-fortune">
 		<DisplayArea :screenCapture="false" id="fake-wheel-of-fortune">
-			<!-- <WOFWheel /> -->
-			<WOFBoard :clue="clue" @updateClue="clue = $event" />
+			<WOFWheel />
+			<!-- <WOFBoard :clue="clue" @updateClue="clue = $event" /> -->
 		</DisplayArea>
 		<ControlBar class="contol-bar">
 

@@ -1,53 +1,46 @@
 const scores = {
 	prize: {
-		dan: 0,
-		eddie: 0,
-		miller: 0,
-		saba: 0,
-		tom: 0
+		dan: 1,
+		eddie: 5,
+		miller: 4,
+		saba: 2,
+		tom: 3
 	},
 	alphabet: {
-		dan: 0,
-		eddie: 0,
-		miller: 0,
-		saba: 0,
-		tom: 0
+		dan: 3,
+		eddie: 1,
+		miller: 4,
+		saba: 5,
+		tom: 3
 	},
 	multitasking: {
-		dan: 0,
-		eddie: 0,
-		miller: 0,
-		saba: 0,
-		tom: 0
+		dan: 3,
+		eddie: 5,
+		miller: 5,
+		saba: 3,
+		tom: 1
 	},
 	tower: {
-		dan: 0,
-		eddie: 0,
-		miller: 0,
-		saba: 0,
-		tom: 0
+		dan: 4,
+		eddie: 5,
+		miller: 2,
+		saba: 3,
+		tom: 2
 	},
 	song: {
-		dan: 0,
-		eddie: 0,
-		miller: 0,
-		saba: 0,
-		tom: 0
+		dan: 4,
+		eddie: 1,
+		miller: 5,
+		saba: 3,
+		tom: 4
 	},
 	final: {
-		dan: 0,
-		eddie: 0,
-		miller: 0,
-		saba: 0,
-		tom: 0
+		dan: 5,
+		eddie: 2,
+		miller: 1,
+		saba: 4,
+		tom: 3
 	},
-	bonus: {
-		dan: 0,
-		eddie: 0,
-		miller: 0,
-		saba: 0,
-		tom: 0
-	}
 }
 
 module.exports = scores

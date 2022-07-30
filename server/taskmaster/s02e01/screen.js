@@ -20,7 +20,7 @@ const modes = {
 
 	alphabet: {
 		intro:		{ type: 'video', video: '/taskmaster/s02e01/videos/1.1 - Alphabet - Intro.mp4' },
-		clip1:		{ type: 'video', video: '/taskmaster/s02e01/videos/1.2 - Alphabet - Dan & Tom.mp4' }, // It's Dan and Tom
+		clip1:		{ type: 'video', video: '/taskmaster/s02e01/videos/1.2 - Alphabet - Dan & Tom.mp4' }, // It's Daniel and Thomas
 		clip2:		{ type: 'video', video: '/taskmaster/s02e01/videos/1.3 - Alphabet - Miller & Saba.mp4' }, // It's M&S time! Here's Miller and Saba
 		clip3:		{ type: 'video', video: '/taskmaster/s02e01/videos/1.4 - Alphabet - Eddie.mp4' } // Which means it's finally it's Eddie Eddie...
 	},
@@ -35,7 +35,7 @@ const modes = {
 
 	tower: {
 		intro:		{ type: 'video', video: '/taskmaster/s02e01/videos/2.1 - Tower - Intro.mp4' },
-		all:		{ type: 'video', video: '/taskmaster/s02e01/videos/2.2 - Tower - All.mp4' }, // Let’s watch a montage all four university friend’s and one failed local politician
+		clip:		{ type: 'video', video: '/taskmaster/s02e01/videos/2.2 - Tower - All.mp4' }, // Let’s watch a montage all four university friend’s and one failed local politician
 
 
 		dan:		{ type: 'portrait', portraits: [{ name: 'dan', image: '/taskmaster/s02e01/tower/dan.png' }]},
@@ -62,6 +62,8 @@ const modes = {
 
 		tom:		{ type: 'video', video: '/taskmaster/s02e01/videos/4.4 - Song - Tom - Sweet Saba P.mp4' },
 		miller:		{ type: 'video', video: '/taskmaster/s02e01/videos/4.5 - Song - Miller - Mills Better Know.mp4' },
+		eddie:		{ type: 'video', video: '/taskmaster/s02e01/videos/4.6 - Song - Eddie.mp4' },
+		saba:		{ type: 'video', video: '/taskmaster/s02e01/videos/4.7 - Song - Saba.mp4' },
 		dan:		{ type: 'video', video: '/taskmaster/s02e01/videos/4.8 - Song - Dan - Eddie Love.mp4' },
 	},
 
@@ -71,7 +73,7 @@ const modes = {
 
 let mode = modes.logo
 mode = modes.score
-// mode = modes.prize.dan
+mode = modes.tower.all
 
 // mode = { type: 'letter', letter: '( . )( . )' }
 

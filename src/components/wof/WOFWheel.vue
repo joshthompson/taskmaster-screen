@@ -167,14 +167,14 @@
 			setTimeout(() => this.processSpin(), this.spinFrame)
 		}
 
-		pathMain(word: string) {
+		pathMain(word: string | number) {
 			switch (word) {
 				case 'FREE SPIN': return 'SPIN'
 				case 'LOSE A TURN': return 'TURN'
 				default: return word
 			} 
 		}
-		pathCross(word: string) {
+		pathCross(word: string | number) {
 			switch (word) {
 				case 'FREE SPIN': return 'FREE'
 				case 'LOSE A TURN': return 'LOSE A'

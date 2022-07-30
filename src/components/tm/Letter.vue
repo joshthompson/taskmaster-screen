@@ -15,7 +15,7 @@
 
 <style scoped lang="scss">
 	.letter {
-		background-image: url('../../assets/slide-bg.jpg');
+		background-image: url('../../assets/taskmaster/logo-bg.jpg');
 		background-size: cover;
 		background-position: center;
 		width: 100vw;
@@ -24,7 +24,7 @@
 		div {
 			font-size: 32rem;
             text-transform: uppercase;
-            color: #000000;
+            color: #FFFFFF;
 			transform: translateY(-50%);
 		}
 	}
