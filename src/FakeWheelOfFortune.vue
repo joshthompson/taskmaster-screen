@@ -8,6 +8,7 @@
 	import ScriptBar from '@/components/shared/ScriptBar.vue'
 	import WOFBoard from '@/components/wof/WOFBoard.vue'
 	import WOFWheel from '@/components/wof/WOFWheel.vue'
+	import WOFLogo from '@/components/wof/WOFLogo.vue'
 	import WOFAudio from '@/services/wof/WOFAudio'
 	import OBS from '@/services/shared/OBS'
 
@@ -28,6 +29,17 @@
 		star = 'S'
 	}
 
+	enum InventoryItems {
+		FREE_SPIN = 'Free Spin'
+	}
+	
+	export interface Contestant {
+		name: string
+		score: number
+		total: number
+		inventory: (InventoryItems | string)[]
+	}
+
 	const maxLength = 12
 	const maxLines = 4
 	const foundDelay = 1000
@@ -40,20 +52,40 @@
 			ControlBar,
 			ScriptBar,
 			WOFBoard,
-			WOFWheel
+			WOFWheel,
+			WOFLogo
 		}
 	})
 	export default class FakeWheelOfFortune extends Vue {
 
-		public clue: Clue = this.createClue('')
 		public scenes: OBSWebSocket.Scene[] = []
+		public view: 'board' | 'wheel' | 'logo' = 'logo'
+
+		public clues: Clue[] = [
+			this.createClue('In the twinkling of an eye', 'Phrases'),
+			this.createClue('I like big butts and I cannot lie', 'Song lyrics'),
+			this.createClue('The Great Pyramids of Giza', 'Famous Places'),
+			this.createClue('In for a penny, in for a pound', 'Phrases'),
+			this.createClue('Call the Midwife', 'TV Show'),
+			this.createClue('Ed Sheeran Shape Of You', 'Singer/Song'),
+			this.createClue('Fifty Shades Of Grey', 'Book'),
+			this.createClue('Lewis Hamilton', 'Sporting Greats'),
+		]
+		public clueNumber = 0
+		public clue = this.clues[this.clueNumber]
+		public finalGuess = ''
+		
+		public contestants: Contestant[] = [
+			{ name: 'Ringo', score: 0, total: 0, inventory: [] },
+			{ name: 'Jamie', score: 0, total: 0, inventory: [] },
+			{ name: 'Remi', score: 0, total: 0, inventory: [] },
+		];
+		public current: number = 0
+		public guessValue: number = 0
 
 		public async created() {
-			// this.createClue('IN THE TWINKLING OF AN EYE', 'Phrases')
-			this.clue = this.createClue('Well done to be players I guess', 'Cool things to say')
 
 			OBS.setTextAndCenter('Wheel Of Fortune', 'Category Name', this.clue.category.toUpperCase())
-
 
 			// const settings = await OBS.getSourceSettings()
 			this.scenes = (await OBS.getScenes()).scenes
@@ -127,26 +159,38 @@
 					this.clue.classes[i][j] = ClueClass.hidden
 				}
 			}))
-			this.clue = { ...this.clue }
+			this.clue = {
+				...this.clue,
+				guesses: new Set()
+			}
+			
 		}
 
+		public setClue(number: number) {
+			this.clues[this.clueNumber] = this.clue
+			this.clueNumber = number
+			this.clue = this.clues[this.clueNumber]
+		}
 
-		public letter(letter: string, delay = foundDelay) {
-			letter = letter.substr(0, 1)
+		public letter(search: string, delay = foundDelay) {
+			const letters = search.split('').map(l => l.substring(0, 1).toUpperCase()).filter(l => l !== ' ')
 			const found: [number, number][] = []
-			this.clue.guesses.add(letter[0])
+			letters.forEach(letter => this.clue.guesses.add(letter))
 			this.clue.letters.forEach((row, i) => {
 				row.forEach((tile, j) => {
-					if (tile.toUpperCase() === letter.toUpperCase()) {
+					if (letters.includes(tile.toUpperCase())) {
 						found.push([i, j])
 					}
 				})
 			})
 			found.forEach(([i, j], n) => {
+				this.clue.classes[i][j] = ClueClass.hidden
 				setTimeout(() => {
 					this.clue.classes[i][j] = ClueClass.found
 					WOFAudio.bing()
 					this.clue = { ...this.clue }
+					this.currentContestant.score = parseInt('' + this.currentContestant.score) || 0
+					this.currentContestant.score += parseInt(this.guessValue.toString())
 				}, delay * n)
 			})
 			setTimeout(() => this.revealFound(), delay * found.length)
@@ -170,39 +214,133 @@
 			})
 		}
 
+		public submitFinalGuess() {
+			this.letter(this.finalGuess)
+		}
+
+		private get currentContestant() {
+			return this.contestants[this.current]
+		}
+
+		public addContestant() {
+			this.contestants = [
+				...this.contestants,
+				{ name: prompt('Name'), score: 0, total: 0, inventory: [] }
+			]
+		}
+
+		public removeContestant(i: number) {
+			this.contestants = this.contestants.filter((_, j) => j !== i)
+			this.switchContestant(0)
+		}
+
+		public switchContestant(n: number) {
+			this.current += this.contestants.length * 100 + n
+			this.current %= this.contestants.length
+		}
+
+		public bankrupt() {
+			this.currentContestant.score = 0
+			this.switchContestant(1)
+		}
+
+		public loseATurn() {
+			this.switchContestant(1)
+		}
+
+		public freeSpin() {
+			this.currentContestant.inventory.push(InventoryItems.FREE_SPIN)
+		}
+
+		public setGuessValue(value: number) {
+			this.guessValue = value
+		}
+
 	}
 </script>
 
 <template>
 	<div id="fake-wheel-of-fortune">
 		<DisplayArea :screenCapture="false" id="fake-wheel-of-fortune">
-			<WOFWheel />
-			<!-- <WOFBoard :clue="clue" @updateClue="clue = $event" /> -->
+			<WOFLogo v-if="view === 'logo'" />
+			<WOFWheel
+				v-if="view === 'wheel'"
+				:contestants="contestants"
+				:current="current"
+				@setValue="setGuessValue($event)"
+				@bankrupt="bankrupt()"
+				@loseATurn="loseATurn()"
+				@freeSpin="freeSpin()"
+			/>
+			<WOFBoard
+				v-if="view === 'board'"
+				:clue="clue"
+				:contestants="contestants"
+				:current="current"
+				:finalGuess="finalGuess"
+				@updateClue="clue = $event"
+			/>
 		</DisplayArea>
 		<ControlBar class="contol-bar">
 
-			<h3>Clue</h3>
-			<p>{{ clue.original.toUpperCase() }}</p>
+			<h3>View</h3>
+			<button @click="view = 'logo'">Logo</button>	
+			<button @click="view = 'wheel'">Wheel</button>	
+			<button @click="view = 'board'">Board</button>	
 
-			<h3>Consonants</h3>
-			<button
-				v-for="char in consonants"
-				:key="char"
-				:disabled="clue.guesses.has(char)"
-				@click="letter(char)"
-			>{{ char }}</button>
+			<div>
+				<h3>Contestants</h3>
 
-			<h3>Vowels</h3>
-			<button
-				v-for="char in vowels"
-				:key="char"
-				:disabled="clue.guesses.has(char)"
-				@click="letter(char)"
-			>{{ char }}</button>
+				<div v-for="(contestant, i) in contestants" :key="'contestant' + i">
+					<div class="contestant" :class="{ current: i === current }">
+						<span class="name">{{ contestant.name }}</span>
+						<span class="score"><input v-model="contestant.score" /></span>
+						<button @click="removeContestant(i)">x</button>
+					</div>
+					<div class="inventory">
+						<span v-for="(item, n) in contestant.inventory" :key="`item_${n}`">{{ item }}</span>
+					</div>
+				</div>
 
-			<h3>Actions</h3>
-			<button @click="revealAll()">Reveal All</button>
-			<button @click="hideAll()">Hide All</button>
+				<button @click="addContestant()">Add Contestant</button>
+				<button @click="switchContestant(1)">Next</button>
+				<button @click="switchContestant(-1)">Prev</button>
+			</div>
+
+			<h3>All Clues</h3>
+			<div v-for="(c, i) in clues" :key="`clue_${i}`" class="clue" :class="{ current: i === clueNumber }" @click="setClue(i)">
+				<i>Category: {{ c.category }}</i>
+				<div>{{ c.original }}</div>
+			</div>
+
+			<h3>Guess Value</h3>
+			<p><input type="number" v-model="guessValue" /></p>
+
+			<div v-if="view === 'board'">
+				<h3>Consonants</h3>
+				<button
+					v-for="char in consonants"
+					:key="char"
+					:disabled="clue.guesses.has(char)"
+					@click="letter(char)"
+				>{{ char }}</button>
+
+				<h3>Vowels</h3>
+				<button
+					v-for="char in vowels"
+					:key="char"
+					:disabled="clue.guesses.has(char)"
+					@click="letter(char)"
+				>{{ char }}</button>
+
+				<h3>Actions</h3>
+				<button @click="revealAll()">Reveal All</button>
+				<button @click="hideAll()">Hide All</button>
+
+				<h3>Final Round</h3>
+				<input v-model="finalGuess" />
+				<button @click="submitFinalGuess()">Submit</button>
+			</div>
 
 		</ControlBar>
 		<ScriptBar>
@@ -216,5 +354,46 @@
 
 	#fake-wheel-of-fortune {
 		background: grey;
+	}
+
+	.contestant {
+		display: flex;
+		padding-bottom: 0.5rem;
+		align-items: center;
+
+		&.current:before {
+			content: "≫ ";
+			margin-right: 0.25rem;
+		}
+
+		.name {
+			flex-grow: 1;
+		}
+		.score {
+			margin-right: 0.5rem;
+		}
+	}
+	.inventory span {
+		display: inline-block;
+		padding: 0.1rem 0.5rem;
+		border-radius: 0.25rem;
+		background: #333;
+		color: #FFF;
+		margin: 0 0.25rem 0.5rem 0;
+	}
+
+	.clue {
+		border: 1px solid white;
+		padding: 0.5rem;
+		padding-left: calc(0.5rem + 9px);
+		margin-top: 0.5rem;
+		cursor: pointer;
+		&:hover {
+			background: rgba(0, 0, 0, 0.25);
+		}
+		&.current {
+			border-left-width: 10px;
+			padding-left: calc(0.5rem);
+		}
 	}
 </style>

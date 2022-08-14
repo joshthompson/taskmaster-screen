@@ -2,8 +2,12 @@
 	import { Component, Prop, Vue } from 'vue-property-decorator'
 	
 	import { Clue, ClueClass } from '@/types/WheelOfFortune'
+	import { Contestant } from '@/FakeWheelOfFortune.vue'
+	import WOFContestants from './WOFContestants.vue'
 
-	@Component
+	@Component({
+		components: { WOFContestants }
+	})
 	export default class WOFWheel extends Vue {
 
 		@Prop({
@@ -14,6 +18,9 @@
 				classes: []
 			}
 		}) public clue: Clue
+		@Prop({ default: [] }) public contestants: Contestant[]
+		@Prop({ default: 0 }) public current: number
+		@Prop({ default: '' }) public finalGuess: string
 
 		public consonants = 'BCDFGHJKLMNPQRSTVWXYZ'
 		public vowels = 'AEIOU'
@@ -29,21 +36,25 @@
 </script>
 
 <template>
-	<div class="board">
-		<div class="rows">
-			<div v-for="(row, i) in clue.classes" :key="'row_' + i" class="row">
-				<div
-					v-for="(charClass, j) in row"
-					:key="'char_' + i + '_' + j"
-					class="cell"
-					:class="'char' + charClass"
-					@click="reveal(i, j)"
-				>
-					<div class="tile">{{ charClass === 'O' ? clue.letters[i][j] : ''}}</div>
+	<div>
+		<WOFContestants :contestants="contestants" :current="current" />
+		<div class="board">
+			<div class="rows">
+				<div v-for="(row, i) in clue.classes" :key="'row_' + i" class="row">
+					<div
+						v-for="(charClass, j) in row"
+						:key="'char_' + i + '_' + j"
+						class="cell"
+						:class="'char' + charClass"
+						@click="reveal(i, j)"
+					>
+						<div class="tile">{{ charClass === 'O' ? clue.letters[i][j] : ''}}</div>
+					</div>
 				</div>
 			</div>
+			<div class="category">{{ clue.category }}</div>
+			<div class="final-guess" v-if="finalGuess.length">{{ finalGuess }}</div>
 		</div>
-		<div class="category">{{ clue.category }}</div>
 	</div>
 </template>
 
@@ -59,24 +70,35 @@
 		display: block;
 
 		.rows {
-			$fs: 2;
-			$c1: #D0502C;
-			$c2: #F5E95C;
-			$c3: #5EC7EE;
-			filter: drop-shadow(0 s($fs) 0 $c1)
-					drop-shadow(0 s(-$fs) 0 $c1)
-					drop-shadow(s($fs) 0 0 $c1)
-					drop-shadow(s(-$fs) 0 0 $c1)
+			--fs: 2;
+			--c1: #D0502C;
+			--c2: #F5E95C;
+			--c3: #5EC7EE;
+			filter: drop-shadow(0 svar(var(--fs)) 0 var(--c1))
+					drop-shadow(0 svar(calc(0 - var(--fs))) 0 var(--c1))
+					drop-shadow(svar(var(--fs)) 0 0 var(--c1))
+					drop-shadow(svar(calc(0 - var(--fs))) 0 0 var(--c1))
 
-					drop-shadow(0 s($fs) 0 $c2)
-					drop-shadow(0 s(-$fs) 0 $c2)
-					drop-shadow(s($fs) 0 0 $c2)
-					drop-shadow(s(-$fs) 0 0 $c2)
+					drop-shadow(0 svar(var(--fs)) 0 var(--c2))
+					drop-shadow(0 svar(calc(0 - var(--fs))) 0 var(--c2))
+					drop-shadow(svar(var(--fs)) 0 0 var(--c2))
+					drop-shadow(svar(calc(0 - var(--fs))) 0 0 var(--c2))
 
-					drop-shadow(0 s($fs) 0 $c3)
-					drop-shadow(0 s(-$fs) 0 $c3)
-					drop-shadow(s($fs) 0 0 $c3)
-					drop-shadow(s(-$fs) 0 0 $c3);
+					drop-shadow(0 svar(var(--fs)) 0 var(--c3))
+					drop-shadow(0 svar(calc(0 - var(--fs))) 0 var(--c3))
+					drop-shadow(svar(var(--fs)) 0 0 var(--c3))
+					drop-shadow(svar(calc(0 - var(--fs))) 0 0 var(--c3));
+		}
+
+		&.animate {
+			.rows {
+				animation: winner 1s linear infinite;
+			}
+			@keyframes winner {
+				0% { --c1: #D0502C; --c2: #F5E95C; --c3: #5EC7EE; }
+				33% { --c1: #5EC7EE; --c2: #D0502C; --c3: #F5E95C; }
+				67% { --c1: #F5E95C; --c2: #5EC7EE; --c3: #D0502C; }
+			}
 		}
 
 		.row {
@@ -123,7 +145,8 @@
 			}
 		}
 
-		.category {
+		.category,
+		.final-guess {
 			text-transform: uppercase;
 			font-family: 'Courier New', Courier, monospace;
 			color: #E0C23B;
@@ -131,6 +154,10 @@
 			font-weight: bold;
 			text-shadow: s(0.5) s(0.5) 0 #000000;
 			margin-top: s(6.5);
+		}
+
+		.final-guess {
+			margin-top: s(-2);
 		}
 	}
 

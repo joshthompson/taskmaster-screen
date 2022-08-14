@@ -13,7 +13,7 @@
 		public game: 'taskmaster' | 'weakest-link' | 'pointless' | 'wheel-of-fortune' = null
 		
 		public created() {
-			// this.setGame('wheel-of-fortune'
+			this.setGame('wheel-of-fortune')
 		}
 
 		public setGame(game: 'taskmaster' | 'weakest-link' | 'pointless' | 'wheel-of-fortune') {
@@ -36,9 +36,9 @@
 			<a v-if="!game" @click="setGame('pointless')" class="pointless">
 				<img src="./assets/pointless/logo.png" />
 			</a>
-			<!-- <a v-if="!game" @click="setGame('wheel-of-fortune')" class="wheel-of-fortune">
+			<a v-if="!game" @click="setGame('wheel-of-fortune')" class="wheel-of-fortune">
 				<img src="./assets/wheel-of-fortune/logo.png" />
-			</a> -->
+			</a>
 		</div>
 		<FakeTaskmaster v-if="game === 'taskmaster'" />
 		<FakeWeakestLink v-if="game === 'weakest-link'" />

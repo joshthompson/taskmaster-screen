@@ -113,7 +113,7 @@ const modes = {
 
 let mode = modes.logo
 
-mode = modes.score
+mode = modes.sandwich.vicki
 // mode = modes.trophy
 
 module.exports = mode

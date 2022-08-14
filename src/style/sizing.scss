@@ -10,6 +10,10 @@ $height: min(#{$vw-height}, #{$vh-height});
 	@return calc(#{$v / 100} * #{$height});
 }
 
+@function svar($var) {
+	@return calc(#{$var} / 100 * #{$height});
+}
+
 $s0_25: calc(0.0025 * #{$height});
 $s0_5: calc(0.005 * #{$height});
 $s1: calc(0.01 * #{$height});
