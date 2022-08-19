@@ -1,9 +1,18 @@
 const ELEMENT_CLASS = 'fake-game-show-music'
 import store from '@/store'
 
-export function audio(file: string, id: string = 'default', playbackRate: number = 1) {
+interface AudioOptions {
+	id?: string
+	playbackRate?: number
+	volume?: number
+}
+
+export function audio(file: string, options: Partial<AudioOptions> = {}) {
+
+	const { id, playbackRate, volume } = { id: 'default', playbackRate: 1, volume: 1, ...options }
+
 	// Stop the music
-	stop(id)
+	stop(options.id)
 
 	// Create new audio tag
 	const element = document.createElement('audio')
@@ -15,7 +24,7 @@ export function audio(file: string, id: string = 'default', playbackRate: number
 	// Play
 	element.currentTime = 0
 	element.play()
-	element.volume = store.state.volume
+	element.volume = store.state.volume * volume
 	element.playbackRate = playbackRate
 
 	return element

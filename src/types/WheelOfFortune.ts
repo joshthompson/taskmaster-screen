@@ -13,3 +13,6 @@ export interface Clue {
 	letters: string[][]
 	classes: ClueClass[][]
 }
+
+export interface WOFState {
+}

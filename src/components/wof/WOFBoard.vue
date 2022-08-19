@@ -2,7 +2,7 @@
 	import { Component, Prop, Vue } from 'vue-property-decorator'
 	
 	import { Clue, ClueClass } from '@/types/WheelOfFortune'
-	import { Contestant } from '@/FakeWheelOfFortune.vue'
+	import { Contestant, RoundType } from '@/FakeWheelOfFortune.vue'
 	import WOFContestants from './WOFContestants.vue'
 
 	@Component({
@@ -21,9 +21,14 @@
 		@Prop({ default: [] }) public contestants: Contestant[]
 		@Prop({ default: 0 }) public current: number
 		@Prop({ default: '' }) public finalGuess: string
+		@Prop({ default: false }) public animateBoard: boolean
+		@Prop({ default: false }) public showTotals: boolean	
+		@Prop() public round: RoundType
+		
 
 		public consonants = 'BCDFGHJKLMNPQRSTVWXYZ'
 		public vowels = 'AEIOU'
+		public readonly RoundType = RoundType
 
 		public reveal(i: number, j: number) {
 			if (this.clue.classes[i][j] === ClueClass.found) {
@@ -37,8 +42,8 @@
 
 <template>
 	<div>
-		<WOFContestants :contestants="contestants" :current="current" />
-		<div class="board">
+		<WOFContestants v-if="round !== RoundType.FINAL" :contestants="contestants" :current="current" :showTotals="showTotals" />
+		<div class="board" :class="{ animate: animateBoard }">
 			<div class="rows">
 				<div v-for="(row, i) in clue.classes" :key="'row_' + i" class="row">
 					<div
@@ -52,8 +57,8 @@
 					</div>
 				</div>
 			</div>
+			<div class="final-guess" v-if="round === RoundType.FINAL">{{ finalGuess }}</div>
 			<div class="category">{{ clue.category }}</div>
-			<div class="final-guess" v-if="finalGuess.length">{{ finalGuess }}</div>
 		</div>
 	</div>
 </template>
@@ -154,10 +159,11 @@
 			font-weight: bold;
 			text-shadow: s(0.5) s(0.5) 0 #000000;
 			margin-top: s(6.5);
+			height: s(8);
 		}
 
 		.final-guess {
-			margin-top: s(-2);
+			margin-bottom: s(6.5);
 		}
 	}
 

@@ -22,6 +22,7 @@ const initialState: AppState = {
 		screen: 'nothing',
 		jackpot: 4
 	},
+	wof: {},
 	volume: 0.45
 }
 

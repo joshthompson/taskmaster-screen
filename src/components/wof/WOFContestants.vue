@@ -8,9 +8,17 @@
 
 		@Prop({ default: [] }) public contestants: Contestant[]
 		@Prop({ default: 0}) public current: number
+		@Prop({ default: false }) public showTotals: boolean
+		
+		public displayValue(contestant: Contestant) {
+			return (this.showTotals ? contestant.total : contestant.score).toString()
+		}
 		
 		public padScore(contestant: Contestant) {
-			return contestant.score.toString().padStart(5, '0')
+			if (this.displayValue(contestant) === '0') {
+				return '     '
+			}
+			return this.displayValue(contestant).padStart(5, ' ')
 		}
 	}
 </script>
@@ -27,8 +35,15 @@
 			<div class="details" >
 				<div>{{ contestant.name }}</div>
 				<div class="score">
-					<div v-for="(number, i) in padScore(contestant)" :key="`score-${i}`">
-						{{ number }}
+					<div class="score-background">
+						<div v-for="(_number, i) in padScore(contestant)" :key="`score-${i}`" class="character">
+							8
+						</div>
+					</div>
+					<div class="score-foreground">
+						<div v-for="(number, i) in padScore(contestant)" :key="`score-${i}`" class="character">
+							{{ number }}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -66,12 +81,28 @@
 				background: #333333;
 				padding: s(2);
 				margin-top: s(1);
-				color: yellow;
-				text-shadow: 0 0 s(2) yellow;
 				font-family: 'Seven Segment';
 				font-size: s(5);
 				font-weight: normal;
-				div {
+				height: s(10);
+
+				.score-background {
+					position: absolute;
+
+					color: #1c1c1a;
+					text-shadow: 0 0 s(5) #1c1c1a;
+				}
+
+				.score-foreground {
+					position: absolute;
+					color: yellow;
+					text-shadow: 0 0 s(2) yellow;
+					.character {
+						background: none;
+					}
+				}
+
+				.character {
 					display: inline-block;
 					background: #000;
 					padding: s(0.25) s(1);

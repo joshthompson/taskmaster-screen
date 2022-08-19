@@ -7,10 +7,11 @@
 	import ControlBar from '@/components/shared/ControlBar.vue'
 	import ScriptBar from '@/components/shared/ScriptBar.vue'
 	import WOFBoard from '@/components/wof/WOFBoard.vue'
-	import WOFWheel from '@/components/wof/WOFWheel.vue'
+	import WOFWheel, { Token } from '@/components/wof/WOFWheel.vue'
 	import WOFLogo from '@/components/wof/WOFLogo.vue'
 	import WOFAudio from '@/services/wof/WOFAudio'
 	import OBS from '@/services/shared/OBS'
+	import { AppState } from './types'
 
 	interface Clue {
 		original: string
@@ -18,6 +19,7 @@
 		guesses: Set<string>
 		letters: string[][]
 		classes: ClueClass[][]
+		roundType: RoundType
 	}
 
 	enum ClueClass {
@@ -27,6 +29,12 @@
 		found = 'H',
 		letter = 'O',
 		star = 'S'
+	}
+
+	export enum RoundType {
+		NORMAL = 'normal',
+		DOUBLE = 'double',
+		FINAL = 'final'
 	}
 
 	enum InventoryItems {
@@ -45,6 +53,10 @@
 	const foundDelay = 1000
 	const revealDelay = 500
 	const fastReveal = 30
+	const boardAnimationDelay = 500
+	const boardAnimationTime = 10_000
+
+	const vowelCost = 250
 
 	@Component({
 		components: {
@@ -59,21 +71,25 @@
 	export default class FakeWheelOfFortune extends Vue {
 
 		public scenes: OBSWebSocket.Scene[] = []
-		public view: 'board' | 'wheel' | 'logo' = 'logo'
+		public view: 'board' | 'wheel' | 'logo' | 'titles' | 'pre' = 'wheel'
+		public round = RoundType.NORMAL;
+		public readonly Token = Token;
 
 		public clues: Clue[] = [
-			this.createClue('In the twinkling of an eye', 'Phrases'),
-			this.createClue('I like big butts and I cannot lie', 'Song lyrics'),
-			this.createClue('The Great Pyramids of Giza', 'Famous Places'),
-			this.createClue('In for a penny, in for a pound', 'Phrases'),
-			this.createClue('Call the Midwife', 'TV Show'),
-			this.createClue('Ed Sheeran Shape Of You', 'Singer/Song'),
-			this.createClue('Fifty Shades Of Grey', 'Book'),
-			this.createClue('Lewis Hamilton', 'Sporting Greats'),
+			this.createClue('In the twinkling of an eye', 'Phrases', RoundType.NORMAL),
+			this.createClue('I like big butts and I cannot lie', 'Song lyrics', RoundType.DOUBLE),
+			this.createClue('The Great Pyramids of Giza', 'Famous Places', RoundType.DOUBLE),
+			this.createClue('In for a penny, in for a pound', 'Phrases', RoundType.DOUBLE),
+			// this.createClue('Call the Midwife', 'TV Show'),
+			// this.createClue('Ed Sheeran Shape Of You', 'Singer/Song'),
+			// this.createClue('Fifty Shades Of Grey', 'Book'),
+			this.createClue('Lewis Hamilton', 'Sporting Greats', RoundType.FINAL),
 		]
 		public clueNumber = 0
 		public clue = this.clues[this.clueNumber]
 		public finalGuess = ''
+		public animateBoard = false
+		public showTotals = false
 		
 		public contestants: Contestant[] = [
 			{ name: 'Ringo', score: 0, total: 0, inventory: [] },
@@ -98,10 +114,12 @@
 			
 		}
 
-		public consonants = 'BCDFGHJKLMNPQRSTVWXYZ'
-		public vowels = 'AEIOU'
+		public readonly consonants = 'BCDFGHJKLMNPQRSTVWXYZ'
+		public readonly vowels = 'AEIOU'
+		public readonly vowelCost = vowelCost
+		public readonly RoundType = RoundType
 
-		private createClue(clue: string, category: string = null, maxLineLength = maxLength) {
+		private createClue(clue: string, category: string = null, roundType: RoundType, maxLineLength = maxLength) {
 			const lines: string[][] = [[]]
 			let longest = 0
 			clue.split(' ').forEach(word => {
@@ -121,7 +139,8 @@
 				category,
 				guesses: new Set(),
 				letters: this.tiles(),
-				classes: this.tiles()
+				classes: this.tiles(),
+				roundType
 			}
 
 			lines.forEach((line, i) => {
@@ -132,6 +151,14 @@
 				})
 			})
 			return clueObj
+		}
+
+		public addClue() {
+			this.clues.push(this.createClue(
+				prompt('Clue'),
+				prompt('Category'),
+				prompt('Round', 'normal, double, final') as RoundType
+			))
 		}
 
 		private tiles() {
@@ -150,7 +177,17 @@
 				}
 			}))
 			this.clue = { ...this.clue }
+			setTimeout(() => this.animateBoard = true, boardAnimationDelay)
+			setTimeout(() => this.animateBoard = false, boardAnimationDelay + boardAnimationTime)
 			this.revealFound(fastReveal)
+			this.addScoresToTotals()
+		}
+
+		private addScoresToTotals() {
+			this.contestants = this.contestants.map(contestant => ({
+				...contestant,
+				total: contestant.total + contestant.score
+			}))
 		}
 
 		public hideAll() {
@@ -166,10 +203,14 @@
 			
 		}
 
-		public setClue(number: number) {
+		public setRound(number: number) {
 			this.clues[this.clueNumber] = this.clue
 			this.clueNumber = number
 			this.clue = this.clues[this.clueNumber]
+			this.contestants = this.contestants.map(contestant => ({ ...contestant, score: 0 }))
+			if (this.clue.roundType) {
+				this.round = this.clue.roundType;
+			}
 		}
 
 		public letter(search: string, delay = foundDelay) {
@@ -189,12 +230,26 @@
 					this.clue.classes[i][j] = ClueClass.found
 					WOFAudio.bing()
 					this.clue = { ...this.clue }
+					
 					this.currentContestant.score = parseInt('' + this.currentContestant.score) || 0
-					this.currentContestant.score += parseInt(this.guessValue.toString())
+					this.currentContestant.score += this.multiplier * parseInt(this.guessValue.toString())
 				}, delay * n)
 			})
 			setTimeout(() => this.revealFound(), delay * found.length)
 			this.clue = { ...this.clue }
+
+			if (found.length === 0) {
+				WOFAudio.wrong()
+			}
+		}
+
+		get multiplier() {
+			switch (this.round) {
+				case RoundType.NORMAL: return 1
+				case RoundType.DOUBLE: return 2
+				case RoundType.FINAL: return 0
+				default: return 1
+			}
 		}
 
 		public revealFound(delay = revealDelay) {
@@ -218,7 +273,14 @@
 			this.letter(this.finalGuess)
 		}
 
-		private get currentContestant() {
+		public buyVowel(vowel: string) {
+			if (this.currentContestant.score >= vowelCost) {
+				this.currentContestant.score -= vowelCost
+				this.letter(vowel)
+			}
+		}
+
+		public get currentContestant() {
 			return this.contestants[this.current]
 		}
 
@@ -229,11 +291,6 @@
 			]
 		}
 
-		public removeContestant(i: number) {
-			this.contestants = this.contestants.filter((_, j) => j !== i)
-			this.switchContestant(0)
-		}
-
 		public switchContestant(n: number) {
 			this.current += this.contestants.length * 100 + n
 			this.current %= this.contestants.length
@@ -242,10 +299,12 @@
 		public bankrupt() {
 			this.currentContestant.score = 0
 			this.switchContestant(1)
+			WOFAudio.bankrupt()
 		}
 
 		public loseATurn() {
 			this.switchContestant(1)
+			WOFAudio.wrong()
 		}
 
 		public freeSpin() {
@@ -256,91 +315,180 @@
 			this.guessValue = value
 		}
 
+		public get allConsonants() {
+			return this.clue.original.toUpperCase().split('').filter(l => 
+				this.consonants.includes(l) && !this.clue.guesses.has(l)
+			).length === 0;
+		}
+
+		public useItem(c: number, i: number) {
+			const item = this.contestants[c].inventory[i]
+
+			switch (item) {
+				case InventoryItems.FREE_SPIN:
+					this.removeItem(c, i)
+					this.current = c
+					break
+				default:
+					break
+			}
+		}
+
+		public removeItem(c: number, i: number) {
+			this.contestants[c].inventory.splice(i, 1)
+		}
+
+
+		public get volume() {
+			return (this.$store.state as AppState).volume
+		}
+
+		public setVolume(event) {
+			WOFAudio.setVolume(parseFloat(event.target.value))
+		}
+
+		public toggleShowTotals() {
+			this.showTotals = !this.showTotals
+		}
+
+		public addToken(token: Token) {
+			(this.$refs.wheel as WOFWheel).addToken(token)
+		}
+
+		public spin() {
+			(this.$refs.wheel as WOFWheel).spin()
+		}
+
+		public landOnToken(token: Token) {
+			WOFAudio.token()
+			this.currentContestant.inventory.push(token)
+		}
+
 	}
 </script>
 
 <template>
 	<div id="fake-wheel-of-fortune">
-		<DisplayArea :screenCapture="false" id="fake-wheel-of-fortune">
+		<DisplayArea :screenCapture="false" id="fake-wheel-of-fortune-display-area">
 			<WOFLogo v-if="view === 'logo'" />
 			<WOFWheel
 				v-if="view === 'wheel'"
 				:contestants="contestants"
+				:showTotals="showTotals"
 				:current="current"
+				:round="round"
 				@setValue="setGuessValue($event)"
 				@bankrupt="bankrupt()"
 				@loseATurn="loseATurn()"
 				@freeSpin="freeSpin()"
+				@token="landOnToken($event)"
+				ref="wheel"
 			/>
 			<WOFBoard
 				v-if="view === 'board'"
 				:clue="clue"
 				:contestants="contestants"
+				:showTotals="showTotals"
 				:current="current"
+				:round="round"
 				:finalGuess="finalGuess"
+				:animateBoard="animateBoard"
 				@updateClue="clue = $event"
 			/>
 		</DisplayArea>
 		<ControlBar class="contol-bar">
 
-			<h3>View</h3>
-			<button @click="view = 'logo'">Logo</button>	
-			<button @click="view = 'wheel'">Wheel</button>	
-			<button @click="view = 'board'">Board</button>	
+			<div>
+				<h3>Volume: {{ volume * 100 }}%</h3>
+				<input type="range" min="0" max="1" step="0.01" :value="volume" @change="setVolume" />
+			</div>
+
+			<h3 class="option-header">
+				<span>View:</span>
+				<select v-model="view">
+					<option :value="'pre'">Pre</option>
+					<option :value="'titles'">Titles</option>
+					<option :value="'logo'">Logo</option>
+					<option :value="'wheel'">Wheel</option>	
+					<option :value="'board'">Board</option>	
+				</select>
+			</h3>
 
 			<div>
 				<h3>Contestants</h3>
-
+				<div class="contestant header">
+					<span class="name"></span>
+					<span class="score">Score</span>
+					<span class="total">Total</span>
+				</div>
 				<div v-for="(contestant, i) in contestants" :key="'contestant' + i">
 					<div class="contestant" :class="{ current: i === current }">
-						<span class="name">{{ contestant.name }}</span>
-						<span class="score"><input v-model="contestant.score" /></span>
-						<button @click="removeContestant(i)">x</button>
+						<span class="name"><input v-model="contestant.name" /></span>
+						<span class="score"><input type="number" v-model="contestant.score" /></span>
+						<span class="total"><input type="number" v-model="contestant.total" /></span>
 					</div>
 					<div class="inventory">
-						<span v-for="(item, n) in contestant.inventory" :key="`item_${n}`">{{ item }}</span>
+						<span v-for="(item, n) in contestant.inventory" :key="`item_${n}`" @click="useItem(i, n)">{{ item }}</span>
 					</div>
 				</div>
 
-				<button @click="addContestant()">Add Contestant</button>
 				<button @click="switchContestant(1)">Next</button>
 				<button @click="switchContestant(-1)">Prev</button>
+				<button @click="toggleShowTotals()">{{ showTotals ? 'Show Scores' : 'Score Totals' }}</button>
 			</div>
 
-			<h3>All Clues</h3>
-			<div v-for="(c, i) in clues" :key="`clue_${i}`" class="clue" :class="{ current: i === clueNumber }" @click="setClue(i)">
-				<i>Category: {{ c.category }}</i>
-				<div>{{ c.original }}</div>
+			<div v-if="round !== RoundType.FINAL">
+				<h3>Guess Value</h3>
+				<p><input type="number" v-model="guessValue" /></p>
 			</div>
-
-			<h3>Guess Value</h3>
-			<p><input type="number" v-model="guessValue" /></p>
 
 			<div v-if="view === 'board'">
-				<h3>Consonants</h3>
-				<button
-					v-for="char in consonants"
-					:key="char"
-					:disabled="clue.guesses.has(char)"
-					@click="letter(char)"
-				>{{ char }}</button>
+				<div v-if="round !== RoundType.FINAL">
+					<h3>Consonants</h3>
+					<p v-if="allConsonants">All Consonants Guessed!</p>
+					<button
+						v-for="char in consonants"
+						class="letter-button"
+						:key="char"
+						:disabled="clue.guesses.has(char) || allConsonants"
+						@click="letter(char)"
+					>{{ char }}</button>
 
-				<h3>Vowels</h3>
-				<button
-					v-for="char in vowels"
-					:key="char"
-					:disabled="clue.guesses.has(char)"
-					@click="letter(char)"
-				>{{ char }}</button>
+					<h3>Vowels</h3>
+					<button
+						v-for="char in vowels"
+						class="letter-button"
+						:key="char"
+						:disabled="clue.guesses.has(char) || currentContestant.score < vowelCost"
+						@click="buyVowel(char)"
+					>{{ char }}</button>
+				</div>
+
+				<div v-if="round === RoundType.FINAL">
+					<h3>Final Round</h3>
+					<input v-model="finalGuess" />
+					<button @click="submitFinalGuess()">Submit</button>
+				</div>
 
 				<h3>Actions</h3>
 				<button @click="revealAll()">Reveal All</button>
 				<button @click="hideAll()">Hide All</button>
-
-				<h3>Final Round</h3>
-				<input v-model="finalGuess" />
-				<button @click="submitFinalGuess()">Submit</button>
 			</div>
+
+			<div v-if="view === 'wheel'">
+				<h3>Actions</h3>
+				<button @click="spin()">Spin</button>
+				<button @click="addToken(Token.STAR_PRIZE)">Star Prize</button>
+				<button @click="addToken(Token.PITCHERS_PRIZE)">Pitcher's Prize</button>
+			</div>
+
+			<h3>All Clues</h3>
+			<div v-for="(c, i) in clues" :key="`clue_${i}`" class="clue" :class="{ current: i === clueNumber }" @click="setRound(i)">
+				<i>Category: {{ c.category }}</i>
+				<div>{{ c.original }}</div>
+				<div><span class="label">{{ c.roundType }}</span></div>
+			</div>
+			<p><button @click="addClue()">Add Clue</button></p>
 
 		</ControlBar>
 		<ScriptBar>
@@ -352,25 +500,58 @@
 <style lang="scss" scoped>
 	@import '@/style/sizing.scss';
 
-	#fake-wheel-of-fortune {
+	button + button {
+		margin-left: 0.25rem;
+	}
+
+	button.letter-button {
+		& + & {
+			margin: 0;
+		}
+	}
+
+	#fake-wheel-of-fortune-display-area {
+		cursor: none !important;
 		background: grey;
+
+	}
+
+	.option-header {
+		display: flex;
+		span {
+			flex-grow: 1;
+		}
 	}
 
 	.contestant {
 		display: flex;
-		padding-bottom: 0.5rem;
+		margin-bottom: 0.5rem;
 		align-items: center;
 
-		&.current:before {
-			content: "≫ ";
-			margin-right: 0.25rem;
+		&.header {
+			font-size: small;
+			font-weight: bold;
+			margin-bottom: 0.25rem;
+		}
+
+		&.current {
+			outline: 1px solid yellow;
+			outline-offset: 1px;
 		}
 
 		.name {
 			flex-grow: 1;
-		}
-		.score {
+			flex-shrink: 1;
 			margin-right: 0.5rem;
+		}
+		.score,
+		.total {
+			width: 60px;
+			margin-right: 0.5rem;
+		}
+
+		input {
+			width: 100%;
 		}
 	}
 	.inventory span {
@@ -394,6 +575,19 @@
 		&.current {
 			border-left-width: 10px;
 			padding-left: calc(0.5rem);
+		}
+	}
+
+	.label {
+		display: inline-block;
+		background: #333;
+		color: #FFF;
+		padding: 0.1rem 0.25rem;
+		border-radius: 0.25rem;
+		font-size: small;
+		text-transform: uppercase;
+		& + & {
+			margin-left: 0.5rem;
 		}
 	}
 </style>

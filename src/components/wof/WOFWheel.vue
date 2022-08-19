@@ -1,18 +1,21 @@
 <script lang="ts">
-	import { Contestant } from '@/FakeWheelOfFortune.vue'
+	import { Contestant, RoundType } from '@/FakeWheelOfFortune.vue'
 	import WOFAudio from '@/services/wof/WOFAudio'
 	import { Component, Prop, Vue } from 'vue-property-decorator'
 	import WOFContestants from './WOFContestants.vue'
 
-	enum Token {
+	export enum Token {
 		STAR_PRIZE = 'star-prize',
 		PITCHERS_PRIZE = 'pitchers-prize',
 	}
 
 	interface Segment {
+		n: number
 		value: string | number
 		cross?: boolean
 		token?: Token
+		tokenOrder?: number
+		tokenCollected?: boolean
 	}
 
 	enum SpecialSegments {
@@ -28,6 +31,8 @@
 
 		@Prop({ default: [] }) public contestants: Contestant[]
 		@Prop({ default: 0}) public current: number
+		@Prop({ default: false }) public showTotals: boolean
+		@Prop() public round: RoundType
 
 		public Token = Token
 
@@ -47,13 +52,13 @@
 			{ value: 700 },
 			{ value: 450 },
 			{ value: 1000 },
-			{ value: 300, token: Token.PITCHERS_PRIZE },
+			{ value: 300 },
 			{ value: 750 },
 			{ value: SpecialSegments.FREE_SPIN, cross: true },
 			{ value: 400 },
 			{ value: 150 },
 			{ value: 600 },
-			{ value: 400, token: Token.STAR_PRIZE },
+			{ value: 400 },
 			{ value: 1000 },
 			{ value: SpecialSegments.BANKRUPT },
 			{ value: 800 },
@@ -67,7 +72,7 @@
 			{ value: 900 },
 			{ value: 500 },
 			{ value: 200 }
-		]
+		].map((s, n) => ({ ...s, n }))
 
 		public rotate = 0
 		public speed = 0
@@ -75,6 +80,9 @@
 		public readonly deceleration = 0.08
 		public readonly pegDeceleration = 0.3
 		public readonly spinFrame = 50
+		public readonly RoundType = RoundType
+		public topSegment: number = 0
+		private tokenOrder = 0
 
 		get totalSegments() {
 			return this.segments.length
@@ -90,6 +98,10 @@
 
 			const rotate = ((this.rotate + 90) % 360) * circ / 360
 			const top = rotate > start && rotate <= end
+
+			if (top) {
+				this.topSegment = n
+			}
 
 			return {
 				d: [
@@ -135,17 +147,21 @@
 
 		tokenData(n: number) {
 			const radius = 40
+			const tokenSize = 13
 			const cx = 50
 			const cy = 50
 			const circ = Math.PI * 2
 			const angle = (n + 0.45) * circ / this.totalSegments
-			const x = cx + Math.cos(angle) * radius - 6
-			const y = cy - Math.sin(angle) * radius - 6
+			const x = cx + Math.cos(angle) * (radius * 0.75) - tokenSize / 2
+			const y = cy - Math.sin(angle) * (radius * 0.75) - tokenSize / 2
 			return {
-				cx: x,
-				cy: y,
-				transform: `translate(${x}, ${y})`
+				x,
+				y,
 			}
+		}
+
+		tokenOuterStyle(_n: number) {
+			return {}
 		}
 
 		circle(n: number) {
@@ -163,7 +179,7 @@
 			}
 		}
 
-		spin() {
+		public spin() {
 			this.spins++
 			// Lowest spin = 10
 			// Highest spin = 30
@@ -188,8 +204,10 @@
 					this.$emit('loseATurn')
 					break;
 			}
-			if (segment.token) {
-				// TODO
+			if (segment.token && !segment.tokenCollected) {
+				segment.tokenCollected = true
+				this.$emit('token', segment.token)
+				this.segments = [...this.segments]
 			}
 		}
 
@@ -231,13 +249,38 @@
 				default: return null
 			} 
 		}
+
+		public addToken(token: Token) {
+			const segments = this.visibleSegments.filter(s => typeof s.value === 'number' && !s.token)
+			const segment = segments[Math.floor(Math.random() * segments.length)]
+			if (segment) {
+				this.segments = this.segments.map(s => s.n === segment.n ? { ...s, token, tokenOrder: this.tokenOrder++ } : s)
+			}
+		}
+
+		public get visibleSegments() {
+			return this.segments.filter((_segment, n) => {
+				const dist1 = Math.abs(this.topSegment - n)
+				const dist2 = Math.abs(this.topSegment - (n + this.segments.length))
+				const dist3 = Math.abs(this.topSegment - (n - this.segments.length))
+				const dist = Math.min(dist1, dist2, dist3)
+				return dist <= 5
+			})
+		}
+
+		public get tokenSegments() {
+			return this.segments.filter(s => s.token).sort((a, b) => {
+				if (a.tokenCollected && !b.tokenCollected) return 1
+				return a.tokenOrder - b.tokenOrder
+			})
+		}
 	}
 </script>
 
 <template>
 	<div>
-		<WOFContestants :contestants="contestants" :current="current" />
-		<svg viewBox="0 0 100 100" :style="{ transform: `rotate(${rotate}deg) translate(-50%, 50%)` }" ref="svg">
+		<WOFContestants v-if="round !== RoundType.FINAL" :contestants="contestants" :current="current" :showTotals="showTotals" />
+		<svg viewBox="0 0 100 100" :style="{ transform: `rotate(${rotate}deg) translate(-50%, 50%)` }" ref="svg" class="wheel">
 			<circle class="outer" cx="50" cy="50" r="50" fill="#000000" @click="spin()" />
 			<circle cx="50" cy="50" r="49" fill="#FFFFFF" />
 			<g class="segments">
@@ -289,8 +332,8 @@
 			<path class="peg" d="M 49 0 L 51 0 L 50 3 L 49 0" :style="{ transform: `rotate(${-rotate}deg)` }" />
 
 			<g class="tokens">
-				<g v-for="(segment, n) in segments" :key="`token-${n}`">
-					<g class="token" v-if="segment.token" v-bind="tokenData(n)" :class="segment.token">
+				<g v-for="segment in tokenSegments" :key="`token-${segment.n}`" :style="tokenOuterStyle(segment.n)">
+					<svg class="token" v-bind="tokenData(segment.n)" :class="{ [segment.token]: true, collected: segment.tokenCollected }">
 						<g v-if="segment.token === Token.STAR_PRIZE">
 							<path d="M13.99,7.58l-1.6,1.6c-.09,.09-.14,.21-.14,.33v2.26c0,.26-.21,.47-.47,.47h-2.26c-.12,0-.24,.05-.33,.14l-1.6,1.6c-.18,.18-.48,.18-.67,0l-1.6-1.6c-.09-.09-.21-.14-.33-.14H2.72c-.26,0-.47-.21-.47-.47v-2.26c0-.12-.05-.24-.14-.33l-1.6-1.6c-.18-.18-.18-.48,0-.67l1.6-1.6c.09-.09,.14-.21,.14-.33V2.72c0-.26,.21-.47,.47-.47h2.26c.12,0,.24-.05,.33-.14l1.6-1.6c.18-.18,.48-.18,.67,0l1.6,1.6c.09,.09,.21,.14,.33,.14h2.26c.26,0,.47,.21,.47,.47v2.26c0,.12,.05,.24,.14,.33l1.6,1.6c.18,.18,.18,.48,0,.67Z"/>
 							<text class="text1">STAR</text>
@@ -300,7 +343,7 @@
 							<path d="M13.99,7.58l-1.6,1.6c-.09,.09-.14,.21-.14,.33v2.26c0,.26-.21,.47-.47,.47h-2.26c-.12,0-.24,.05-.33,.14l-1.6,1.6c-.18,.18-.48,.18-.67,0l-1.6-1.6c-.09-.09-.21-.14-.33-.14H2.72c-.26,0-.47-.21-.47-.47v-2.26c0-.12-.05-.24-.14-.33l-1.6-1.6c-.18-.18-.18-.48,0-.67l1.6-1.6c.09-.09,.14-.21,.14-.33V2.72c0-.26,.21-.47,.47-.47h2.26c.12,0,.24-.05,.33-.14l1.6-1.6c.18-.18,.48-.18,.67,0l1.6,1.6c.09,.09,.21,.14,.33,.14h2.26c.26,0,.47,.21,.47,.47v2.26c0,.12,.05,.24,.14,.33l1.6,1.6c.18,.18,.18,.48,0,.67Z"/>
 							<text class="text">PP</text>
 						</g>
-					</g>
+					</svg>
 				</g>
 			</g>
 		</svg>
@@ -317,7 +360,7 @@
 
 	$size: 150;
 
-	svg {
+	.wheel {
 		width: s($size);
 		height: s($size);
 		position: absolute;
@@ -325,9 +368,9 @@
 		bottom: 0;
 		transform-origin: 0% 100%;
 
-		.outer {
-			cursor: pointer;
-		}
+		// .outer {
+		// 	cursor: pointer;
+		// }
 
 		:not(.outer) {
 			pointer-events: none;
@@ -403,6 +446,29 @@
 		}
 
 		.token {
+
+			&:not(.collected) > g {
+				animation: new-token 1s ease-out;
+				transform: scale(1);
+				transform-box: content-box;
+			}
+
+			&.collected > g {
+				animation: token-collected 2s ease-out;
+				opacity: 0;
+				transform: scale(3);
+			}
+
+			@keyframes new-token {
+				0% { opacity: 0; transform: scale(3); }
+				100% { opacity: 1; transform: scale(1); }
+			}
+
+			@keyframes token-collected {
+				0% { opacity: 1; transform: scale(1); }
+				100% { opacity: 0; transform: scale(3); }
+			}
+
 			path {
 				transform: scale(1);
 				stroke-width: 1px;
