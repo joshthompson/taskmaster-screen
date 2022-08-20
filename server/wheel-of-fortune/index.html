@@ -1,71 +1,187 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 	<head>
-		<title>Wheel Of Fortune</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 		<style>
-			#meter {
-				height: 10vh;
-				width: 90vw;
-				margin: 45vh auto;
-				background: #333;
+			html, body {
+				overscroll-behavior: none;
+				overflow: hidden;
 			}
-			#meter div {
-				background: red;
-				height: 10vh;
+			h1 {
+				font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+				text-align: center;
+			}
+			#wheel {
+				--size: min(80vw, 80vh);
+				left: calc(50% - var(--size) / 2);
+				top: calc(50% - var(--size) / 2);
+				width: var(--size);
+				height: var(--size);
+				background: linear-gradient(90deg, red, blue);
+				border-radius: 50%;
+				position: absolute;
+				cursor: pointer;
 			}
 		</style>
 	</head>
 	<body>
-		<div>
-			<h2>It is your turn to spin the wheel!</h2>
-			<div id="meter">
-				<div></div>
-			</div>
-			<h2>Click anywhere to stop the power guage</h2>
-		</div>
-		<script>
-			let interval;
-			let power = 0;
-			let increase = true;
-			let on = false;
-			let powerChange = 5;
+		<h1>Spin The Wheel</h1>
+		<svg id="wheel" viewBox="0 0 100 100">
+			<circle cx="50" cy="50" r="50" fill="#000000" />
+			<circle cx="50" cy="50" r="49" fill="#FFFFFF" />
+			<g class="segments">
+				<path d="M 50 50 L 99 50 A 49 49 0 0 0 97.33036548816435 37.317866789976485 L 50 50" fill="#C340DE" />
+				<path d="M 50 50 L 97.33036548816435 37.317866789976485 A 49 49 0 0 0 92.4352447854375 25.5000000000 L 50 50" fill="#7D35CC" />
+				<path d="M 50 50 L 92.4352447854375 25.5000000000 A 49 49 0 0 0 84.64823227814082 15.351767721859176 L 50 50" fill="#0026DC" />
+				<path d="M 50 50 L 84.64823227814082 15.351767721859176 A 49 49 0 0 0 74.5 7.56475521456251 L 50 50" fill="#50B291" />
+				<path d="M 50 50 L 74.5 7.56475521456251 A 49 49 0 0 0 62.682133210023515 2.6696345118356533 L 50 50" fill="#F4E84E" />
+				<path d="M 50 50 L 62.682133210023515 2.6696345118356533 A 49 49 0 0 0 50 1 L 50 50" fill="#D56B2C" />
+				<path d="M 50 50 L 50 1 A 49 49 0 0 0 37.31786678997649 2.6696345118356533 L 50 50" fill="#963335" />
+				<path d="M 50 50 L 37.31786678997649 2.6696345118356533 A 49 49 0 0 0 25.500000000 7.564755214562503 L 50 50" fill="#409AE8" />
+				<path d="M 50 50 L 25.500000000 7.564755214562503 A 49 49 0 0 0 15.351767721859176 15.351767721859169 L 50 50" fill="#C340DE" />
+				<path d="M 50 50 L 15.351767721859176 15.351767721859169 A 49 49 0 0 0 7.564755214562503 25.5000000000 L 50 50" fill="#7D35CC" />
+				<path d="M 50 50 L 7.564755214562503 25.5000000000 A 49 49 0 0 0 2.6696345118356604 37.31786678997647 L 50 50" fill="#0026DC" />
+				<path d="M 50 50 L 2.6696345118356604 37.31786678997647 A 49 49 0 0 0 1 49.99999999999999 L 50 50" fill="#50B291" />
+				<path d="M 50 50 L 1 49.99999999999999 A 49 49 0 0 0 2.6696345118356533 62.68213321002352 L 50 50" fill="#F4E84E" />
+				<path d="M 50 50 L 2.6696345118356533 62.68213321002352 A 49 49 0 0 0 7.564755214562496 74.49999999999999 L 50 50" fill="#D56B2C" />
+				<path d="M 50 50 L 7.564755214562496 74.49999999999999 A 49 49 0 0 0 15.351767721859154 84.64823227814081 L 50 50" fill="#963335" />
+				<path d="M 50 50 L 15.351767721859154 84.64823227814081 A 49 49 0 0 0 25.49999999999998 92.43524478543748 L 50 50" fill="#409AE8" />
+				<path d="M 50 50 L 25.49999999999998 92.43524478543748 A 49 49 0 0 0 37.31786678997649 97.33036548816435 L 50 50" fill="#C340DE" />
+				<path d="M 50 50 L 37.31786678997649 97.33036548816435 A 49 49 0 0 0 49.99999999999999 99 L 50 50" fill="#7D35CC" />
+				<path d="M 50 50 L 49.99999999999999 99 A 49 49 0 0 0 62.682133210023494 97.33036548816435 L 50 50" fill="#0026DC" />
+				<path d="M 50 50 L 62.682133210023494 97.33036548816435 A 49 49 0 0 0 74.5 92.43524478543749 L 50 50" fill="#50B291" />
+				<path d="M 50 50 L 74.5 92.43524478543749 A 49 49 0 0 0 84.64823227814082 84.64823227814084 L 50 50" fill="#F4E84E" />
+				<path d="M 50 50 L 84.64823227814082 84.64823227814084 A 49 49 0 0 0 92.43524478543748 74.500000000 L 50 50" fill="#D56B2C" />
+				<path d="M 50 50 L 92.43524478543748 74.500000000 A 49 49 0 0 0 97.33036548816435 62.68213321002356 L 50 50" fill="#963335" />
+				<path d="M 50 50 L 97.33036548816435 62.68213321002356 A 49 49 0 0 0 99 50.0000000000 L 50 50" fill="#409AE8" />
+			</g>
+			<circle cx="50" cy="50" r="7" fill="#000000" />
+		</svg>
+		<script type="text/javascript">
+			class Wheel{
+				constructor() {
+					this.wheelElm = document.getElementById('wheel');
+					this.wheelElm.addEventListener('mousedown', e => {
+						this.onGrab(e.clientX, e.clientY);
+					});
+					window.addEventListener('mousemove', e => {
+						if (e.which == 1) {
+							this.onMove(e.clientX, e.clientY);
+						} else if (!this.isDragging) {
+							this.onRelease();
+						}
+					});
+					window.addEventListener('mouseup', this.onRelease.bind(this));
 
-			function setupMeter() {
-				on = true;
-				interval = setInterval(() => {
-					power += (increase ? powerChange : -powerChange);
-					if (power >= 100) {
-						power = 100;
-						increase = false;
-						powerChange = 5 * (Math.random() * 0.6 + 0.7);
-					} else if (power <= 0) {
-						power = 0;
-						increase = true;
-						powerChange = 5 * (Math.random() * 0.6 + 0.7);
-					}
-					render();
-				}, 20);
-			}
+					this.wheelElm.addEventListener('touchstart', e => {
+						this.onGrab(e.touches[0].clientX, e.touches[0].clientY);
+					});
+					window.addEventListener('touchmove', e => {
+						this.onMove(e.touches[0].clientX, e.touches[0].clientY);
+					});
+					window.addEventListener('touchend', this.onRelease.bind(this));
 
-			function go() {
-				clearInterval(interval);
-			}
+					this.calculatePositions();
+					window.addEventListener('resize', this.calculatePositions.bind(this));
 
-			function render() {
-				const meter = document.getElementById('meter');
-				meter.querySelector('div').style.width = `${power}%`;
-				meter.querySelector('div').style.background = `hsl(${power*0.8 + 0.4}, 100%, 40%)`;
-			}
+					this.currentAngle = 0;
+					this.oldAngle = 0;
+					this.lastAngles = [0,0,0];
+					this.isDragging = false;
+					this.startX = null;
+					this.startY = null;
 
-			setupMeter();
-			document.body.addEventListener('click', () => {
-				if (on) {
-					go();
-					on = false;
-				} else {
-					setupMeter();
+					this.positionCallbacks = [];
 				}
-			} );
+
+				calculatePositions() {
+					this.wheelWidth = this.wheelElm.getBoundingClientRect().width;
+					this.wheelHeight = this.wheelElm.getBoundingClientRect().height
+					this.wheelX = this.wheelElm.getBoundingClientRect().x + this.wheelWidth / 2;
+					this.wheelY = this.wheelElm.getBoundingClientRect().y + this.wheelHeight / 2;
+				}
+
+				onPositionChange(callback) {
+					this.positionCallbacks.push(callback);
+				}
+
+				onGrab(x, y) {
+					if (!this.isSpinning) {
+						this.isDragging = true;
+						this.startAngle = this.calculateAngle(x, y);
+					}				
+				}
+
+				onMove(x, y) {
+					if (!this.isDragging) {
+						return
+					}
+
+					this.lastAngles.shift();
+					this.lastAngles.push(this.currentAngle);
+
+					const deltaAngle = this.calculateAngle(x, y) - this.startAngle;
+					this.currentAngle = deltaAngle + this.oldAngle;
+					
+					this.render(this.currentAngle);
+				}
+
+				calculateAngle(currentX, currentY) {
+					const xLength = currentX - this.wheelX;
+					const yLength = currentY - this.wheelY;
+					const angle = Math.atan2(xLength, yLength) * (180/Math.PI);
+					return 360 - angle;
+				}
+
+				onRelease() {
+					if (this.isDragging) {
+						this.isDragging = false;
+						this.oldAngle = this.currentAngle;
+
+						const speed = this.lastAngles[0] - this.lastAngles[2];
+						this.giveMoment(speed / 1.5);
+						submitSpin(speed);
+					}		
+				}
+
+				giveMoment(speed) {
+					const maxSpeed = 20;
+					if (speed >= maxSpeed) {
+						speed = maxSpeed;
+					} else if (speed <= -maxSpeed)
+						speed = -maxSpeed;
+
+					if (speed >= 0.1) {
+						speed -= 0.1;
+						window.requestAnimationFrame(() => this.giveMoment(speed));
+						this.isSpinning = true;
+					} else if (speed <= -0.1) {
+						speed += 0.1;
+						window.requestAnimationFrame(() => this.giveMoment(speed));
+						this.isSpinning = true;
+					} else {
+						this.isSpinning = false;
+					}
+
+					this.oldAngle -= speed;
+					this.oldAngle = (this.oldAngle + 360) % 360
+					this.render(this.oldAngle);
+				}
+
+				render(deg) {
+					this.wheelElm.style.transform = `rotate(${deg}deg)`;
+					for (let callback of this.positionCallbacks) {
+						callback(deg);
+					}
+				}
+			}
+
+			const wheel = new Wheel();
+
+			async function submitSpin(speed) {
+				const resp = await fetch(`/wheel-of-fortune/spin?speed=${speed}`, { method: 'POST' });
+				console.log(resp);
+			}
 		</script>
 	</body>
 </html>

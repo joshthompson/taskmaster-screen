@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Wheel Of Fortune</title>
+		<style>
+			#meter {
+				height: 10vh;
+				width: 90vw;
+				margin: 45vh auto;
+				background: #333;
+			}
+			#meter div {
+				background: red;
+				height: 10vh;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<h2>It is your turn to spin the wheel!</h2>
+			<div id="meter">
+				<div></div>
+			</div>
+			<h2>Click anywhere to stop the power guage</h2>
+		</div>
+		<script>
+			let interval;
+			let power = 0;
+			let increase = true;
+			let on = false;
+			let powerChange = 5;
+
+			function setupMeter() {
+				on = true;
+				interval = setInterval(() => {
+					power += (increase ? powerChange : -powerChange);
+					if (power >= 100) {
+						power = 100;
+						increase = false;
+						powerChange = 5 * (Math.random() * 0.6 + 0.7);
+					} else if (power <= 0) {
+						power = 0;
+						increase = true;
+						powerChange = 5 * (Math.random() * 0.6 + 0.7);
+					}
+					render();
+				}, 20);
+			}
+
+			function go() {
+				clearInterval(interval);
+			}
+
+			function render() {
+				const meter = document.getElementById('meter');
+				meter.querySelector('div').style.width = `${power}%`;
+				meter.querySelector('div').style.background = `hsl(${power*0.8 + 0.4}, 100%, 40%)`;
+			}
+
+			setupMeter();
+			document.body.addEventListener('click', () => {
+				if (on) {
+					go();
+					on = false;
+				} else {
+					setupMeter();
+				}
+			} );
+		</script>
+	</body>
+</html>

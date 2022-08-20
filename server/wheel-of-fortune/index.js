@@ -1,17 +1,23 @@
-const router = require('express').Router()
+module.exports = function(io) {
 
-router.get('/state', (_req, res) => {
-	res.send({})
-})
+	io.on('connection', _socket => {
+		console.log('a user connected')
+	});
 
-router.get('/state/set', (req, res) => {
-	console.log(req._parsedUrl.query.replace('state=', ''))
-	tm_screen = JSON.parse(req._parsedUrl.query.replace('state=', '').replace(/%22/g, '"'));
-	res.sendStatus(200)
-})
+	const router = require('express').Router()
 
-router.get('/', (_req, res) => {
-	res.sendFile(`${__dirname}/index.html`)
-})
+	router.get('/state', (_req, res) => {
+		res.send({})
+	})
+	
+	router.post('/spin', (req, res) => {
+		io.emit('spin', parseFloat(req.query.speed))
+		res.sendStatus(200)
+	})
+	
+	router.get('/', (_req, res) => {
+		res.sendFile(`${__dirname}/index.html`)
+	})
 
-module.exports = router
+	return router
+}

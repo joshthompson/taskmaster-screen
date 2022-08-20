@@ -25,7 +25,7 @@ app.use(express.static('public'))
 
 app.use('/taskmaster', require('./server/taskmaster'))
 app.use('/weakest-link', require('./server/weakest-link')(io))
-app.use('/wheel-of-fortune', require('./server/wheel-of-fortune'))
+app.use('/wheel-of-fortune', require('./server/wheel-of-fortune')(io))
 
 let director = 'free'
 app.get('/set-director/:director', (req, res) => {

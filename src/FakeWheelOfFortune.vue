@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Component, Vue } from 'vue-property-decorator'
 	import OBSWebSocket from 'obs-websocket-js'
-
+	import { io } from 'socket.io-client';
 	
 	import DisplayArea from '@/components/shared/DisplayArea.vue'
 	import ControlBar from '@/components/shared/ControlBar.vue'
@@ -111,6 +111,15 @@
 				// settings,
 				scenes: this.scenes
 			})
+
+			const socket = io.connect(':6226', { autoConnect: true })
+			socket.on('connect', () => {
+				socket.emit('hi')
+				socket.on('spin', speed => {
+					this.spin()
+					console.log(speed)
+				})
+			});
 			
 		}
 
