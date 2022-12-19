@@ -1,26 +1,26 @@
 <script lang="ts">
-	import { Contestant } from '@/FakeWheelOfFortune.vue'
-	import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Contestant } from '@/FakeWheelOfFortune.vue'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
 
-	@Component
-	export default class WOFContestants extends Vue {
+@Component
+export default class WOFContestants extends Vue {
 
-		@Prop({ default: [] }) public contestants: Contestant[]
-		@Prop({ default: 0}) public current: number
-		@Prop({ default: false }) public showTotals: boolean
-		
-		public displayValue(contestant: Contestant) {
-			return (this.showTotals ? contestant.total : contestant.score).toString()
-		}
-		
-		public padScore(contestant: Contestant) {
-			if (this.displayValue(contestant) === '0') {
-				return '     '
-			}
-			return this.displayValue(contestant).padStart(5, ' ')
-		}
+	@Prop({ default: [] }) public contestants: Contestant[]
+	@Prop({ default: 0}) public current: number
+	@Prop({ default: false }) public showTotals: boolean
+
+	public displayValue(contestant: Contestant) {
+		return (this.showTotals ? contestant.total : contestant.score).toString()
 	}
+
+	public padScore(contestant: Contestant) {
+		if (this.displayValue(contestant) === '0') {
+			return '     '
+		}
+		return this.displayValue(contestant).padStart(5, ' ')
+	}
+}
 </script>
 
 <template>

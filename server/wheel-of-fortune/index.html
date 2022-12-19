@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+		<title>Wheel of Fortune</title>
 		<style>
 			html, body {
 				overscroll-behavior: none;
@@ -182,6 +183,25 @@
 				const resp = await fetch(`/wheel-of-fortune/spin?speed=${speed}`, { method: 'POST' });
 				console.log(resp);
 			}
+
+			async function poll(id, mode) {
+				setTimeout(() => {
+					try {
+						const resp = await fetch(`/wheel-of-fortune/mode?id=${id}&current=${mode}`, { method: 'POST' });
+						mode = resp.mode
+						console.log(mode)
+					} catch {}
+					switch (mode) {
+						case 'buzz': break;
+						case 'spin': break;
+						case 'wait': break;
+					}
+					pollMode(id, mode)
+				}, 1000)
+			}
+
+			const id = parseInt(window.location.href.split('/wheel-of-fortune/')[1])
+			poll(id, null)
 		</script>
 	</body>
 </html>

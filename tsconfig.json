@@ -23,7 +23,8 @@
       "esnext",
       "dom",
       "dom.iterable",
-      "scripthost"
+      "scripthost",
+      "ES2021"
     ]
   },
   "include": [

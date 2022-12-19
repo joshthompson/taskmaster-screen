@@ -23,7 +23,7 @@ async function getScenes() {
 
 async function setScene(name) {
 	await connect()
-	return obs.send('SetCurrentScene', { 'scene-name': name })
+	return obs.send('SetCurrentScene', { ['scene-name']: name })
 }
 
 async function setSourceSettings(sourceName, sourceSettings) {
@@ -33,7 +33,7 @@ async function setSourceSettings(sourceName, sourceSettings) {
 
 async function setSourcePosition(sceneName, item, x = 0, y = 0) {
 	await connect()
-	return obs.send('SetSceneItemPosition', { 'scene-name': sceneName, item, x, y })
+	return obs.send('SetSceneItemPosition', { ['scene-name']: sceneName, item, x, y })
 }
 
 async function getSourceSettings() {
@@ -46,23 +46,22 @@ async function getSourceSettings() {
 async function setTextAndCenter(sceneName: string, sourceName: string, text: string) {
 	await sleep(100)
 	await connect()
-	let props = await obs.send('GetSceneItemProperties', { 'scene-name': sceneName, item: { name: sourceName }})
+	let props = await obs.send('GetSceneItemProperties', { ['scene-name']: sceneName, item: { name: sourceName }})
 	await obs.send('SetSceneItemProperties', {
-		'scene-name': sceneName,
+		['scene-name']: sceneName,
 		item: { name: sourceName },
 		...props,
-		visible: false,
+		visible: false
 	})
 	await setSourceSettings(sourceName, { text: text })
 	await sleep(100)
-	props = await obs.send('GetSceneItemProperties', { 'scene-name': sceneName, item: { name: sourceName }})
+	props = await obs.send('GetSceneItemProperties', { ['scene-name']: sceneName, item: { name: sourceName }})
 
-	console.log(props, text)
 	// const maxWidth = 1200
 	const scale = 0.35
 
 	await obs.send('SetSceneItemProperties', {
-		'scene-name': sceneName,
+		['scene-name']: sceneName,
 		item: { name: sourceName },
 		...props,
 		scale: { x: scale, y: scale },

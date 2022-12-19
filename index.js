@@ -1,7 +1,11 @@
 const express = require('express')
 const app = express()
 const server = require('http').Server(app)
-const io = require('socket.io')(server)
+const io = require('socket.io')(server, {
+	cors: {
+		origin: 'http://localhost:8080'
+	}
+})
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
@@ -11,7 +15,6 @@ console.log('\033cGAME SHOW SCREEN')
 
 /* tslint:disable:no-console */
 server.listen(6226)
-// app.listen(6226, () => console.log('Running on http://localhost:6226'))
 
 app.use((_req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*')
@@ -20,7 +23,6 @@ app.use((_req, res, next) => {
 })
 
 app.use(cors())
-// app.use(express.static('dist'))
 app.use(express.static('public'))
 
 app.use('/taskmaster', require('./server/taskmaster'))

@@ -1,26 +1,26 @@
 <script lang="ts">
-	import { Component, Vue } from 'vue-property-decorator'
-	import FakeTaskmaster from './FakeTaskmaster.vue'
-	import FakeWeakestLink from './FakeWeakestLink.vue'
-	import FakePointless from './FakePointless.vue'
-	import FakeWheelOfFortune from './FakeWheelOfFortune.vue'
+import { Component, Vue } from 'vue-property-decorator'
+import FakeTaskmaster from './FakeTaskmaster.vue'
+import FakeWeakestLink from './FakeWeakestLink.vue'
+import FakePointless from './FakePointless.vue'
+import FakeWheelOfFortune from './FakeWheelOfFortune.vue'
 
-	@Component({
-		components: { FakeTaskmaster, FakeWeakestLink, FakePointless, FakeWheelOfFortune }
-	})
-	export default class App extends Vue {
-		public started: boolean = false
-		public game: 'taskmaster' | 'weakest-link' | 'pointless' | 'wheel-of-fortune' = null
-		
-		public created() {
-			this.setGame('wheel-of-fortune')
-		}
+@Component({
+	components: { FakeTaskmaster, FakeWeakestLink, FakePointless, FakeWheelOfFortune }
+})
+export default class App extends Vue {
+	public started: boolean = false
+	public game: 'taskmaster' | 'weakest-link' | 'pointless' | 'wheel-of-fortune' = null
 
-		public setGame(game: 'taskmaster' | 'weakest-link' | 'pointless' | 'wheel-of-fortune') {
-			window.document.title = game.toUpperCase()
-			this.game = game
-		}
+	public created() {
+		this.setGame('wheel-of-fortune')
 	}
+
+	public setGame(game: 'taskmaster' | 'weakest-link' | 'pointless' | 'wheel-of-fortune') {
+		window.document.title = game.toUpperCase()
+		this.game = game
+	}
+}
 </script>
 
 <template>

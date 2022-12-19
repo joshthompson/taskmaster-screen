@@ -1,43 +1,43 @@
 <script lang="ts">
-	import { Component, Prop, Vue } from 'vue-property-decorator'
-	
-	import { Clue, ClueClass } from '@/types/WheelOfFortune'
-	import { Contestant, RoundType } from '@/FakeWheelOfFortune.vue'
-	import WOFContestants from './WOFContestants.vue'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
-	@Component({
-		components: { WOFContestants }
-	})
-	export default class WOFWheel extends Vue {
+import { Clue, ClueClass } from '@/types/WheelOfFortune'
+import { Contestant, RoundType } from '@/FakeWheelOfFortune.vue'
+import WOFContestants from './WOFContestants.vue'
 
-		@Prop({
-			default: {
-				original: '',
-				category: '',
-				letters: [],
-				classes: []
-			}
-		}) public clue: Clue
-		@Prop({ default: [] }) public contestants: Contestant[]
-		@Prop({ default: 0 }) public current: number
-		@Prop({ default: '' }) public finalGuess: string
-		@Prop({ default: false }) public animateBoard: boolean
-		@Prop({ default: false }) public showTotals: boolean	
-		@Prop() public round: RoundType
-		
+@Component({
+	components: { WOFContestants }
+})
+export default class WOFWheel extends Vue {
 
-		public consonants = 'BCDFGHJKLMNPQRSTVWXYZ'
-		public vowels = 'AEIOU'
-		public readonly RoundType = RoundType
-
-		public reveal(i: number, j: number) {
-			if (this.clue.classes[i][j] === ClueClass.found) {
-				this.clue.classes[i][j] = ClueClass.letter
-			}
-			this.$emit('updateClue', this.clue)
+	@Prop({
+		default: {
+			original: '',
+			category: '',
+			letters: [],
+			classes: []
 		}
+	}) public clue: Clue
+	@Prop({ default: [] }) public contestants: Contestant[]
+	@Prop({ default: 0 }) public current: number
+	@Prop({ default: '' }) public finalGuess: string
+	@Prop({ default: false }) public animateBoard: boolean
+	@Prop({ default: false }) public showTotals: boolean
+	@Prop() public round: RoundType
 
+
+	public consonants = 'BCDFGHJKLMNPQRSTVWXYZ'
+	public vowels = 'AEIOU'
+	public readonly RoundType = RoundType
+
+	public reveal(i: number, j: number) {
+		if (this.clue.classes[i][j] === ClueClass.found) {
+			this.clue.classes[i][j] = ClueClass.letter
+		}
+		this.$emit('updateClue', this.clue)
 	}
+
+}
 </script>
 
 <template>
